@@ -1,4 +1,3 @@
-import './App.css'
 import BlurIn from './components/magicui/blur-in'
 import Marquee from './components/magicui/marquee'
 import ShinyButton from './components/magicui/shiny-button'
