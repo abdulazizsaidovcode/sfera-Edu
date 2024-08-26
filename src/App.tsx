@@ -1,20 +1,25 @@
-import BlurIn from './components/magicui/blur-in'
-import Marquee from './components/magicui/marquee'
-import ShinyButton from './components/magicui/shiny-button'
-import SparklesText from './components/magicui/sparkles-text'
-import TextRevealByWord from './components/magicui/text-reveal'
+import { Route, Routes } from 'react-router-dom'
+import DefaultLayout from './layout/DefaultLayout'
+import PageTitle from './components/Header/PageTitle'
+import Index from './pages'
 
 function App() {
 
   return (
-    <>
-      hello
-      <BlurIn word={"Hello World"}></BlurIn>
-      <ShinyButton text='hello'></ShinyButton>
-      <TextRevealByWord text='hello my name is good boy'></TextRevealByWord>
-      <SparklesText text='salom jigarla' />
-      ddd <Marquee />
-    </>
+    <DefaultLayout>
+      <Routes>
+        <Route
+        index
+        path={`/`}
+        element={
+          <>
+            <PageTitle title="Admin | Dashboard" />
+            <Index />
+          </>
+        }
+        />
+      </Routes>
+    </DefaultLayout>
   )
 }
 
