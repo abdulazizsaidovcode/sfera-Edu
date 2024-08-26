@@ -5,6 +5,9 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
+    backgroundImage: {
+      'custom-gradient': 'linear-gradient(90deg, #1D4ED8, #4F46E5)',
+    },
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif']
     },
@@ -240,14 +243,23 @@ module.exports = {
         rotating: {
           '0%, 100%': { transform: 'rotate(360deg)' },
           '50%': { transform: 'rotate(0deg)' }
-        }
+        },
+        ripple: {
+          "0%, 100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "50%": {
+            transform: "translate(-50%, -50%) scale(0.9)",
+          },
+        },
       },
       animation: {
         'ping-once': 'ping 5s cubic-bezier(0, 0, 0.2, 1)',
         rotating: 'rotating 30s linear infinite',
         'spin-1.5': 'spin 1.5s linear infinite',
         'spin-2': 'spin 2s linear infinite',
-        'spin-3': 'spin 3s linear infinite'
+        'spin-3': 'spin 3s linear infinite',
+        ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
       }
     }
   },
