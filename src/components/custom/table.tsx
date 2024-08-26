@@ -28,7 +28,7 @@ const TableBody: React.FC<{ rows: Array<{ [key: string]: string }>, showIcons?: 
           {Object.keys(row).map((key, cellIndex) => (
             <td
               key={cellIndex}
-              className="px-2  text-center text-sm text-black border-r border-gray-300"
+              className="px-2 py-2  text-center text-sm text-black border-r border-gray-300"
             >
               {row[key]}
             </td>
