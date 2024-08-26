@@ -1,9 +1,13 @@
+import ShinyButton from '@/components/magicui/shiny-button'
 import React from 'react'
 
 function Index() {
     return (
         <div>
-            hello index
+            <ShinyButton
+                text='CANCEL'
+                className="bg-[#fff]"
+            />
         </div>
     )
 }
