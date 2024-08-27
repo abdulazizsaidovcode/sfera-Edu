@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout'
-import PageTitle from './components/Header/PageTitle'
+import PageTitle from './components/custom/Header/PageTitle'
 import Index from './pages'
 import Login from './pages/auth/login'
 
