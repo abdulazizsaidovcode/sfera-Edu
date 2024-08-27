@@ -1,10 +1,8 @@
 import DotPattern from '@/components/magicui/dot-pattern'
 import Ripple from '@/components/magicui/ripple'
 import ShinyButton from '@/components/magicui/shiny-button'
-import React from 'react'
 
 function Login() {
-
 
     return (
         <>
@@ -19,14 +17,14 @@ function Login() {
                             </h1>
                             <div className="space-y-4 md:space-y-6">
                                 <div>
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                                    <input type="email" name="email" id="email" className="bg-white border border-blue-500 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your userName" />
+                                    <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</p>
+                                    <input type="email" id="email" className="login__input bg-white border border-blue-500 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="name" />
                                 </div>
                                 <div className='mb-5'>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                    <input type="password" name="password" id="password" placeholder="••••••••" className="bg-white border border-blue-500 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-blue-600 dark:placeholder-blue-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                    <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
+                                    <input type="password" name="password" id="password" placeholder="••••••••" className="login__input bg-white border border-blue-500 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 " />
                                 </div>
-                                <ShinyButton text='hello' className=' bg-blue-400 w-full' />
+                                <ShinyButton text='login' className=' bg-current w-full' />
                                 <div className='flex justify-between'>
                                     <p className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</p>
                                     <p className="text-sm font-medium text-blue-600 hover:underline dark:text-primary-500">Sign up</p>

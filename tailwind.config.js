@@ -19,7 +19,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        current: 'currentColor',
+        current: '#5fa5f9',
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',

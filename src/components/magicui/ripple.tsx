@@ -26,7 +26,7 @@ const Ripple = React.memo(function Ripple({
             className={`absolute animate-ripple rounded-2xl bg-blue-300 backdrop-blur shadow-xl border [--i:${i}]`}
             style={
               {
-                width: `${size}px`,
+                width: `${size + 20}px`,
                 height: `${size + 105}px`,
                 opacity,
                 animationDelay,
