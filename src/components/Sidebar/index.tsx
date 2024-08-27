@@ -183,7 +183,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   title='Student'
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
-                  to='/'
+                  to='/e'
                 />
                 <MenuItem
                   title='Rate'
