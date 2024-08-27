@@ -49,7 +49,8 @@ const TableBody: React.FC<{ rows: Array<{ [key: string]: string }>, showIcons?: 
   );
 };
 
-// Main Table Component
+// Table component full 
+
 const Table: React.FC<{ headers: string[], rows: Array<{ [key: string]: string }>, showIcons?: boolean }> = ({ headers, rows, showIcons = false }) => {
   return (
     <div className="overflow-x-auto">
