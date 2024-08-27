@@ -13,7 +13,7 @@ module.exports = {
     },
     screens: {
       '2xsm': '375px',
-      xsm: '425px',
+      xsm: '465px',
       '3xl': '2000px',
       ...defaultTheme.screens
     },
