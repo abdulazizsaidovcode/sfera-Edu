@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { NavLink, useLocation } from 'react-router-dom';
 import { MdGroup, MdOutlineCategory, MdOutlinePlayLesson, MdStars } from "react-icons/md";
@@ -6,10 +6,14 @@ import { FaChalkboardTeacher } from 'react-icons/fa';
 import { PiStudentFill } from 'react-icons/pi';
 import { VscFileSubmodule } from 'react-icons/vsc';
 import { RiHomeOfficeLine } from 'react-icons/ri';
+import { IoIosLogOut } from 'react-icons/io';
+import ShinyButton from '@/components/magicui/shiny-button';
 
 interface SidebarProps {
   sidebarOpen: boolean;
+  isOpenModal: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  setIsOpenModal: (arg: boolean) => void;
 }
 
 const MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, title: string, to: string }) => {
@@ -23,7 +27,7 @@ const MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, tit
   )
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: SidebarProps) => {
   const location = useLocation();
   const role = localStorage.getItem('ROLE');
 
@@ -55,6 +59,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+
+  const toggleModal = () => setIsOpenModal(!isOpenModal);
+
+  console.log('MODAL', isOpenModal);
+
 
   return (
     <aside
@@ -100,7 +109,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
 
           {/* <!-- Menu Group --> */}
-          <div>
+          <div className='flex flex-col'>
             <ul className="mb-6 flex flex-col">
               {/* <!-- Menu Item Dashboard ADMIN or SUPER_ADMIN --> */}
               <li>
@@ -193,9 +202,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 />
               </li>
             </ul>
+            <ShinyButton onClick={toggleModal} icon={<IoIosLogOut size={25} />} text='Logout' className='bg-blue-400' />
           </div>
         </nav>
         {/* <!-- Sidebar Menu --> */}
+
       </div>
     </aside>
   );

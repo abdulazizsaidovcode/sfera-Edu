@@ -26,28 +26,33 @@ const animationProps = {
 } as AnimationProps;
 interface ShinyButtonProps {
   text: string;
+  onClick?: () => void,
   className?: string;
+  icon?: any
 }
 const ShinyButton = ({
   text = "shiny-button",
   className,
+  icon,
+  onClick
 }: ShinyButtonProps) => {
   return (
     <motion.button
       {...animationProps}
+      onClick={onClick}
       className={cn(
         "relative rounded-lg px-6 py-2 font-medium backdrop-blur-xl transition-[box-shadow] duration-300 ease-in-out hover:shadow dark:bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/10%)_0%,transparent_60%)] dark:hover:shadow-[0_0_20px_hsl(var(--primary)/10%)]",
         className,
       )}
     >
       <span
-        className="relative block h-full w-full text-sm uppercase tracking-wide text-white dark:font-light "
+        className={icon ? "relative flex justify-start items-center gap-2 h-full w-full text-sm uppercase tracking-wide text-white dark:font-light" : 'relative flex justify-center items-center  h-full w-full text-sm uppercase tracking-wide text-white dark:font-light'}
         style={{
           maskImage:
             "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent 30%),hsl(var(--primary)) 100%))",
         }}
       >
-        {text}
+        {icon} {text}
       </span>
     </motion.button>
   );

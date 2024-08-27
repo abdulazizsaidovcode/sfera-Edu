@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { pathname } = useLocation();
   const role = localStorage.getItem('ROLE');
 
@@ -12,7 +13,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     <div className="dark:bg-boxdark-2 dark:text-bodydark bg-stroke text-black">
       <div className="flex h-screen overflow-hidden">
         {!(pathname.startsWith('/login') || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/')) && (
-          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
         )}
 
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
