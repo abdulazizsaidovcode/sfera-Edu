@@ -34,8 +34,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
@@ -189,7 +187,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   to='/'
                 />
                 <MenuItem
-                  title='Course'
+                  title='Lesson'
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
                   to='/course'
