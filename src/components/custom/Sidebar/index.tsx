@@ -16,7 +16,7 @@ interface SidebarProps {
 const   MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, title: string, to: string }) => {
   return (
     <NavLink className={'text-black '} to={to}>
-      <div className={`py-3 px-4 my-3 ${pathname === to ? 'bg-[#20CC6D] group relative shadow flex items-center gap-2.5  font-medium text-black duration-300 ease-in-out cursor-pointer border-none  dark:border-graydark  rounded-lg' : "bg-white hover:opacity-70 group relative shadow flex items-center gap-2.5 font-medium text-black duration-300 ease-in-out hover:bg-[#DAFBED] border-2 cursor-pointer border-stroke  p-3 rounded-lg"}`}>
+      <div className={`py-3 px-4 my-3 ${pathname === to ? 'bg-[#20CC6D] group relative shadow flex items-center gap-2.5  font-medium text-black duration-300 ease-in-out cursor-pointer border-none  dark:border-graydark  rounded-lg' : "bg-white hover:opacity-70 group relative shadow flex items-center gap-2.5 font-medium text-black duration-300 ease-in-out hover:bg-[#DAFBED]  cursor-pointer border-stroke  p-3 rounded-lg"}`}>
         {icon}
         {title}
       </div>
