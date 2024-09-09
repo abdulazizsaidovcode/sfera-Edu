@@ -8,6 +8,7 @@ import { VscFileSubmodule } from 'react-icons/vsc';
 import { RiHomeOfficeLine } from 'react-icons/ri';
 import { IoIosLogOut } from 'react-icons/io';
 import ShinyButton from '@/components/magicui/shiny-button';
+import Login from '@/pages/auth/login';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -192,8 +193,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   title='Student'
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
-                  to='/e'
+                  to='/'
+                  
                 />
+               
                 <MenuItem
                   title='Rate'
                   icon={<MdStars size={20} />}
