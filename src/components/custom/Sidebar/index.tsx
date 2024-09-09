@@ -178,7 +178,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   title='Dashboard'
                   icon={<LuLayoutDashboard size={20} />}
                   pathname={location.pathname}
-                  to='/'
+                  to='/dashboard'
                 />
                 <MenuItem
                   title='Lesson'

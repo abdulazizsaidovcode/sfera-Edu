@@ -5,7 +5,7 @@ import NumberTicker from '@/components/magicui/number-ticker'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
     return (
-        <div className="bg-white dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
+        <div className="bg-white shadow-2xl dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
             <HyperText
                 className="text-3xl text-black dark:text-white"
                 text={title}

@@ -5,6 +5,7 @@ import Index from './pages'
 import Login from './pages/auth/login'
 import Home from './pages/home/home'
 import Course from './pages/course/course'
+import Dashboard from './pages/Dashboard/dashboard'
 
 function App() {
 
@@ -13,11 +14,11 @@ function App() {
       <Routes>
         <Route
           index
-          path={`/`}
+          path={`/dashboard`}
           element={
             <>
               <PageTitle title="Admin | Dashboard" />
-              <Index />
+              <Dashboard />
             </>
           }
         />
