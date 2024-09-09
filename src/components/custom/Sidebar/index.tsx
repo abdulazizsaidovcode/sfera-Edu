@@ -76,8 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
       <div className="flex justify-start items-center gap-2 px-6 pb-5.5 lg:pb-6.5">
         <NavLink to="/">
           <div className={`flex justify-start items-center w-full px-4 lg:px-6`}>
-            {/* <img src={darkLogo} alt="logo" className={`w-full h-20 scale-[2.5] dark:inline hidden`} />
-            <img src={lightLogo} alt="logo" className={`w-full h-20 scale-[2.5] dark:hidden inline`} /> */}
+           
           </div>
         </NavLink>
 
@@ -110,7 +109,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
 
           {/* <!-- Menu Group --> */}
-          <div className='flex flex-col'>
+          <div className='flex flex-col '>
             <ul className="mb-6 flex flex-col">
               {/* <!-- Menu Item Dashboard ADMIN or SUPER_ADMIN --> */}
               <li>
@@ -190,18 +189,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   to='/'
                 />
                 <MenuItem
-                  title='Student'
+                  title='Course'
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
                   to='/'
                   
-                />
-               
-                <MenuItem
-                  title='Rate'
-                  icon={<MdStars size={20} />}
-                  pathname={location.pathname}
-                  to='/'
                 />
               </li>
             </ul>
