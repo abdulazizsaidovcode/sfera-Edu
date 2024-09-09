@@ -19,12 +19,12 @@ interface SidebarProps {
 
 const MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, title: string, to: string }) => {
   return (
-    <div className={pathname === to ? 'bg-stroke hover:opacity-70 dark:hover:bg-graydark group relative shadow flex items-center gap-2.5 py-3 px-4 my-3 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-slate-300 border-2 cursor-pointer border-stroke dark:border-graydark dark:bg-[#1A222C] p-3 rounded-lg' : "bg-white hover:opacity-70 dark:hover:bg-graydark group relative shadow flex items-center gap-2.5 py-3 px-4 my-1 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-slate-300 border-2 cursor-pointer border-stroke dark:border-graydark dark:bg-boxdark p-3 rounded-lg"}>
+    <NavLink className={'text-black dark:text-stroke'} to={to}>
+    <div className={`py-3 px-4 my-3 ${pathname === to ? 'bg-stroke hover:opacity-70 dark:hover:bg-graydark group relative shadow flex items-center gap-2.5  font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-slate-300 border-2 cursor-pointer border-stroke dark:border-graydark dark:bg-[#1A222C]  rounded-lg' : "bg-white hover:opacity-70 dark:hover:bg-graydark group relative shadow flex items-center gap-2.5 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-slate-300 border-2 cursor-pointer border-stroke dark:border-graydark dark:bg-boxdark p-3 rounded-lg"}`}>
       {icon}
-      <NavLink className={'text-black dark:text-stroke'} to={to}>
-        {title}
-      </NavLink>
+      {title}
     </div>
+    </NavLink>
   )
 }
 
@@ -192,7 +192,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   title='Course'
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
-                  to='/'
+                  to='/course'
                   
                 />
               </li>

@@ -4,6 +4,7 @@ import PageTitle from './components/custom/Header/PageTitle'
 import Index from './pages'
 import Login from './pages/auth/login'
 import Home from './pages/home/home'
+import Course from './pages/course/course'
 
 function App() {
 
@@ -37,6 +38,16 @@ function App() {
             <>
               <PageTitle title="Home" />
               <Home />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/course`}
+          element={
+            <>
+              <PageTitle title="Course" />
+              <Course />
             </>
           }
         />
