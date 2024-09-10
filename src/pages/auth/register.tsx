@@ -51,6 +51,8 @@ function Register() {
             await postData();
             navigate('/login', { replace: true });
             toast.success('Ro\'yxatdan o\'tdingiz!');
+            setPhoneNumber('');
+            setPassword('');
         } catch (err) {
             console.log('Xatolik yuz berdi:', error);
             toast.error('Ro\'yxatdan o\'tishda xatolik yuz berdi.');

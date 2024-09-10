@@ -1,10 +1,38 @@
+import PhoneInput from '@/components/Inputs/PhoneInput';
 import TextInput from '@/components/Inputs/TextInput';
 import DotPattern from '@/components/magicui/dot-pattern';
-import Ripple from '@/components/magicui/ripple';
 import ShinyButton from '@/components/magicui/shiny-button';
-import { Link } from 'react-router-dom';
+import { config } from '@/context/api/token';
+import { login_URl } from '@/context/api/url';
+import { usePost } from '@/context/logic/global_functions/usePostOption';
+import { useFormValue } from '@/storys/loginValue';
+import { useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
+    const { phoneNumber, password, setPhoneNumber, setPassword, } = useFormValue();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate()
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const { error, loading, postData, response } = usePost(login_URl, {
+        phoneNumber: phoneNumber || '',
+        password: passwordRef.current?.value || '',
+    })
+
+    const handleSubmit = async () => {
+        try {
+            // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
+            await postData();
+            navigate('/dashboard', { replace: true });
+            toast.success('Muvaffaqiyatli kirdingiz!');
+        } catch (err) {
+            console.log('Xatolik yuz berdi:', error);
+            toast.error('Kirishda xatolik yuz berdi.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     return (
         <>
             <DotPattern />
@@ -19,13 +47,23 @@ function Login() {
                             <div className="space-y-4 md:space-y-6">
                                 <div>
                                     <p className="block mb-2 text-sm font-medium text-gray-900">Your name</p>
-                                    <TextInput placeholder='Phone number' />
+                                    <PhoneInput
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e)}
+                                        placeholder='phonenumber'
+                                    />
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
-                                    <TextInput placeholder='Password' />
+                                    <TextInput
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder='••••••••'
+                                        type='password'
+                                        ref={passwordRef}
+                                    />
                                 </div>
-                                <ShinyButton text='login' className='bg-[#087E43] w-full' />
+                                <ShinyButton disabled={isSubmitting} text='login' className='bg-[#087E43] w-full' onClick={handleSubmit} />
                                 <div className='flex justify-between'>
                                     <p className="text-sm font-medium text-primary-600 ">Forgot password?</p>
                                     <Link to="/register" className="text-sm font-medium text-[#087E43] hover:underline hover:text-[#087E43]">Sign up</Link>
