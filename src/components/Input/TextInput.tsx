@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { forwardRef, InputHTMLAttributes } from 'react';
 
-interface TextInputProps {
-  placeholder?: string;
+interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  type?: string;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ placeholder, value, onChange }) => {
+const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ value, onChange, placeholder, type, ...props }, ref) => {
   return (
-    <input
-      type="text"
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className="bg-white border border-[#087E43] text-gray-900 rounded-lg focus:ring-[#087E43] focus:border-[#087E43] block w-full p-2.5"
-    />
+    <div className="text-input-container">
+      <input
+        ref={ref}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        type={type}
+        {...props}
+        className="login__input bg-white border border-[#087E43] text-gray-900 rounded-lg focus:ring-[#087E43] focus:border-[#087E43] block w-full p-2.5"
+      />
+    </div>
   );
-};
+});
+
+TextInput.displayName = 'TextInput'; // `displayName` ni o‘rnatish zarur, bu `forwardRef` bilan ishlash uchun
 
 export default TextInput;

@@ -9,6 +9,8 @@ interface StoreState {
     setPhoneNumber: (phoneNumber: string) => void;
     password: string;
     setPassword: (password: string) => void;
+    checkPassword:string
+    setCheckPassword:(checkPassword:string)=>void
 }
 
 export const useFormValue = create<StoreState>((set) => ({
@@ -20,4 +22,6 @@ export const useFormValue = create<StoreState>((set) => ({
     setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),
     password: '',
     setPassword: (password: string) => set({ password }),
+    checkPassword:'',
+    setCheckPassword:(checkPassword:string)=>set({checkPassword})
 }));
