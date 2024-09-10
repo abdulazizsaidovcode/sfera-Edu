@@ -8,6 +8,7 @@ import Course from './pages/course/course'
 import Dashboard from './pages/Dashboard/dashboard'
 import Lesson from './pages/lesson/lesson'
 import LessonVideo from './pages/lesson/lesson'
+import Register from './pages/auth/register'
 
 function App() {
 
@@ -31,6 +32,16 @@ function App() {
             <>
               <PageTitle title="Login" />
               <Login />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/register`}
+          element={
+            <>
+              <PageTitle title="Register" />
+              <Register />
             </>
           }
         />
