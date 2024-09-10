@@ -3,19 +3,34 @@ import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
 import TextInput from '@/components/Input/TextInput';
 import { useFormValue } from '@/storys/loginValue';
+import { usePost } from '@/context/logic/global_functions/usePostOption';
+import { register_URl } from '@/context/api/url';
+import { replace, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function Register() {
     const { phoneNumber, firstName, lastName, password, checkPassword, setFirstName, setLastName, setPhoneNumber, setPassword, setCheckPassword } = useFormValue();
-    
+    const [errorInput, setError] = useState<string | null>(null);
+    const navigate=useNavigate()
+    // Input references
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
     const phoneNumberRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const checkPasswordRef = useRef<HTMLInputElement>(null);
 
-    const [error, setError] = useState<string | null>(null);
+    // API call using usePost
+    const { error, loading, postData, response } = usePost(
+        register_URl, // URL
+        {
+            firstname: firstNameRef.current?.value || '', // Getting value from useRef
+            lastname: lastNameRef.current?.value || '',
+            phoneNumber: phoneNumberRef.current?.value || '',
+            password: passwordRef.current?.value || '',
+        }
+    );
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredCheckPassword = checkPasswordRef.current?.value || '';
 
@@ -24,12 +39,17 @@ function Register() {
             return;
         }
 
-        // Agar parollar mos kelsa, xatoni tozalash va boshqa amallarni bajarish
+        // Agar parollar mos kelsa, xatoni tozalash va POST so'rovini jo'natish
         setError(null);
-        console.log("First Name:", firstNameRef.current?.value);
-        console.log("Last Name:", lastNameRef.current?.value);
-        console.log("Phone Number:", phoneNumberRef.current?.value);
-        console.log("Password:", enteredPassword);
+
+        try {
+            // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
+            await postData();
+            navigate('/login',{replace:true})
+            toast.success('Ro\'yxatdan o\'tdingiz!')
+        } catch (err) {
+            console.log('Xatolik yuz berdi:', error);
+        }
     };
 
     return (
@@ -91,7 +111,7 @@ function Register() {
                                         ref={checkPasswordRef}
                                     />
                                 </div>
-                                {error && <p className="text-red-500 text-sm">{error}</p>}
+                                {errorInput && <p className="text-red-500 text-sm">{error}</p>}
                                 <ShinyButton text='Register' className='bg-[#087E43] w-full' onClick={handleSubmit} />
                             </div>
                         </div>
