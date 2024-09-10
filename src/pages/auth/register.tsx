@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import PhoneInput from '@/components/Inputs/PhoneInput';
 import LoadingModal from '@/components/Loading/loading';
+import PasswordInput from '@/components/Inputs/passwordInput';
 
 function Register() {
     const { phoneNumber, firstName, lastName, password, checkPassword, setFirstName, setLastName, setPhoneNumber, setPassword, setCheckPassword } = useFormValue();
@@ -44,20 +45,23 @@ function Register() {
 
         // Agar parollar mos kelsa, xatoni tozalash va POST so'rovini jo'natish
         setError(null);
-        setIsSubmitting(true);
-
-        try {
-            // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
-            await postData();
-            navigate('/login', { replace: true });
-            toast.success('Ro\'yxatdan o\'tdingiz!');
-            setPhoneNumber('');
-            setPassword('');
-        } catch (err) {
-            console.log('Xatolik yuz berdi:', error);
-            toast.error('Ro\'yxatdan o\'tishda xatolik yuz berdi.');
-        } finally {
-            setIsSubmitting(false);
+        if (phoneNumber.length > 11 && firstNameRef.current?.value && lastNameRef.current?.value && passwordRef.current?.value) {
+            setIsSubmitting(true);
+            try {
+                // postData funksiyasini chaqiramiz v   a serverga so'rovni yuboramiz
+                await postData();
+                navigate('/login', { replace: true });
+                toast.success('Ro\'yxatdan o\'tdingiz!');
+                setPhoneNumber('');
+                setPassword('');
+            } catch (err) {
+                console.log('Xatolik yuz berdi:', error);
+                toast.error('Ro\'yxatdan o\'tishda xatolik yuz berdi.');
+            } finally {
+                setIsSubmitting(false);
+            }
+        } else {
+            toast.bol('Formani to\'ldiring!');
         }
     };
 
@@ -100,30 +104,30 @@ function Register() {
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
-                                    <TextInput
+                                    <PasswordInput
+                                        ref={passwordRef}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        placeholder='••••••••'
+                                        placeholder="Enter your password"
                                         type='password'
-                                        ref={passwordRef}
                                     />
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Check password</p>
-                                    <TextInput
+                                    <PasswordInput
+                                        ref={checkPasswordRef}
                                         value={checkPassword}
                                         onChange={(e) => setCheckPassword(e.target.value)}
-                                        placeholder='••••••••'
+                                        placeholder="Enter your password"
                                         type='password'
-                                        ref={checkPasswordRef}
                                     />
                                 </div>
                                 {errorInput && <p className="text-red-500 text-sm">{error}</p>}
-                                <ShinyButton 
-                                    text='Register' 
-                                    className='bg-[#087E43] w-full' 
-                                    onClick={handleSubmit} 
-                                    disabled={isSubmitting} 
+                                <ShinyButton
+                                    text='Register'
+                                    className='bg-[#087E43] w-full'
+                                    onClick={handleSubmit}
+                                    disabled={isSubmitting}
                                 />
                             </div>
                         </div>
