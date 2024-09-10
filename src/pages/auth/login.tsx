@@ -1,3 +1,4 @@
+import TextInput from '@/components/Input/TextInput';
 import DotPattern from '@/components/magicui/dot-pattern';
 import Ripple from '@/components/magicui/ripple';
 import ShinyButton from '@/components/magicui/shiny-button';
@@ -18,22 +19,11 @@ function Login() {
                             <div className="space-y-4 md:space-y-6">
                                 <div>
                                     <p className="block mb-2 text-sm font-medium text-gray-900">Your name</p>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        className="login__input bg-white border border-[#087E43] text-gray-900 rounded-lg focus:ring-[#087E43] focus:border-[#087E43] block w-full p-2.5"
-                                        placeholder="name"
-                                    />
+                                    <TextInput placeholder='Phone number' />
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        placeholder="••••••••"
-                                        className="login__input bg-white border border-[#087E43] text-gray-900 rounded-lg focus:ring-[#087E43] focus:border-[#087E43] block w-full p-2.5"
-                                    />
+                                    <TextInput placeholder='Password' />
                                 </div>
                                 <ShinyButton text='login' className='bg-[#087E43] w-full' />
                                 <div className='flex justify-between'>

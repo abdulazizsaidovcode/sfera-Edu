@@ -1,10 +1,11 @@
 import DotPattern from '@/components/magicui/dot-pattern';
-import Ripple from '@/components/magicui/ripple';
 import { Link } from 'react-router-dom';
 import ShinyButton from '@/components/magicui/shiny-button';
 import TextInput from '@/components/Input/TextInput';
+import { useFormValue } from '@/storys/loginValue';
 
 function Register() {
+    const {phoneNumber,firstName}=useFormValue()
     return (
         <>
             <DotPattern />
@@ -18,7 +19,7 @@ function Register() {
                             </h1>
                             <div className="space-y-4 md:space-y-6">
                                 <div>
-                                    <p className="block mb-2 text-sm font-medium text-gray-900">Firstname:</p>
+                                    <p className="block mb-2 text-sm font-medium  text-gray-900">Firstname:</p>
                                     <TextInput placeholder='firstname' />
                                 </div>
                                 <div>
