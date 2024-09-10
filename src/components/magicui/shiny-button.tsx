@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, type AnimationProps } from "framer-motion";
-
 import { cn } from "@/lib/utils";
 
 const animationProps = {
@@ -24,32 +23,44 @@ const animationProps = {
     },
   },
 } as AnimationProps;
+
 interface ShinyButtonProps {
   text: string;
-  onClick?: () => void,
+  onClick?: () => void;
   className?: string;
-  icon?: any
+  icon?: any;
+  disabled?: boolean; // Added disabled prop
 }
+
 const ShinyButton = ({
   text = "shiny-button",
   className,
   icon,
-  onClick
+  onClick,
+  disabled = false, // Default value for disabled
 }: ShinyButtonProps) => {
   return (
     <motion.button
       {...animationProps}
-      onClick={onClick}
+      onClick={!disabled ? onClick : undefined} // Only call onClick if not disabled
       className={cn(
-        "relative rounded-lg px-6 py-2 font-medium backdrop-blur-xl transition-[box-shadow] duration-300 ease-in-out hover:shadow ",
+        "relative rounded-lg px-6 py-2 font-medium backdrop-blur-xl transition-[box-shadow] duration-300 ease-in-out hover:shadow",
+        {
+          "cursor-not-allowed opacity-50": disabled, // Styling for disabled state
+        },
         className,
       )}
+      disabled={disabled} // Add disabled attribute
     >
       <span
-        className={icon ? "relative flex justify-start items-center gap-2 h-full w-full text-sm uppercase tracking-wide text-white dark:font-light" : 'relative flex justify-center items-center  h-full w-full text-sm uppercase tracking-wide text-white dark:font-light'}
+        className={
+          icon
+            ? "relative flex justify-start items-center gap-2 h-full w-full text-sm uppercase tracking-wide text-white dark:font-light"
+            : "relative flex justify-center items-center h-full w-full text-sm uppercase tracking-wide text-white dark:font-light"
+        }
         style={{
           maskImage:
-            "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent 30%),hsl(var(--primary)) 100%))",
+            "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent 30%),hsl(var(--primary)) 100%)",
         }}
       >
         {icon} {text}

@@ -1,21 +1,24 @@
 import React, { useRef, useState } from 'react';
 import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
-import TextInput from '@/components/Input/TextInput';
+import TextInput from '@/components/Inputs/TextInput';
 import { useFormValue } from '@/storys/loginValue';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
 import { register_URl } from '@/context/api/url';
-import { replace, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import PhoneInput from '@/components/Inputs/PhoneInput';
+import LoadingModal from '@/components/Loading/loading';
 
 function Register() {
     const { phoneNumber, firstName, lastName, password, checkPassword, setFirstName, setLastName, setPhoneNumber, setPassword, setCheckPassword } = useFormValue();
     const [errorInput, setError] = useState<string | null>(null);
-    const navigate=useNavigate()
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Input references
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
-    const phoneNumberRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const checkPasswordRef = useRef<HTMLInputElement>(null);
 
@@ -25,7 +28,7 @@ function Register() {
         {
             firstname: firstNameRef.current?.value || '', // Getting value from useRef
             lastname: lastNameRef.current?.value || '',
-            phoneNumber: phoneNumberRef.current?.value || '',
+            phoneNumber: phoneNumber || '',
             password: passwordRef.current?.value || '',
         }
     );
@@ -41,14 +44,18 @@ function Register() {
 
         // Agar parollar mos kelsa, xatoni tozalash va POST so'rovini jo'natish
         setError(null);
+        setIsSubmitting(true);
 
         try {
             // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
             await postData();
-            navigate('/login',{replace:true})
-            toast.success('Ro\'yxatdan o\'tdingiz!')
+            navigate('/login', { replace: true });
+            toast.success('Ro\'yxatdan o\'tdingiz!');
         } catch (err) {
             console.log('Xatolik yuz berdi:', error);
+            toast.error('Ro\'yxatdan o\'tishda xatolik yuz berdi.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -60,64 +67,68 @@ function Register() {
                     <div className="w-full backdrop-blur-sm rounded-2xl border border-[#087E43] dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-2 space-y-4 md:space-y-6 sm:p-8 relative z-999">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                                Sign up 
+                                Sign up
                             </h1>
                             <div className="space-y-4 md:space-y-6">
                                 <div>
                                     <p className="block mb-2 text-sm font-medium text-gray-900">Firstname:</p>
-                                    <TextInput 
-                                        value={firstName} 
-                                        onChange={(e) => setFirstName(e.target.value)} 
-                                        placeholder='firstname' 
+                                    <TextInput
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        placeholder='firstname'
                                         ref={firstNameRef}
                                     />
                                 </div>
                                 <div>
                                     <p className="block mb-2 text-sm font-medium text-gray-900">Lastname:</p>
-                                    <TextInput 
-                                        value={lastName} 
-                                        onChange={(e) => setLastName(e.target.value)} 
-                                        placeholder='lastname' 
+                                    <TextInput
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        placeholder='lastname'
                                         ref={lastNameRef}
                                     />
                                 </div>
                                 <div>
                                     <p className="block mb-2 text-sm font-medium text-gray-900">Phonenumber:</p>
-                                    <TextInput 
-                                        value={phoneNumber} 
-                                        onChange={(e) => setPhoneNumber(e.target.value)} 
-                                        placeholder='phonenumber' 
-                                        ref={phoneNumberRef}
-                                        type='number'
+                                    <PhoneInput
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e)}
+                                        placeholder='phonenumber'
                                     />
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
-                                    <TextInput 
-                                        value={password} 
-                                        onChange={(e) => setPassword(e.target.value)} 
-                                        placeholder='••••••••' 
+                                    <TextInput
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder='••••••••'
                                         type='password'
                                         ref={passwordRef}
                                     />
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Check password</p>
-                                    <TextInput 
-                                        value={checkPassword} 
-                                        onChange={(e) => setCheckPassword(e.target.value)} 
-                                        placeholder='••••••••' 
+                                    <TextInput
+                                        value={checkPassword}
+                                        onChange={(e) => setCheckPassword(e.target.value)}
+                                        placeholder='••••••••'
                                         type='password'
                                         ref={checkPasswordRef}
                                     />
                                 </div>
                                 {errorInput && <p className="text-red-500 text-sm">{error}</p>}
-                                <ShinyButton text='Register' className='bg-[#087E43] w-full' onClick={handleSubmit} />
+                                <ShinyButton 
+                                    text='Register' 
+                                    className='bg-[#087E43] w-full' 
+                                    onClick={handleSubmit} 
+                                    disabled={isSubmitting} 
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+            <LoadingModal isVisible={isSubmitting} /> {/* Render the LoadingModal component */}
         </>
     );
 }

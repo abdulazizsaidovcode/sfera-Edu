@@ -1,4 +1,4 @@
-import TextInput from '@/components/Input/TextInput';
+import TextInput from '@/components/Inputs/TextInput';
 import DotPattern from '@/components/magicui/dot-pattern';
 import Ripple from '@/components/magicui/ripple';
 import ShinyButton from '@/components/magicui/shiny-button';
