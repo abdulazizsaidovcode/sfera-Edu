@@ -6,6 +6,8 @@ import Login from './pages/auth/login'
 import Home from './pages/home/home'
 import Course from './pages/course/course'
 import Dashboard from './pages/Dashboard/dashboard'
+import Lesson from './pages/lesson/lesson'
+import LessonVideo from './pages/lesson/lesson'
 
 function App() {
 
@@ -49,6 +51,16 @@ function App() {
             <>
               <PageTitle title="Course" />
               <Course />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/lesson`}
+          element={
+            <>
+              <PageTitle title="Course" />
+              <LessonVideo />
             </>
           }
         />

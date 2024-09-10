@@ -15,7 +15,7 @@ interface SidebarProps {
 
 const   MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, title: string, to: string }) => {
   return (
-    <NavLink className={'text-black '} to={to}>
+    <NavLink className={'text-black bg-[#6A9C89] '} to={to}>
       <div className={`py-3 px-4 my-3 ${pathname === to ? 'bg-[#20CC6D] group relative shadow flex items-center gap-2.5  font-medium text-black duration-300 ease-in-out cursor-pointer border-none  dark:border-graydark  rounded-lg' : "bg-white hover:opacity-70 group relative shadow flex items-center gap-2.5 font-medium text-black duration-300 ease-in-out hover:bg-[#DAFBED]  cursor-pointer border-stroke  p-3 rounded-lg"}`}>
         {icon}
         {title}
@@ -63,7 +63,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white shadow-4 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#C4DAD2] shadow-4 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}

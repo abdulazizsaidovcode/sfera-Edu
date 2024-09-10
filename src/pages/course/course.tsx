@@ -1,50 +1,86 @@
-import React, { useState } from 'react';
-import Accordion from '@/components/accordion/accordion';
-import AccordionItem from '@/components/accordion/accordion';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { MdDevices } from "react-icons/md";
+import { FaVideo } from "react-icons/fa";
+import AccordionItem from "@/components/accordion/accordion";
 
 const Course = () => {
-  const [openAccordionId, setOpenAccordionId] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
 
-  const accordionData = [
-    { id: 1, title: 'Accordion Title 1', content: 'This is the content for the first accordion item.' },
-    { id: 2, title: 'Accordion Title 2', content: 'This is the content for the second accordion item.' },
-    { id: 3, title: 'Accordion Title 3', content: [
-        'This is the first piece of content for the third accordion item.',
-        'This is the second piece of content for the third accordion item.',
-      ]
-    },
-  ];
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
 
-  const handleToggle = (id: number) => {
+  const toggleAccordion = (id: string) => {
     setOpenAccordionId(openAccordionId === id ? null : id);
   };
 
+  const accordionData = [
+    {
+      id: "parentAccordion1",
+      title: "1-Modul",
+      icon:<MdDevices />,
+      children: [
+        {
+          id: "childAccordion1",
+          title: "1-dars",
+          navigateTo: "/lesson",
+          subtitle:'Java asoslari',
+          icon: <FaVideo />
+        },
+        {
+          id: "childAccordion2",
+          title: "2-dars",
+          navigateTo: "/lesson",
+          subtitle:'Java asoslari',
+          icon: <FaVideo />
+        },
+      ],
+    },
+    {
+      id: "parentAccordion2",
+      title: "2-Modul",
+      icon:<MdDevices />,
+      children: [
+        {
+          id: "childAccordion3",
+          title: "3-dars",
+          navigateTo: "/lesson",
+          subtitle:'Java asoslari',
+          icon: <FaVideo />
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="hs-accordion-group">
-      <AccordionItem id="one" title="Accordion #1">
-        <AccordionItem id="sub-one" title="Sub accordion #1">
-          <p className="text-gray-800 dark:text-neutral-200">
-            <em>This is the first sub accordion body.</em>
-          </p>
+      {accordionData.map((parent) => (
+        <AccordionItem
+          key={parent.id}
+          id={parent.id}
+          title={parent.title}
+          icon = {parent.icon}
+          isOpen={openAccordionId === parent.id}
+          toggle={() => toggleAccordion(parent.id)}
+        >
+          {parent.children.map((child) => (
+            <AccordionItem
+              key={child.id}
+              id={child.id}
+              title={child.title}
+              subtitle={child.subtitle}
+              isOpen={false} // Child accordions are not independently openable
+              toggle={() => handleNavigate(child.navigateTo)} // Handle navigation on click
+              icon={child.icon}
+            />
+          ))}
         </AccordionItem>
-        <AccordionItem id="sub-two" title="Sub accordion #2">
-          <p className="text-gray-800 dark:text-neutral-200">
-            <em>This is the second sub accordion body.</em>
-          </p>
-        </AccordionItem>
-      </AccordionItem>
-      <AccordionItem id="two" title="Accordion #2">
-        <p className="text-gray-800 dark:text-neutral-200">
-          <em>This is the second accordion body.</em>
-        </p>
-      </AccordionItem>
-      <AccordionItem id="three" title="Accordion #3">
-        <p className="text-gray-800 dark:text-neutral-200">
-          <em>This is the third accordion body.</em>
-        </p>
-      </AccordionItem>
+      ))}
     </div>
   );
-}
+};
 
 export default Course;
