@@ -1,3 +1,4 @@
+import PasswordInput from '@/components/Inputs/passwordInput';
 import PhoneInput from '@/components/Inputs/PhoneInput';
 import TextInput from '@/components/Inputs/TextInput';
 import DotPattern from '@/components/magicui/dot-pattern';
@@ -64,12 +65,12 @@ function Login() {
                                 </div>
                                 <div className='mb-5'>
                                     <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</p>
-                                    <TextInput
+                                    <PasswordInput
+                                        ref={passwordRef}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        placeholder='••••••••'
+                                        placeholder="Enter your password"
                                         type='password'
-                                        ref={passwordRef}
                                     />
                                 </div>
                                 <ShinyButton disabled={isSubmitting} text='login' className='bg-[#087E43] w-full' onClick={handleSubmit} />
