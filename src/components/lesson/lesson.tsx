@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AccordionItem from "../accordion/accordion";
 import AccordionLesson from "../accordion/accordionLesson";
 
 interface LessonProps {
@@ -10,7 +9,6 @@ interface LessonProps {
 }
 
 const Lesson: React.FC<LessonProps> = ({ videoUrl, resourceTitle, questionTitle, accordionItems }) => {
-    // State to manage which accordion item is open
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     // Handler to toggle accordion items
