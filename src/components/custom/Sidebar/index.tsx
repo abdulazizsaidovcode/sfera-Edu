@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { PiStudentFill } from 'react-icons/pi';
 import { IoIosLogOut } from 'react-icons/io';
 import ShinyButton from '@/components/magicui/shiny-button';
-import logo from '@/assets/images/Sfer 1.png'
+import logo from '@/assets/images/Sfer 2.png'
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -65,7 +65,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#C4DAD2] shadow-4 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#16423C] shadow-4 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
