@@ -2,11 +2,10 @@ import PhoneInput from '@/components/Inputs/PhoneInput';
 import TextInput from '@/components/Inputs/TextInput';
 import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
-import { config } from '@/context/api/token';
 import { login_URl } from '@/context/api/url';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
 import { useFormValue } from '@/storys/loginValue';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,16 @@ function Login() {
         phoneNumber: phoneNumber || '',
         password: passwordRef.current?.value || '',
     })
-
+    console.log('---------------------', response, '-----------------------');
+    useEffect(() => {
+        if (response) {
+            const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
+            localStorage.setItem('token', response?.token);
+            localStorage.setItem('ROLE', response?.role);
+            localStorage.setItem('tokenExpiry', expiryTime.toString());
+            navigate("/dashboard");
+        }
+    }, [response?.role, response?.token])
     const handleSubmit = async () => {
         try {
             // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
@@ -33,6 +41,7 @@ function Login() {
             setIsSubmitting(false);
         }
     };
+    // log
     return (
         <>
             <DotPattern />
@@ -66,7 +75,7 @@ function Login() {
                                 <ShinyButton disabled={isSubmitting} text='login' className='bg-[#087E43] w-full' onClick={handleSubmit} />
                                 <div className='flex justify-between'>
                                     <p className="text-sm font-medium text-primary-600 ">Forgot password?</p>
-                                    <Link to="/register" className="text-sm font-medium text-[#087E43] hover:underline hover:text-[#087E43]">Sign up</Link>
+                                    <Link to="/auth/register" className="text-sm font-medium text-[#087E43] hover:underline hover:text-[#087E43]">Sign up</Link>
                                 </div>
                             </div>
                         </div>

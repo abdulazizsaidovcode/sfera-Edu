@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout'
 import PageTitle from './components/custom/Header/PageTitle'
 import Index from './pages'
@@ -9,8 +9,57 @@ import Dashboard from './pages/Dashboard/dashboard'
 import Lesson from './pages/lesson/lesson'
 import LessonVideo from './pages/lesson/lesson'
 import Register from './pages/auth/register'
+import { useEffect } from 'react'
+import { setConfig } from './context/api/token'
 
 function App() {
+  const tokens = localStorage.getItem('token');
+  const role = localStorage.getItem('ROLE');
+  const tokenExpiry = localStorage.getItem('tokenExpiry');
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setConfig();
+    const refresh = sessionStorage.getItem('refreshes');
+
+    if (!tokens) {
+      sessionStorage.removeItem('refreshes');
+      if (!pathname.startsWith('/auth')) navigate('/auth/login');
+    } else if (!refresh) sessionStorage.setItem('refreshes', 'true');
+  }, [tokens, pathname, navigate]);
+
+  useEffect(() => {
+    setConfig();
+    window.scrollTo(0, 0);
+
+    if (pathname === '/') {
+      if (role === 'ROLE_STUDENT') {
+        if (!tokens) navigate('/auth/login');
+        else navigate('/dashboard');
+      } else if (role === 'ROLE_TEACHER') {
+        if (!tokens) navigate('/auth/login');
+        // kamchiolik bor qilish kk
+        else navigate('/dashboard');
+      }
+    }
+
+    if (tokens && tokenExpiry) {
+      const now = new Date().getTime();
+      if (now > parseInt(tokenExpiry)) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenExpiry');
+        localStorage.removeItem('ROLE');
+      }
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenExpiry');
+      localStorage.removeItem('ROLE');
+    }
+
+    if (!tokens && !pathname.startsWith('/auth')) navigate('/auth/login');
+    if (!tokens && pathname.startsWith('/auth')) sessionStorage.removeItem('refreshes');
+  }, [pathname, tokens, navigate]);
 
   return (
     <DefaultLayout>
@@ -27,7 +76,7 @@ function App() {
         />
         <Route
           index
-          path={`/login`}
+          path={`/auth/login`}
           element={
             <>
               <PageTitle title="Login" />
@@ -37,7 +86,7 @@ function App() {
         />
         <Route
           index
-          path={`/register`}
+          path={`/auth/register`}
           element={
             <>
               <PageTitle title="Register" />

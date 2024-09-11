@@ -20,13 +20,8 @@ export function usePost<T>(url: string, data: T, config?: any): UsePostResponse<
         toastMessage(result.data.error.code);
         throw new Error(result.data.error.message);
       }
-      return result.data.data; const { token, role } = result.data.data;
-
-      // Save token and role in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('role', role);
-
       return result.data.data;
+
     },
     onError: (error: any) => {
       // Custom error handling if needed
