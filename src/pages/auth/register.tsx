@@ -50,7 +50,7 @@ function Register() {
             try {
                 // postData funksiyasini chaqiramiz v   a serverga so'rovni yuboramiz
                 await postData();
-                navigate('/login', { replace: true });
+                navigate('/auth/login', { replace: true });
                 toast.success('Ro\'yxatdan o\'tdingiz!');
                 setPhoneNumber('');
                 setPassword('');
@@ -61,7 +61,7 @@ function Register() {
                 setIsSubmitting(false);
             }
         } else {
-            toast.bol('Formani to\'ldiring!');
+            toast.error('Formani to\'ldiring!');
         }
     };
 

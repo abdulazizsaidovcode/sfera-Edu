@@ -10,7 +10,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const role = localStorage.getItem('ROLE');
 
   useEffect(() => {
-    let check = !(pathname.startsWith('/login') || (pathname.startsWith('/home')) || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/'))
+    let check = !(pathname.startsWith('/auth') || (pathname.startsWith('/home')) || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/'))
     setIsvisibleSidebar(check)
   }, [pathname, role])
 
