@@ -21,7 +21,6 @@ export const getCourses = async (setData: any) => {
     const response = await axios.get(`${getModule}/${id}`, config);
     try {
       if (response.data.data) {
-        console.log("data",response.data.data); 
         setData(response.data.data)
       } else if (response.data.error) {
         console.error('Error in response:', response.data.error);
@@ -30,3 +29,7 @@ export const getCourses = async (setData: any) => {
       console.error('Error fetching module data:', error);
     }
   };
+
+  export const getStudentInfo = async () =>{
+    const res = await axios.get()
+  }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdDevices } from "react-icons/md";
-import { FaVideo } from "react-icons/fa";
 import AccordionItem from "@/components/accordion/accordion";
 import { getCourses, getModules } from "@/context/logic/course";
 import { useCategory } from "@/context/logic/state-managment/course";
@@ -25,11 +24,17 @@ const Course = () => {
 
   useEffect(() => {
     getCourses(setCategoryData);
+    const id = categoryData?.id;
+    getModules(id, setModuleData);
   }, []);
+  console.log(moduleData);
+  console.log(categoryData);
+  
+  
 
   const hasData = categoryData && categoryData.name;
   const accordionData = (moduleData || []).map((modulData: any) => ({
-    id: `parentAccordion${modulData.id}`,
+    id: `parentAccordion${modulData.id}`, // `id` qiymatini to'g'ri tarzda ishlatish
     title: `${modulData.name}`,
     icon: <MdDevices />,
   }));
@@ -42,9 +47,8 @@ const Course = () => {
         className="text-3xl font-bold mb-6 text-gray-800" />
       {hasData ? (
         <>
-          {/* Custom YouTube-style gradient banner */}
-          <div className="bg-[#16423C] h-40 w-full flex items-center justify-center relative rounded-lg shadow-lg mb-6">
-            <div className="absolute inset-0 bg-black opacity-20 rounded-lg"></div> {/* Dark overlay */}
+          <div className="bg-[#f0fff4] h-40 w-full flex items-center justify-center relative rounded-lg shadow-lg mb-6">
+            <div className="absolute inset-0 bg-black opacity-20 rounded-lg"></div>
             <div className="relative z-10 text-center">
               <h2 className="text-4xl font-bold text-white">
                 Guruhingiz: <span className="text-white">{categoryData.name || ''}</span>
@@ -56,12 +60,12 @@ const Course = () => {
           {accordionData.length > 0 ? (
             accordionData.map((moduleData: any) => (
               <AccordionItem
-                key={moduleData.moduleId}
-                id={moduleData.moduleId}
+                key={moduleData.id} 
+                id={moduleData.id}
                 title={moduleData.title}
                 icon={moduleData.icon}
-                isOpen={openAccordionId === moduleData.moduleId}
-                toggle={() => toggleAccordion(moduleData.moduleId)}
+                isOpen={openAccordionId === moduleData.id} 
+                toggle={() => toggleAccordion(moduleData.id)}
               >
               </AccordionItem>
             ))
