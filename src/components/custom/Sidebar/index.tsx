@@ -5,6 +5,7 @@ import { PiStudentFill } from 'react-icons/pi';
 import { IoIosLogOut, IoMdNotificationsOutline } from 'react-icons/io';
 import ShinyButton from '@/components/magicui/shiny-button';
 import logo from '@/assets/images/Sfer 2.png';
+import { MdOutlinePlayLesson } from 'react-icons/md';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -115,9 +116,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                 />
                 <MenuItem
                   title='Lesson'
-                  icon={<PiStudentFill size={20} />}
+                  icon={<MdOutlinePlayLesson size={20} />}
                   pathname={location.pathname}
                   to='/course'
+                />
+                <MenuItem
+                  title='Profile'
+                  icon={<PiStudentFill size={20} />}
+                  pathname={location.pathname}
+                  to='/profile'
                 />
                 <MenuItem
                   title='Notification'
