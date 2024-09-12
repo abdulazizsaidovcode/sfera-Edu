@@ -14,7 +14,7 @@ export interface IThead {
 
 const Tables: React.FC<IMasterTableProps> = ({thead, children}) => {
     return (
-        <div className="rounded-sm bg-white shadow-default">
+        <div className="rounded-sm bg-white shadow-xl">
             <div className="max-w-full overflow-x-auto w-[100%]">
                 <table className="w-full table-auto">
                     <thead>
