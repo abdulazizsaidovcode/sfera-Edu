@@ -1,5 +1,6 @@
 import PasswordInput from '@/components/Inputs/passwordInput';
 import PhoneInput from '@/components/Inputs/PhoneInput';
+import LoadingModal from '@/components/Loading/loading';
 import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
 import { login_URl } from '@/context/api/url';
@@ -102,6 +103,7 @@ function Login() {
                     </div>
                 </div>
             </section>
+            <LoadingModal isVisible={isSubmitting} />
         </>
     );
 }
