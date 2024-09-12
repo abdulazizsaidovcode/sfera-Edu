@@ -59,7 +59,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
     if (setIsOpenModal && isOpenModal) setIsOpenModal(!isOpenModal);
   }
 
-  console.log('MODAL', isOpenModal);
 
 
   return (
