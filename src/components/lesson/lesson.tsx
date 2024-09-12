@@ -18,6 +18,7 @@ const Lesson: React.FC<LessonProps> = ({ videoUrl, resourceTitle, questionTitle,
 
     return (
         <div className="text-white min-h-screen">
+            
             {/* Video Section */}
             <div className="mb-8">
                 <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>

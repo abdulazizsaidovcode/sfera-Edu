@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MdDevices } from "react-icons/md";
 import { FaVideo } from "react-icons/fa";
 import AccordionItem from "@/components/accordion/accordion";
-import { getCourses, getModules} from "@/context/logic/course";
+import { getCourses, getModules } from "@/context/logic/course";
 import { useCategory } from "@/context/logic/state-managment/course";
 import { useModule } from "@/context/logic/state-managment/module";
 import { config } from "@/context/api/token";
@@ -22,36 +22,31 @@ const Course = () => {
     setOpenAccordionId(openAccordionId === id ? null : id);
   };
 
-
   useEffect(() => {
-    getCourses(setCategoryData)
-    // const id = categoryData.id;
-    // getModules(id,setModuleData)
-  },[])
-  
-  
+    getCourses(setCategoryData);
+  }, []);
 
   const hasData = categoryData && categoryData.name;
   const accordionData = (moduleData || []).map((modulData: any) => ({
     id: `parentAccordion${modulData.id}`,
     title: `${modulData.name}`,
     icon: <MdDevices />,
-    // children: modulData.lessons.map((lesson: any) => ({
-    //   id: `childAccordion${lesson.id}`,
-    //   title: `${lesson.number}-dars`,
-    //   navigateTo: `/lesson/${lesson.id}`,
-    //   subtitle: lesson.subtitle,
-    //   icon: <FaVideo />,
-    // })),
   }));
 
   return (
     <div className="hs-accordion-group">
       {hasData ? (
         <>
-          <h2 className="font-bold mb-3 text-2xl">
-            Sizning guruhingiz <span className="text-red-600 font-bold">{categoryData.name || ''}</span>
-          </h2>
+          {/* Custom YouTube-style gradient banner */}
+          <div className="bg-[#16423C] h-40 w-full flex items-center justify-center relative rounded-lg shadow-lg mb-6">
+            <div className="absolute inset-0 bg-black opacity-20 rounded-lg"></div> {/* Dark overlay */}
+            <div className="relative z-10 text-center">
+              <h2 className="text-4xl font-bold text-white">
+                Guruhingiz: <span className="text-white">{categoryData.name || ''}</span>
+              </h2>
+              <p className="text-white mt-2 font-semibold">Darslarni hoziroq boshlang</p>
+            </div>
+          </div>
 
           {accordionData.length > 0 ? (
             accordionData.map((moduleData: any) => (
@@ -60,20 +55,9 @@ const Course = () => {
                 id={moduleData.moduleId}
                 title={moduleData.title}
                 icon={moduleData.icon}
-                isOpen={openAccordionId === moduleData.moduleId }
+                isOpen={openAccordionId === moduleData.moduleId}
                 toggle={() => toggleAccordion(moduleData.moduleId)}
               >
-                {/* {parent.modulData.map((child) => (
-                  <AccordionItem
-                    key={child.id}
-                    id={child.id}
-                    title={child.title}
-                    subtitle={child.subtitle}
-                    isOpen={false} // Child accordions are not independently openable
-                    toggle={() => handleNavigate(child.navigateTo)} // Handle navigation on click
-                    icon={child.icon}
-                  />
-                ))} */}
               </AccordionItem>
             ))
           ) : (
