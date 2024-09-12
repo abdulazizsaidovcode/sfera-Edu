@@ -1,51 +1,37 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { getCategory , getModule} from '../api/url';
+import { config } from '../api/token';
+import { useCategory } from './state-managment/course';
 
-const usePost = () => {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<any>(null);
+ export const getCourses = async (setData:any) => {
+  
+   const response = await axios.get(getCategory,config);
+  try {
+    if(response.data.data){
+      setData(response.data.data);
+    }else if (response.data.error){
+     
+    }
+  } catch (error) {
+    console.error('Error fetching course data:', error);
+  }
+};
 
-  const post = async (url: string, postData: any, file?: File) => {
-    setIsLoading(true);
-    setError(null);
-    setData(null);
-
+export const useModules = () => {
+  const { categoryData } = useCategory(); 
+  const getModules = async () => {
     try {
-      const formData = new FormData();
-      // Fayl bor bo'lsa, uni form-data ga qo'shish
-      if (file) {
-        formData.append('file', file);
+      const response = await axios.get(`${getModule}/${categoryData.id}`, config);
+      console.log(response.data);
+      if (response.data.data) {
+        return response.data.data;
+      } else if (response.data.error) {
+        console.error('Error in response:', response.data.error);
       }
-
-      // postData obyektidagi barcha maydonlarni form-data ga qo'shish
-      Object.keys(postData).forEach((key) => {
-        formData.append(key, postData[key]);
-      });
-
-      const { data } = await axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (data.success) {
-        setData(data.body);
-      }
-      return data.body;
-    } catch (err: any) {
-      setError(err);
-      throw new Error(
-        err.response.data.message
-          ? err.response.data.message
-          : err.response.data.error,
-      );
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching module data:', error);
     }
   };
 
-  return { data, isLoading, error, post };
+  return { getModules };
 };
-
-export default usePost;

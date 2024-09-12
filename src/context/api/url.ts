@@ -8,3 +8,11 @@ export const lesson_see:string = `${base_url}`
 
 // file upload 
 export const file_upload : string = `${base_url}file/upload`
+
+// get category one student 
+
+export const getCategory : string = `${base_url}student/course`
+
+// get module 
+
+export const getModule : string = `${base_url}module/byCategory`
