@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { NavLink, useLocation } from 'react-router-dom';
 import { PiStudentFill } from 'react-icons/pi';
-import { IoIosLogOut } from 'react-icons/io';
+import { IoIosLogOut, IoMdNotificationsOutline } from 'react-icons/io';
 import ShinyButton from '@/components/magicui/shiny-button';
-import logo from '@/assets/images/Sfer 2.png'
+import logo from '@/assets/images/Sfer 2.png';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -21,8 +21,8 @@ const MenuItem = ({ title, to, pathname, icon }: { pathname: any, icon: any, tit
         {title}
       </div>
     </NavLink>
-  )
-}
+  );
+};
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: SidebarProps) => {
   const location = useLocation();
@@ -30,6 +30,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
+
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
@@ -45,7 +46,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!sidebarOpen || keyCode !== 27) return;
@@ -57,7 +57,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
 
   const toggleModal = () => {
     if (setIsOpenModal && isOpenModal) setIsOpenModal(!isOpenModal);
-  }
+  };
+
+  const handleLogout = () => {
+    // Foydalanuvchidan tasdiqlash so'rash
+    const confirmLogout = window.confirm('Tizimdan chiqmoqchimisiz?');
+    if (confirmLogout) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
 
   return (
     <aside
@@ -65,7 +74,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
       className={`absolute left-0 top-0 z-999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#16423C] shadow-4 duration-300 ease-linear  lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
     >
-      {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex justify-start items-center gap-2 px-6 pb-5.5 lg:pb-6.5">
         <NavLink to="/" className={''}>
           <img src={logo} alt="Sfera" className='w-46 pt-4 flex justify-center items-center' />
@@ -94,7 +102,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
         </button>
       </div>
 
-      {/* <!-- Sidebar Menu --> */}
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear flex-grow">
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           <div className='flex flex-col'>
@@ -112,15 +119,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   pathname={location.pathname}
                   to='/course'
                 />
+                <MenuItem
+                  title='Notification'
+                  icon={<IoMdNotificationsOutline size={20} />}
+                  pathname={location.pathname}
+                  to='/notification'
+                />
               </li>
             </ul>
           </div>
         </nav>
       </div>
 
-      {/* <!-- Logout Button at the bottom --> */}
       <div className="px-6 py-4 self-end w-full">
-        <ShinyButton onClick={toggleModal} icon={<IoIosLogOut size={25} />} text='Logout' className='bg-[#063d36] border-none w-full' />
+        <ShinyButton onClick={handleLogout} icon={<IoIosLogOut size={25} />} text='Logout' className='bg-[#063d36] border-none w-full' />
       </div>
     </aside>
   );

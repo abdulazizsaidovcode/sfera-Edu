@@ -11,6 +11,7 @@ import LessonVideo from './pages/lesson/lesson'
 import Register from './pages/auth/register'
 import { useEffect } from 'react'
 import { setConfig } from './context/api/token'
+import Notification from './pages/notification/notification'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -111,6 +112,16 @@ function App() {
             <>
               <PageTitle title="Course" />
               <Course />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/notification`}
+          element={
+            <>
+              <PageTitle title="Notification" />
+              <Notification />
             </>
           }
         />
