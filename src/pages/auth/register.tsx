@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
 import TextInput from '@/components/Inputs/TextInput';
@@ -24,7 +24,7 @@ function Register() {
     const checkPasswordRef = useRef<HTMLInputElement>(null);
 
     // API call using usePost
-    const { error, loading, postData, response } = usePost(
+    const { error, loading, postData,  } = usePost(
         register_URl, // URL
         {
             firstname: firstNameRef.current?.value || '', // Getting value from useRef
@@ -48,7 +48,7 @@ function Register() {
         if (phoneNumber.length > 11 && firstNameRef.current?.value && lastNameRef.current?.value && passwordRef.current?.value) {
             setIsSubmitting(true);
             try {
-                // postData funksiyasini chaqiramiz v   a serverga so'rovni yuboramiz
+                // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
                 await postData();
                 navigate('/auth/login', { replace: true });
                 toast.success('Ro\'yxatdan o\'tdingiz!');
@@ -64,6 +64,19 @@ function Register() {
             toast.error('Formani to\'ldiring!');
         }
     };
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                handleSubmit();  // Enter bosilganda formani yuborish
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [phoneNumber, password, firstName, lastName]);
 
     return (
         <>
@@ -122,7 +135,7 @@ function Register() {
                                         type='password'
                                     />
                                 </div>
-                                {errorInput && <p className="text-red-500 text-sm">{error}</p>}
+                                {errorInput && <p className="text-red-500 text-sm">{errorInput}</p>}
                                 <ShinyButton
                                     text='Register'
                                     className='bg-[#087E43] w-full'
