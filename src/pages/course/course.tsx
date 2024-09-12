@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { MdDevices } from "react-icons/md";
 import { FaVideo } from "react-icons/fa";
 import AccordionItem from "@/components/accordion/accordion";
-import { getCourses } from "@/context/logic/course";
+import { getCourses, getModules} from "@/context/logic/course";
 import { useCategory } from "@/context/logic/state-managment/course";
+import { useModule } from "@/context/logic/state-managment/module";
+import { config } from "@/context/api/token";
 
 const Course = () => {
   const { setCategoryData, categoryData } = useCategory();
+  const { setModuleData, moduleData } = useModule();
   const navigate = useNavigate();
   const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
 
@@ -19,50 +22,28 @@ const Course = () => {
     setOpenAccordionId(openAccordionId === id ? null : id);
   };
 
+
   useEffect(() => {
-    getCourses(setCategoryData);
-    // getModules()
-  }, [setCategoryData]);
+    getCourses(setCategoryData)
+    // const id = categoryData.id;
+    // getModules(id,setModuleData)
+  },[])
+  
+  
 
   const hasData = categoryData && categoryData.name;
-
-  const accordionData = [
-    {
-      id: "parentAccordion1",
-      title: "1-Modul",
-      icon: <MdDevices />,
-      children: [
-        {
-          id: "childAccordion1",
-          title: "1-dars",
-          navigateTo: "/lesson",
-          subtitle: 'Java asoslari',
-          icon: <FaVideo />,
-        },
-        {
-          id: "childAccordion2",
-          title: "2-dars",
-          navigateTo: "/lesson",
-          subtitle: 'Java asoslari',
-          icon: <FaVideo />,
-        },
-      ],
-    },
-    {
-      id: "parentAccordion2",
-      title: "2-Modul",
-      icon: <MdDevices />,
-      children: [
-        {
-          id: "childAccordion3",
-          title: "3-dars",
-          navigateTo: "/lesson",
-          subtitle: 'Java asoslari',
-          icon: <FaVideo />,
-        },
-      ],
-    },
-  ];
+  const accordionData = (moduleData || []).map((modulData: any) => ({
+    id: `parentAccordion${modulData.id}`,
+    title: `${modulData.name}`,
+    icon: <MdDevices />,
+    // children: modulData.lessons.map((lesson: any) => ({
+    //   id: `childAccordion${lesson.id}`,
+    //   title: `${lesson.number}-dars`,
+    //   navigateTo: `/lesson/${lesson.id}`,
+    //   subtitle: lesson.subtitle,
+    //   icon: <FaVideo />,
+    // })),
+  }));
 
   return (
     <div className="hs-accordion-group">
@@ -73,16 +54,16 @@ const Course = () => {
           </h2>
 
           {accordionData.length > 0 ? (
-            accordionData.map((parent) => (
+            accordionData.map((moduleData: any) => (
               <AccordionItem
-                key={parent.id}
-                id={parent.id}
-                title={parent.title}
-                icon={parent.icon}
-                isOpen={openAccordionId === parent.id}
-                toggle={() => toggleAccordion(parent.id)}
+                key={moduleData.moduleId}
+                id={moduleData.moduleId}
+                title={moduleData.title}
+                icon={moduleData.icon}
+                isOpen={openAccordionId === moduleData.moduleId }
+                toggle={() => toggleAccordion(moduleData.moduleId)}
               >
-                {parent.children.map((child) => (
+                {/* {parent.modulData.map((child) => (
                   <AccordionItem
                     key={child.id}
                     id={child.id}
@@ -92,7 +73,7 @@ const Course = () => {
                     toggle={() => handleNavigate(child.navigateTo)} // Handle navigation on click
                     icon={child.icon}
                   />
-                ))}
+                ))} */}
               </AccordionItem>
             ))
           ) : (

@@ -56,7 +56,7 @@ const ChartOne = () => {
           options={chartOptions}
           series={chartSeries}
           type="bar"
-          height={300}  
+          height={280}  
          
         />
       )}

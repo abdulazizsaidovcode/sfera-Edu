@@ -41,9 +41,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           toggle();
         }}
       >
-        {icon && <span className="mr-2 text-black-600 text-2xl">{icon}</span>} {/* Larger and colored icon */}
+        {icon && <span className="mr-2 text-red-900 text-2xl">{icon}</span>} {/* Larger and colored icon */}
         <div className="flex-1">
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center text-gray-900 font-bold gap-x-2">
             <span>{title}</span>
             {subtitle && <span className="font-bold text-lg">{subtitle}</span>}
           </div>
