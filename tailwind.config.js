@@ -240,6 +240,17 @@ module.exports = {
         2: '0px 1px 4px rgba(0, 0, 0, 0.12)'
       },
       keyframes: {
+        "shine-pulse": {
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "50%": {
+            "background-position": "100% 100%",
+          },
+          to: {
+            "background-position": "0% 0%",
+          },
+        },
         rotating: {
           '0%, 100%': { transform: 'rotate(360deg)' },
           '50%': { transform: 'rotate(0deg)' }

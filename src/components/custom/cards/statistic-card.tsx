@@ -6,8 +6,7 @@ import ShineBorder from '@/components/magicui/shine-border'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
     return (
-        <ShineBorder  color={'#087E43'} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
-
+        <ShineBorder  color={'#16423C'} borderWidth={1.5} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
             <HyperText
                 className="text-3xl text-black dark:text-white"
                 text={title}

@@ -7,6 +7,7 @@ import { getCourses, getModules } from "@/context/logic/course";
 import { useCategory } from "@/context/logic/state-managment/course";
 import { useModule } from "@/context/logic/state-managment/module";
 import { config } from "@/context/api/token";
+import SlightFlip from "@/components/magicui/flip-text";
 
 const Course = () => {
   const { setCategoryData, categoryData } = useCategory();
@@ -35,6 +36,10 @@ const Course = () => {
 
   return (
     <div className="hs-accordion-group">
+      <SlightFlip
+        word="Lesson"
+        justify="right"
+        className="text-3xl font-bold mb-6 text-gray-800" />
       {hasData ? (
         <>
           {/* Custom YouTube-style gradient banner */}
