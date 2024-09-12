@@ -16,3 +16,6 @@ export const getCategory : string = `${base_url}student/course`
 // get module 
 
 export const getModule : string = `${base_url}module/byCategory`
+
+// get student task bal 
+export const getStudentScore:string = `${base_url}`
