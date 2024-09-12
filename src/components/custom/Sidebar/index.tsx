@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { NavLink, useLocation } from 'react-router-dom';
-import { PiStudentFill } from 'react-icons/pi';
-import { IoIosLogOut } from 'react-icons/io';
+import { PiNotification, PiNotificationFill, PiNotificationLight, PiNotionLogoLight, PiStudentFill } from 'react-icons/pi';
+import { IoIosLogOut, IoMdNotificationsOutline } from 'react-icons/io';
 import ShinyButton from '@/components/magicui/shiny-button';
 import logo from '@/assets/images/Sfer 2.png'
 
@@ -111,6 +111,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
                   icon={<PiStudentFill size={20} />}
                   pathname={location.pathname}
                   to='/course'
+                />
+                <MenuItem
+                  title='Notification'
+                  icon={<IoMdNotificationsOutline size={20} />}
+                  pathname={location.pathname}
+                  to='/notification'
                 />
               </li>
             </ul>
