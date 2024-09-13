@@ -59,16 +59,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
   const toggleModal = () => {
     if (setIsOpenModal && isOpenModal) setIsOpenModal(!isOpenModal);
   };
-
-  const handleLogout = () => {
-    // Foydalanuvchidan tasdiqlash so'rash
-    const confirmLogout = window.confirm('Tizimdan chiqmoqchimisiz?');
-    if (confirmLogout) {
-      localStorage.clear();
-      window.location.reload();
-    }
-  };
-
   return (
     <aside
       ref={sidebar}
@@ -138,9 +128,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
         </nav>
       </div>
 
-      <div className="px-6 py-4 self-end w-full">
-        <ShinyButton onClick={handleLogout} icon={<IoIosLogOut size={25} />} text='Logout' className='bg-[#063d36] border-none w-full' />
-      </div>
     </aside>
   );
 };
