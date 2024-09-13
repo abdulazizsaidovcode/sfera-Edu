@@ -23,5 +23,16 @@ interface StudentRatingData {
     setStudentRating: (data) => set({studentRating: data}),
   }));
 
+// student week statistik 
+interface StudentWeek {
+    count: number;
+    week: number;
+    setWeekStudent: (data: Partial<StatistikData>) => void;
+}
 
+export const useWeek = create<StudentWeek>((set) => ({
+    count: 0,
+    week: 0,
+    setWeekStudent: (data) => set((state) => ({ ...state, ...data })),
+}));
 
