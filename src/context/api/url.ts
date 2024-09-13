@@ -4,6 +4,9 @@ export const register_URl:string=`${base_url}auth/register`
 //login url
 export const login_URl:string=`${base_url}auth/login`
 
+//User me 
+export const get_Mee:string = `${base_url}user/get/me`
+
 export const lesson_see:string = `${base_url}`
 
 // file upload 

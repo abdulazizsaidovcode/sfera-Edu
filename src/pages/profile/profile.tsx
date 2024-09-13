@@ -7,11 +7,12 @@ import { useProfile } from '@/storys/loginValue';
 import { useState, useEffect } from 'react';
 import defaultLogo from '@/assets/images/user.jpg'
 import ShinyButton from '@/components/magicui/shiny-button';
+import { useEdit } from '@/context/logic/global_functions/useEditOption';
 
 const Profile = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const {}=useEdit()
   useEffect(() => {
     console.log('First Name:', firstName);
     console.log('Last Name:', lastName);
