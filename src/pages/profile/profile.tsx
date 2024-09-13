@@ -1,166 +1,132 @@
-import React, { useState } from 'react';
-import defaultImage from '@/assets/images/user.jpg';
-import SlightFlip from '@/components/magicui/flip-text';
+import PhoneInput from '@/components/Inputs/PhoneInput';
 import TextInput from '@/components/Inputs/TextInput';
+import SlightFlip from '@/components/magicui/flip-text';
+import Particles from '@/components/magicui/particles';
+import ShineBorder from '@/components/magicui/shine-border';
 import { useProfile } from '@/storys/loginValue';
+import { useState, useEffect } from 'react';
 
 const Profile = () => {
-  const { firstName, lastName, phoneNumber, setFirstName, setLastName, setPhoneNumber } = useProfile();
-  const [userData, setUserData] = useState({
-    firstName: 'Admin',
-    lastName: 'Admin',
-    phone: '+998 90 123 45 67',
-    profileImage: '', // Rasm uchun joy
-  });
-  const [isEditing, setIsEditing] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
+  const [isFormValid, setIsFormValid] = useState(false);
 
-  // Rasm yuklash
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUserData((prevData) => ({
-        ...prevData,
-        profileImage: URL.createObjectURL(file), // Rasmni ko'rsatish uchun URL
-      }));
-      setImagePreview(URL.createObjectURL(file)); // Preview uchun
+  useEffect(() => {
+    console.log('First Name:', firstName);
+    console.log('Last Name:', lastName);
+    console.log('Phone Number:', phoneNumber);
+  }, [firstName, lastName, phoneNumber]);
+
+  const handleInputChange = () => {
+    const isPhoneNumberValid = phoneNumber.trim().length === 11;
+    const isValid =
+      firstName.trim() !== '' &&
+      lastName.trim() !== '' &&
+      isPhoneNumberValid;
+    setIsFormValid(isValid);
+  };
+
+  const handleSave = () => {
+    if (isFormValid) {
+      console.log('Saved First Name:', firstName);
+      console.log('Saved Last Name:', lastName);
+      console.log('Saved Phone Number:', phoneNumber);
     }
   };
 
-  // Tahrirlashni yoqish
-  const toggleEdit = () => {
-    setIsEditing(!isEditing);
-  };
-
-  // Ma'lumotlarni saqlash
-  const handleSave = () => {
-    setFirstName(userData.firstName);
-    setLastName(userData.lastName);
-    setPhoneNumber(userData.phone);
-    
-    // Saqlash logikasini qo'shish (API qo'ng'iroqlar uchun)
-    console.log('Foydalanuvchi ma\'lumotlari saqlandi:', userData);
-    setIsEditing(false);
-  };
-
-  // Input maydonlaridagi o'zgarishlarni boshqarish
-  const handleChange = (name: string, value: string) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <SlightFlip word='Profile' className="text-2xl font-semibold mb-6" />
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto">
-        <div className="flex flex-col items-center mb-6">
-          {/* Profil rasmi */}
-          <div className="relative w-32 h-32 mb-4">
-            {imagePreview ? (
+    <div className="min-h-auto flex items-center justify-center bg-gray-900 py-8">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Right side - Profile Card */}
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2">
+            <div className="flex flex-col items-center">
               <img
-                src={imagePreview}
-                alt="Profile Preview"
-                className="w-full h-full rounded-full object-cover"
+                src="https://via.placeholder.com/100"
+                alt="Profile"
+                className="w-24 h-24 rounded-full border-4 border-purple-600 mb-4"
               />
-            ) : (
-              <div className="w-full h-full bg-gray-200 border-[5px] border-[#16423C] rounded-full flex items-center justify-center">
-                <img src={defaultImage} alt="default image" className='rounded-full' />
+              <h2 className="text-white text-xl md:text-2xl font-bold">Mike Andrew</h2>
+              <p className="text-purple-400">Ceo/Co-Founder</p>
+              <p className="text-gray-400 text-center mt-4 text-sm md:text-base">
+                Do not be scared of the truth because we need to restart the human foundation in truth. And I love you like Kanye loves Kanye.
+              </p>
+              <div className="flex space-x-4 mt-4">
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-twitter"></i>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-google"></i>
+                </a>
               </div>
-            )}
+            </div>
+          </div>
 
-            {/* Rasm yuklash tugmasi */}
-            {isEditing && (
-              <label className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600">
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 16l7-7 7 7"
+          {/* Left side - Edit Profile Form */}
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
+            {/* Banner for Front End */}
+            <div className="relative mb-6 flex items-center justify-center">
+              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden">
+                <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
+                <div className="relative z-10 text-center">
+                  <SlightFlip word="Guruhingiz:" className="text-3xl md:text-4xl font-bold text-black" />
+                  <p className="text-black mt-2 font-semibold">Darslarni hoziroq boshlang</p>
+                </div>
+              </ShineBorder>
+            </div>
+
+            <form className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">First Name</label>
+                  <TextInput
+                    type="text"
+                    placeholder="Enter First Name"
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                    value={firstName}
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                      handleInputChange();
+                    }}
                   />
-                </svg>
-              </label>
-            )}
+                </div>
+                <div>
+                  <label className="block text-gray-300 text-sm mb-2">Last Name</label>
+                  <TextInput
+                    type="text"
+                    placeholder="Enter Last Name"
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                    value={lastName}
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      handleInputChange();
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-gray-300 text-sm mb-2">Phone Number</label>
+                <PhoneInput
+                  placeholder="Enter Phone Number"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                    setPhoneNumber(e);
+                    handleInputChange();
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                className={`w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={!isFormValid}
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            </form>
           </div>
-
-          <h3 className="text-xl font-semibold">{userData.firstName} {userData.lastName}</h3>
-        </div>
-
-        {/* Profil ma'lumotlari */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* Ism */}
-          <div>
-            <label className="text-2xl font-semibold mb-6">First Name</label>
-            {isEditing ? (
-              <TextInput
-                value={userData.firstName}
-                onChange={(e) => handleChange('firstName', e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            ) : (
-              <p className="mt-1">{userData.firstName}</p>
-            )}
-          </div>
-
-          {/* Familiya */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Last Name</label>
-            {isEditing ? (
-              <TextInput
-                value={userData.lastName}
-                onChange={(e) => handleChange('lastName', e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            ) : (
-              <p className="mt-1">{userData.lastName}</p>
-            )}
-          </div>
-
-          {/* Telefon raqami */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Phone</label>
-            {isEditing ? (
-              <TextInput
-                value={userData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            ) : (
-              <p className="mt-1">{userData.phone}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Tahrirlash va saqlash tugmalari */}
-        <div className="mt-6 text-center">
-          {isEditing ? (
-            <button
-              onClick={handleSave}
-              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600"
-            >
-              Save
-            </button>
-          ) : (
-            <button
-              onClick={toggleEdit}
-              className="px-6 py-2 bg-gray-500 text-white font-semibold rounded-md shadow hover:bg-gray-600"
-            >
-              Edit
-            </button>
-          )}
         </div>
       </div>
     </div>
