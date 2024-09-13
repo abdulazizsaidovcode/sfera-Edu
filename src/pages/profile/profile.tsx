@@ -59,7 +59,7 @@ const Profile = () => {
               <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
-                  <SlightFlip word="Guruhingiz:" className="text-3xl md:text-4xl font-bold text-black" />
+                  <SlightFlip word="Guruhingiz:Front end" className="text-3xl md:text-2xl font-bold text-black" />
                   <p className="text-black mt-2 font-semibold">Darslarni hoziroq boshlang</p>
                 </div>
               </ShineBorder>
