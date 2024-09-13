@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { getCategory, getModule } from '../api/url';
+import { getCategory, getModule, getStudentScore, getStudentStatistic } from '../api/url';
 import { config } from '../api/token';
-import { useCategory } from './state-managment/course';
+
 
 export const getCourses = async (setData: any) => {
   const response = await axios.get(getCategory, config);
@@ -30,6 +30,34 @@ export const getCourses = async (setData: any) => {
     }
   };
 
-  export const getStudentInfo = async () =>{
-    const res = await axios.get()
-  }
+  export const getStudentInfo = async (setData:any) =>{
+    const res = await axios.get(`${getStudentScore}`, config)
+    try{
+      if(res.data.data){
+        console.log(res.data.data);
+        setData(res.data.data)
+      }else if(res.data.data){
+         console.log("error", res.data.error);
+      }
+    }catch(error){
+      console.log("Error", error);
+      
+    }
+  };
+
+  export const getStudentStatictik = async (setData:any) =>{
+    const res = await axios.get(`${getStudentStatistic}`, config)
+    try{
+      if(res.data.data){
+        console.log(res.data);
+        setData(res.data.data)
+      }else if(res.data.data){
+         console.log("error", res.data.error);
+      }
+    }catch(error){
+      console.log("Error", error);
+    }
+  };
+
+
+  

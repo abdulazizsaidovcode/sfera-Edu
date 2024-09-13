@@ -8,7 +8,7 @@ const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secon
     return (
         <ShineBorder  color={'#16423C'} borderWidth={1.5} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
             <HyperText
-                className="text-3xl text-black dark:text-white"
+                className="text-2xl text-black dark:text-white"
                 text={title}
             />
             {twoNumbers ? (
