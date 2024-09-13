@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCategory, getModule, getStudentScore, getStudentStatistic } from '../api/url';
+import { getCategory, getModule, getStudentScore, getStudentStatistic, studentRating } from '../api/url';
 import { config } from '../api/token';
 
 
@@ -29,12 +29,12 @@ export const getCourses = async (setData: any) => {
       console.error('Error fetching module data:', error);
     }
   };
+  // student info yani bu cardlarga chiqqan ma'lumotlar 
 
   export const getStudentInfo = async (setData:any) =>{
     const res = await axios.get(`${getStudentScore}`, config)
     try{
       if(res.data.data){
-        console.log(res.data.data);
         setData(res.data.data)
       }else if(res.data.data){
          console.log("error", res.data.error);
@@ -45,11 +45,12 @@ export const getCourses = async (setData: any) => {
     }
   };
 
+  // Student statistik bu oylik natijalar diagrammaga chiqqan ma'lumotlar 
+
   export const getStudentStatictik = async (setData:any) =>{
     const res = await axios.get(`${getStudentStatistic}`, config)
     try{
       if(res.data.data){
-        console.log(res.data);
         setData(res.data.data)
       }else if(res.data.data){
          console.log("error", res.data.error);
@@ -59,5 +60,18 @@ export const getCourses = async (setData: any) => {
     }
   };
 
-
+  // student/rating bu tablega chiqadigan ma'lumot  
+  export const getStudentRating = async (setData:any) =>{
+    const res = await axios.get(`${studentRating}`, config)
+    try{
+      if(res.data.data){
+        console.log("Student rating ", res.data.data);
+        setData(res.data.data)
+      }else if(res.data.data){
+         console.log("error", res.data.error);
+      }
+    }catch(error){
+      console.log("Error", error);
+    }
+  };
   
