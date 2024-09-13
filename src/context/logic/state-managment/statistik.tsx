@@ -19,7 +19,7 @@ interface StudentRatingData {
   }
   
   export const useStudentRating = create<StudentRatingData>((set) => ({
-   studentRating: null,
+    studentRating: null,
     setStudentRating: (data) => set({studentRating: data}),
   }));
 

@@ -31,29 +31,52 @@ const ChartOne = () => {
     const fetchData = async () => {
       try {
         await getStudentStatictik((statData: any) => {
-          const months = statData.map((item: { month: number }) => monthNames[item.month - 1]);
-          const totalScores = statData.map((item: { totalScore: number }) => item.totalScore);
+          if (!statData || statData.length === 0) {
+            const defaultMonths = monthNames.slice(0, 5);
+            const defaultScores = new Array(5).fill(0);
 
-          setStatistikData(statData);
+            setChartData({
+              labels: defaultMonths,
+              datasets: [
+                {
+                  label: 'Umumiy bal',
+                  data: defaultScores,
+                  backgroundColor: [
+                    'rgba(75,192,192,0.6)',
+                    'rgba(255,99,132,0.6)',
+                    'rgba(255,206,86,0.6)',
+                    'rgba(75,192,192,0.6)',
+                    'rgba(153,102,255,0.6)',
+                  ],
+                  borderColor: 'white',
+                  borderWidth: 4,
+                },
+              ],
+            });
+          } else {
+            const months = statData.map((item: { month: number }) => monthNames[item.month - 1]);
+            const totalScores = statData.map((item: { totalScore: number }) => item.totalScore);
+            setStatistikData(statData);
 
-          setChartData({
-            labels: months,
-            datasets: [
-              {
-                label: 'Umumiy bal',
-                data: totalScores,
-                backgroundColor: [
-                  'rgba(75,192,192,0.6)',
-                  'rgba(255,99,132,0.6)',
-                  'rgba(255,206,86,0.6)',
-                  'rgba(75,192,192,0.6)',
-                  'rgba(153,102,255,0.6)',
-                ],
-                borderColor: 'white',
-                borderWidth: 4,
-              },
-            ],
-          });
+            setChartData({
+              labels: months,
+              datasets: [
+                {
+                  label: 'Umumiy bal',
+                  data: totalScores,
+                  backgroundColor: [
+                    'rgba(75,192,192,0.6)',
+                    'rgba(255,99,132,0.6)',
+                    'rgba(255,206,86,0.6)',
+                    'rgba(75,192,192,0.6)',
+                    'rgba(153,102,255,0.6)',
+                  ],
+                  borderColor: 'white',
+                  borderWidth: 4,
+                },
+              ],
+            });
+          }
         });
 
         setIsLoading(false);
@@ -73,7 +96,7 @@ const ChartOne = () => {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context:any) {
+          label: function(context: any) {
             const label = context.label || '';
             const value = context.raw || '';
             return `${label}: ${value} ball`; 

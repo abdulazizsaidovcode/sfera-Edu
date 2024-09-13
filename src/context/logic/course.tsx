@@ -7,6 +7,7 @@ export const getCourses = async (setData: any) => {
   const response = await axios.get(getCategory, config);
   try {
     if (response.data.data) {
+      console.log('Data 1',response.data);
       setData(response.data.data);
     } else if (response.data.error) {
 

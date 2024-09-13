@@ -5,20 +5,23 @@ import NumberTicker from '@/components/magicui/number-ticker'
 import ShineBorder from '@/components/magicui/shine-border'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
+    const displayFirstNumber = firstNumber !== undefined && firstNumber !== null ? firstNumber : 0;
+    const displaySecondNumber = secondNumber !== undefined && secondNumber !== null ? secondNumber : 0;
+
     return (
-        <ShineBorder  color={'#16423C'} borderWidth={1.5} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
+        <ShineBorder color={'#16423C'} borderWidth={1.5} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">
             <HyperText
                 className="text-2xl text-black dark:text-white"
                 text={title}
             />
             {twoNumbers ? (
                 <div className='flex gap-1'>
-                    <NumberTicker className='text-2xl' value={firstNumber} />
+                    <NumberTicker className='text-2xl' value={displayFirstNumber} />
                     <span className="text-2xl"> / </span>
-                    <NumberTicker className='text-2xl' value={secondNumber ?? 0} />
+                    <NumberTicker className='text-2xl' value={displaySecondNumber} />
                 </div>
             ) : (
-                <NumberTicker className='text-2xl' value={firstNumber} />
+                <NumberTicker className='text-2xl' value={displayFirstNumber} />
             )}
         </ShineBorder>
     )
