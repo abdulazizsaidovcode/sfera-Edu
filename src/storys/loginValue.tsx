@@ -13,6 +13,7 @@ interface StoreState {
     setCheckPassword:(checkPassword:string)=>void
 }
 
+
 export const useFormValue = create<StoreState>((set) => ({
     firstName: '',
     setFirstName: (firstName: string) => set({ firstName }),
@@ -24,4 +25,21 @@ export const useFormValue = create<StoreState>((set) => ({
     setPassword: (password: string) => set({ password }),
     checkPassword:'',
     setCheckPassword:(checkPassword:string)=>set({checkPassword})
+}));
+
+interface Profile{
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    setFirstName: (firstName: string) => void;
+    setLastName: (lastName: string) => void;
+    setPhoneNumber: (phoneNumber: string) => void;
+}
+export const useProfile = create<Profile>((set) => ({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    setFirstName: (firstName: string) => set({ firstName }),
+    setLastName: (lastName: string) => set({ lastName }),
+    setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),
 }));

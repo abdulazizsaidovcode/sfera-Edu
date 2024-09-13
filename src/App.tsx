@@ -12,6 +12,7 @@ import Register from './pages/auth/register'
 import { useEffect } from 'react'
 import { setConfig } from './context/api/token'
 import Notification from './pages/notification/notification'
+import Profile from './pages/profile/profile'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -112,6 +113,16 @@ function App() {
             <>
               <PageTitle title="Course" />
               <Course />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/profile`}
+          element={
+            <>
+              <PageTitle title="Profile" />
+              <Profile />
             </>
           }
         />
