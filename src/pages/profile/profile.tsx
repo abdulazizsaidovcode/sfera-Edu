@@ -5,6 +5,8 @@ import Particles from '@/components/magicui/particles';
 import ShineBorder from '@/components/magicui/shine-border';
 import { useProfile } from '@/storys/loginValue';
 import { useState, useEffect } from 'react';
+import defaultLogo from '@/assets/images/user.jpg'
+import ShinyButton from '@/components/magicui/shiny-button';
 
 const Profile = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
@@ -38,29 +40,15 @@ const Profile = () => {
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Right side - Profile Card */}
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2 flex justify-center items-center">
             <div className="flex flex-col items-center">
               <img
-                src="https://via.placeholder.com/100"
+                src={defaultLogo}
                 alt="Profile"
-                className="w-24 h-24 rounded-full border-4 border-purple-600 mb-4"
+                className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />
-              <h2 className="text-white text-xl md:text-2xl font-bold">Mike Andrew</h2>
-              <p className="text-purple-400">Ceo/Co-Founder</p>
-              <p className="text-gray-400 text-center mt-4 text-sm md:text-base">
-                Do not be scared of the truth because we need to restart the human foundation in truth. And I love you like Kanye loves Kanye.
-              </p>
-              <div className="flex space-x-4 mt-4">
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-google"></i>
-                </a>
-              </div>
+              <h1 className='text-2xl font-semibold'>Sardorbek Sayfulllayev</h1>
+              <h2 className='text-lg'>+998942939449</h2>
             </div>
           </div>
 
@@ -117,14 +105,12 @@ const Profile = () => {
                   }}
                 />
               </div>
-              <button
-                type="button"
-                className={`w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+              <ShinyButton
+                text="Save"
+                className={`w-full bg-[#063d36] border-none  ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={!isFormValid}
                 onClick={handleSave}
-              >
-                Save
-              </button>
+              />
             </form>
           </div>
         </div>
