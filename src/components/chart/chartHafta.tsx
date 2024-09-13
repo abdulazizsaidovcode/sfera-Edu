@@ -1,7 +1,7 @@
-import { getStudentStatictik } from '@/context/logic/course';
+import { getStudentStatictik, getStudentWeek } from '@/context/logic/course';
 import { useStatistik } from '@/context/logic/state-managment/statistik';
 import React, { useState, useEffect } from 'react';
-import { Doughnut } from 'react-chartjs-2'; // Import Doughnut chart
+import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,44 +10,47 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement, // Import for pie/doughnut chart
+  ArcElement,
 } from 'chart.js';
 
-// Register the necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-const ChartOne = () => {
+const ChartWeek = () => {
   const [chartData, setChartData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { setStatistikData } = useStatistik();
 
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+  const weekDays = [
+    'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba',
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await getStudentStatictik((statData: any) => {
-          const months = statData.map((item: { month: number }) => monthNames[item.month - 1]);
-          const totalScores = statData.map((item: { totalScore: number }) => item.totalScore);
+        await getStudentWeek((statData: any) => {
+          // Ma'lumotlar to'g'riligini tekshirish
+          const validData = statData.filter((item: any) => item.week >= 1 && item.week <= 7);
+
+          const days = validData.map((item: { week: number }) => weekDays[item.week - 1]);
+          const totalScores = validData.map((item: { count: number }) => item.count);
 
           setStatistikData(statData);
-
+          
           setChartData({
-            labels: months,
+            labels: days,
             datasets: [
               {
                 label: 'Umumiy bal',
                 data: totalScores,
                 backgroundColor: [
-                  'rgba(75,192,192,0.6)',
-                  'rgba(255,99,132,0.6)',
-                  'rgba(255,206,86,0.6)',
-                  'rgba(75,192,192,0.6)',
-                  'rgba(153,102,255,0.6)',
+                  '#FF6384', 
+                  '#36A2EB', 
+                  '#FFCE56', 
+                  '#4BC0C0', 
+                  '#9966FF', 
+                  '#FF9F40', 
+                  '#C9CBCF', 
                 ],
                 borderColor: 'white',
                 borderWidth: 4,
@@ -73,14 +76,14 @@ const ChartOne = () => {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context:any) {
+          label: function (context: any) {
             const label = context.label || '';
             const value = context.raw || '';
-            return `${label}: ${value} ball`; 
-          }
-        }
-      }
-    }
+            return `${label}: ${value} ta`;
+          },
+        },
+      },
+    },
   };
 
   return (
@@ -96,4 +99,4 @@ const ChartOne = () => {
   );
 };
 
-export default ChartOne;
+export default ChartWeek;

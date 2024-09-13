@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCategory, getModule, getStudentScore, getStudentStatistic, studentRating } from '../api/url';
+import { getCategory, getModule, getStudentScore, getStudentStatistic, studentRating, studentWeek } from '../api/url';
 import { config } from '../api/token';
 
 
@@ -66,7 +66,21 @@ export const getCourses = async (setData: any) => {
     const res = await axios.get(`${studentRating}`, config)
     try{
       if(res.data.data){
-        console.log("Student rating ", res.data.data);
+        setData(res.data.data)
+      }else if(res.data.data){
+         console.log("error", res.data.error);
+      }
+    }catch(error){
+      console.log("Error", error);
+    }
+  };
+
+  // student uchun haftalik natijalar 
+  export const getStudentWeek= async (setData:any) =>{
+    const res = await axios.get(`${studentWeek}`, config)
+    try{
+      if(res.data.data){
+        console.log("Student vazifalari ", res.data.data);
         setData(res.data.data)
       }else if(res.data.data){
          console.log("error", res.data.error);
