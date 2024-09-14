@@ -2,21 +2,14 @@ import { create } from 'zustand';
 
 // Define the type for statistik data
 interface StatistikData {
-    phoneNumber:string;
-    firstname:string;
-    lastname:string;
-    score:number;
-    setTableStudent: (data: Partial<StatistikData>) => void;
+    tableStatistik:any
+    setTableStudent: (data: any) => void;
 }
 
 // Create the Zustand store for statistik data
 export const useStatistik = create<StatistikData>((set) => ({
-    phoneNumber:'',
-    firstname:'',
-    lastname:'',
-    score:0,
-    statistikData:null,
-    setTableStudent: (data) => set((state) => ({ ...state, ...data })),
+    tableStatistik:null,
+    setTableStudent: (data) => set({tableStatistik: data}),
 }));
 interface StudentYear {
     yearData:any

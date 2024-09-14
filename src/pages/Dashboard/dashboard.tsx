@@ -1,15 +1,14 @@
-
 import StatisticCard from '@/components/custom/cards/statistic-card';
 import { TfiStatsUp } from "react-icons/tfi";
-import {  getStudentStatictik, getStudentWeek } from '@/context/logic/course';
+import { getStudentRating, getStudentStatictik, getStudentWeek } from '@/context/logic/course';
 import { useEffect } from 'react';
-import { useStatistik, useStudentYear, useWeek} from '@/context/logic/state-managment/statistik';
+import { useStatistik, useStudentYear, useWeek } from '@/context/logic/state-managment/statistik';
 import ChartWeek from '@/components/chart/chartHafta';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
 import { getStudentScore } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import ChartOne from '@/components/chart/chart';
-
+import Tables from '@/components/custom/table';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -19,24 +18,23 @@ export const dashboardThead = [
 ];
 
 const Dashboard = () => {
-  // const { scoreData, setScoreData } = useScore();
-  // const { statistikData, setStatistikData } = useStatistik();
-  const dashboardThead = ['#', 'Last Name', 'First Name', 'Score'];
-  const { data, getData, loading } = useGet(getStudentScore, config)
-  // const { phoneNumber,lastname,firstname,score,setTableStudent} = useStatistik();
-  const {setWeekStudent} =useWeek();
-  const {setYearData} = useStudentYear()
+  
+  const { data, getData, loading } = useGet(getStudentScore, config);
+  const { setWeekStudent } = useWeek();
+  const { setYearData } = useStudentYear();
+  const { setTableStudent, tableStatistik } = useStatistik();
 
   useEffect(() => {
     getData();
     getStudentStatictik(setWeekStudent);
-    getStudentWeek(setWeekStudent)
-    getStudentStatictik(setYearData)
+    getStudentWeek(setWeekStudent);
+    getStudentStatictik(setYearData);
+    getStudentRating(setTableStudent);
   }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <div className="container mx-auto px-4">
@@ -52,15 +50,15 @@ const Dashboard = () => {
         />
         <StatisticCard
           title="Studentlar"
-          firstNumber={data?.ratingStudent === 0 ? 0 : data?.ratingStudent}
-          secondNumber={data?.countRatingStudents == 0 ? 0 : data?.countRatingStudents}
+          firstNumber={data?.ratingStudent}
+          secondNumber={data?.countRatingStudents}
           twoNumbers={true}
           iconVisible={true}
           icon={<i className="fa-solid fa-user text-xl mr-2"></i>}
         />
         <StatisticCard
           title="Natija"
-          firstNumber={data?.score || 0}
+          firstNumber={data?.score}
           iconVisible={true}
           icon={<i className="fa-solid fa-star text-xl mr-2"></i>}
         />
@@ -68,13 +66,13 @@ const Dashboard = () => {
 
       {/* Statistic Charts */}
       <div className="flex flex-col lg:flex-row w-full gap-4">
-          <div className="w-full lg:w-1/2 p-2 shadow-lg rounded-xl bg-[#FFF5E0]">
-            <span className="font-bold text-black mb-4 p-2 text-xl mt-3">Oylik Natijalar</span>
-            <TfiStatsUp className="text-2xl font-bold text-red-900 inline-block mb-1 ml-2" />
-            <div className="mb-3">
-              <ChartOne />
-            </div>
+        <div className="w-full lg:w-1/2 p-2 shadow-lg rounded-xl bg-[#FFF5E0]">
+          <span className="font-bold text-black mb-4 p-2 text-xl mt-3">Oylik Natijalar</span>
+          <TfiStatsUp className="text-2xl font-bold text-red-900 inline-block mb-1 ml-2" />
+          <div className="mb-3">
+            <ChartOne />
           </div>
+        </div>
         <div className="w-full lg:w-1/2 p-2 shadow-lg rounded-xl bg-[#FFF5E0]">
           <span className="font-bold text-black mb-4 p-2 text-xl mt-3">Haftalik Natijalar</span>
           <TfiStatsUp className="text-2xl font-bold text-red-900 inline-block mb-1 ml-2" />
@@ -86,13 +84,13 @@ const Dashboard = () => {
 
       {/* Statistika kartalari uchun joy */}
       <div className="mt-10">
-        {/* <Tables thead={dashboardThead}>
-          {dashboardThead.length === 0 ? (
+        <Tables thead={dashboardThead}>
+          {(!tableStatistik || tableStatistik.length === 0) ? (
             <tr>
               <td colSpan={dashboardThead.length} className="text-center py-4">No data available</td>
             </tr>
           ) : (
-            tableData.map((student: any, index: any) => (
+            tableStatistik.map((student: any, index: any) => (
               <tr key={student.id || index} className="hover:bg-gray duration-100">
                 <td className="border-b border-[#eee] min-w-[200px] p-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{index + 1}</p>
@@ -109,7 +107,7 @@ const Dashboard = () => {
               </tr>
             ))
           )}
-        </Tables> */}
+        </Tables>
       </div>
     </div>
   );

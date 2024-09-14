@@ -75,11 +75,13 @@ export const getStudentRating = async (setData: any) => {
   try {
     if (res.data.data) {
       setData(res.data.data)
-    } else if (res.data.data) {
-      console.log("error", res.data.error);
+    }  else {
+      console.log("Error:", res.data.error);
+      setData([]);
     }
   } catch (error) {
-    console.log("Error", error);
+    console.error("Error fetching statistics:", error);
+    setData([]);
   }
 };
 

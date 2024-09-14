@@ -5,7 +5,6 @@ import NumberTicker from '@/components/magicui/number-ticker'
 import ShineBorder from '@/components/magicui/shine-border'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
-    // Qiymatlarni `null` yoki `undefined` bo'lsa, `0` bilan almashtirish
     const displayFirstNumber = firstNumber ?? 0;
     const displaySecondNumber = secondNumber ?? 0;
 
