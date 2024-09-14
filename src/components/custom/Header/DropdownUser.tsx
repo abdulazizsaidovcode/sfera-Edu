@@ -5,7 +5,6 @@ import { IoIosLogOut } from 'react-icons/io';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
 import { get_Mee } from '@/context/api/url';
 import { config } from '@/context/api/token';
-import ShineBorder from '@/components/magicui/shine-border';
 
 const DropdownUser = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +16,6 @@ const DropdownUser = () => {
         setIsOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -30,7 +28,7 @@ const DropdownUser = () => {
       window.location.reload();
     }
   };
-  const { data, loading, getData } = useGet(get_Mee, config);
+  const { data, getData } = useGet(get_Mee, config);
   useEffect(() => {
     console.log(data);
 
