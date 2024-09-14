@@ -4,22 +4,17 @@ import SlightFlip from '@/components/magicui/flip-text';
 import Particles from '@/components/magicui/particles';
 import ShineBorder from '@/components/magicui/shine-border';
 import { useProfile } from '@/storys/loginValue';
-import { useState, useEffect } from 'react';
-import defaultLogo from '@/assets/images/user.jpg'
+import { useState } from 'react';
+import defaultLogo from '@/assets/images/user.jpg';
 import ShinyButton from '@/components/magicui/shiny-button';
-import { FiEdit } from "react-icons/fi";
 import FileUpload from '@/components/Inputs/fileUpolatInput';
+import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
 
 const Profile = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
   const [isFormValid, setIsFormValid] = useState(false);
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  // const {}=useEdit()
-  useEffect(() => {
-    console.log('First Name:', firstName);
-    console.log('Last Name:', lastName);
-    console.log('Phone Number:', phoneNumber);
-  }, [firstName, lastName, phoneNumber]);
+  const [saveImg, setSaveImg] = useState(0);
+  const [uploadedImg, setUploadedImg] = useState<string | null>(null); // State to store uploaded image URL
 
   const handleInputChange = () => {
     const isPhoneNumberValid = phoneNumber.trim().length === 11;
@@ -29,14 +24,22 @@ const Profile = () => {
       isPhoneNumberValid;
     setIsFormValid(isValid);
   };
-  const handleFileChange = (file: File) => {
-    setProfileImage(file);
+
+  const handleFileChange = async (file: File) => {
+    let imgID = await checkImgUpload(file);
+    setSaveImg(imgID);
+
+    // Create a URL for the uploaded file and save it in state
+    const imageUrl = URL.createObjectURL(file);
+    setUploadedImg(imageUrl);
   };
+
   const handleSave = () => {
     if (isFormValid) {
       console.log('Saved First Name:', firstName);
       console.log('Saved Last Name:', lastName);
       console.log('Saved Phone Number:', phoneNumber);
+      console.log('Uploaded Image ID:', saveImg);
     }
   };
 
@@ -48,12 +51,12 @@ const Profile = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2 flex justify-center items-center">
             <div className="flex flex-col items-center">
               <img
-                src={defaultLogo}
+                src={uploadedImg || defaultLogo} // Use uploaded image if available, otherwise default image
                 alt="Profile"
                 className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />
-              <h1 className='text-2xl font-semibold'>Sardorbek Sayfulllayev</h1>
-              <h2 className='text-lg'>+998942939449</h2>
+              <h1 className="text-2xl font-semibold">Sardorbek Sayfulllayev</h1>
+              <h2 className="text-lg">+998942939449</h2>
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
                 <FileUpload onFileChange={handleFileChange} />

@@ -1,4 +1,4 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 interface StoreState {
     firstName: string;
@@ -9,8 +9,8 @@ interface StoreState {
     setPhoneNumber: (phoneNumber: string) => void;
     password: string;
     setPassword: (password: string) => void;
-    checkPassword:string
-    setCheckPassword:(checkPassword:string)=>void
+    checkPassword: string
+    setCheckPassword: (checkPassword: string) => void
 }
 
 
@@ -23,11 +23,11 @@ export const useFormValue = create<StoreState>((set) => ({
     setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),
     password: '',
     setPassword: (password: string) => set({ password }),
-    checkPassword:'',
-    setCheckPassword:(checkPassword:string)=>set({checkPassword})
+    checkPassword: '',
+    setCheckPassword: (checkPassword: string) => set({ checkPassword })
 }));
 
-interface Profile{
+interface Profile {
     firstName: string;
     lastName: string;
     phoneNumber: string;
@@ -43,3 +43,20 @@ export const useProfile = create<Profile>((set) => ({
     setLastName: (lastName: string) => set({ lastName }),
     setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),
 }));
+
+interface getMee {
+    firstNameGet: string;
+    setFirstNameGet: (firstName: string) => void;
+    lastNameGet: string;
+    setLastNameGet: (lastName: string) => void;
+    phoneNumberGet: string;
+    setPhoneNumberGet: (phoneNumber: string) => void;
+}
+export const useGetMeStore = create<getMee>((set) => ({
+    firstNameGet: '',
+    lastNameGet: '',
+    phoneNumberGet: '',
+    setFirstNameGet: (firstNameGet: string) => set({ firstNameGet }),
+    setLastNameGet: (lastNameGet: string) => set({ lastNameGet }),
+    setPhoneNumberGet: (phoneNumberGet: string) => set({ phoneNumberGet }),
+}))

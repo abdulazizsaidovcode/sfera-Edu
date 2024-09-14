@@ -36,3 +36,4 @@ export function usePost<T>(url: string, data: T, config?: any): UsePostResponse<
     postData: mutation.mutateAsync,
   };
 }
+
