@@ -1,4 +1,4 @@
-import  { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DotPattern from '@/components/magicui/dot-pattern';
 import ShinyButton from '@/components/magicui/shiny-button';
 import TextInput from '@/components/Inputs/TextInput';
@@ -24,16 +24,15 @@ function Register() {
     const checkPasswordRef = useRef<HTMLInputElement>(null);
 
     // API call using usePost
-    const { error, loading, postData,  } = usePost(
+    const { error, loading, postData, } = usePost(
         register_URl, // URL
         {
-            firstname: firstNameRef.current?.value || '', // Getting value from useRef
-            lastname: lastNameRef.current?.value || '',
+            firstName: firstNameRef.current?.value || '', // Getting value from useRef
+            lastName: lastNameRef.current?.value || '',
             phoneNumber: phoneNumber || '',
             password: passwordRef.current?.value || '',
         }
     );
-
     const handleSubmit = async () => {
         const enteredPassword = passwordRef.current?.value || '';
         const enteredCheckPassword = checkPasswordRef.current?.value || '';
