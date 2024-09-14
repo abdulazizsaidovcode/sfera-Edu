@@ -73,7 +73,7 @@ const ChartWeek = () => {
           label: function(context:any) {
             const label = context.label || '';
             const value = context.raw || '';
-            return `${label}: ${value} ball`; 
+            return `${label}: ${value} ta`; 
           }
         }
       }
