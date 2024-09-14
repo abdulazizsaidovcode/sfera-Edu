@@ -1,7 +1,6 @@
 import React from 'react'
 import { StatisticCardTypes } from '@/types/cards'
 import HyperText from '@/components/magicui/hyper-text'
-import NumberTicker from '@/components/magicui/number-ticker'
 import ShineBorder from '@/components/magicui/shine-border'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
