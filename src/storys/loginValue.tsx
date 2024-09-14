@@ -43,20 +43,3 @@ export const useProfile = create<Profile>((set) => ({
     setLastName: (lastName: string) => set({ lastName }),
     setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),
 }));
-
-interface getMee {
-    firstNameGet: string;
-    setFirstNameGet: (firstName: string) => void;
-    lastNameGet: string;
-    setLastNameGet: (lastName: string) => void;
-    phoneNumberGet: string;
-    setPhoneNumberGet: (phoneNumber: string) => void;
-}
-export const useGetMeStore = create<getMee>((set) => ({
-    firstNameGet: '',
-    lastNameGet: '',
-    phoneNumberGet: '',
-    setFirstNameGet: (firstNameGet: string) => set({ firstNameGet }),
-    setLastNameGet: (lastNameGet: string) => set({ lastNameGet }),
-    setPhoneNumberGet: (phoneNumberGet: string) => set({ phoneNumberGet }),
-}))

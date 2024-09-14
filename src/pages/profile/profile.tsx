@@ -4,18 +4,24 @@ import SlightFlip from '@/components/magicui/flip-text';
 import Particles from '@/components/magicui/particles';
 import ShineBorder from '@/components/magicui/shine-border';
 import { useProfile } from '@/storys/loginValue';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import defaultLogo from '@/assets/images/user.jpg';
 import ShinyButton from '@/components/magicui/shiny-button';
 import FileUpload from '@/components/Inputs/fileUpolatInput';
 import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
+import { useGet } from '@/context/logic/global_functions/useGetOption';
+import { get_Mee } from '@/context/api/url';
+import { config } from '@/context/api/token';
 
 const Profile = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
   const [isFormValid, setIsFormValid] = useState(false);
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null); // State to store uploaded image URL
-
+  const { data, getData } = useGet(get_Mee, config);
+  useEffect(() => {
+    getData();
+  }, []);
   const handleInputChange = () => {
     const isPhoneNumberValid = phoneNumber.trim().length === 11;
     const isValid =
@@ -24,7 +30,6 @@ const Profile = () => {
       isPhoneNumberValid;
     setIsFormValid(isValid);
   };
-
   const handleFileChange = async (file: File) => {
     let imgID = await checkImgUpload(file);
     setSaveImg(imgID);
@@ -51,12 +56,12 @@ const Profile = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2 flex justify-center items-center">
             <div className="flex flex-col items-center">
               <img
-                src={uploadedImg || defaultLogo} // Use uploaded image if available, otherwise default image
+                src={uploadedImg || defaultLogo}
                 alt="Profile"
                 className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />
-              <h1 className="text-2xl font-semibold">Sardorbek Sayfulllayev</h1>
-              <h2 className="text-lg">+998942939449</h2>
+              <h1 className="text-2xl font-semibold">{data?.firstName} {data?.lastName}</h1>
+              <h2 className="text-lg">+{data?.phoneNumber}</h2>
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
                 <FileUpload onFileChange={handleFileChange} />
