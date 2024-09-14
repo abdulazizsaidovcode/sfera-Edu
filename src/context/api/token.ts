@@ -12,4 +12,4 @@ export const imgConfig = {
 }
 
 export const setConfig = () => config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
-export const setImgConfig = () => imgConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+export const setImgConfig = () => imgConfig.headers.Authorization = `Bearer ${localStorage.getItem('token')}`   

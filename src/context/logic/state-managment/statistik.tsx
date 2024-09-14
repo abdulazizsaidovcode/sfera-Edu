@@ -2,37 +2,40 @@ import { create } from 'zustand';
 
 // Define the type for statistik data
 interface StatistikData {
-    month: string;
-    totalScore: number;
-    setStatistikData: (data: Partial<StatistikData>) => void;
+    phoneNumber:string;
+    firstname:string;
+    lastname:string;
+    score:number;
+    setTableStudent: (data: Partial<StatistikData>) => void;
 }
 
 // Create the Zustand store for statistik data
 export const useStatistik = create<StatistikData>((set) => ({
-    month: '',
-    totalScore: 0,
-    setStatistikData: (data) => set((state) => ({ ...state, ...data })),
+    phoneNumber:'',
+    firstname:'',
+    lastname:'',
+    score:0,
+    statistikData:null,
+    setTableStudent: (data) => set((state) => ({ ...state, ...data })),
 }));
-interface StudentRatingData {
-    studentRating: any;
-    setStudentRating: (data: any) => void;
-  }
+interface StudentYear {
+    yearData:any
+    setYearData: (data: any) => void;
+}
   
-  export const useStudentRating = create<StudentRatingData>((set) => ({
-    studentRating: null,
-    setStudentRating: (data) => set({studentRating: data}),
-  }));
+export const useStudentYear = create<StudentYear>((set) => ({
+    yearData:null,
+    setYearData: (data) => set({yearData: data}),
+}));
 
 // student week statistik 
 interface StudentWeek {
-    count: number;
-    week: number;
-    setWeekStudent: (data: Partial<StatistikData>) => void;
+    weekData:any
+    setWeekStudent: (data: any) => void;
 }
 
 export const useWeek = create<StudentWeek>((set) => ({
-    count: 0,
-    week: 0,
-    setWeekStudent: (data) => set((state) => ({ ...state, ...data })),
+   weekData:null,
+    setWeekStudent: (data) => set({weekData: data}),
 }));
 
