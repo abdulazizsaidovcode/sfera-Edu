@@ -1,7 +1,7 @@
 import { getStudentStatictik } from '@/context/logic/course';
-import { useStatistik } from '@/context/logic/state-managment/statistik';
+import { useStudentYear } from '@/context/logic/state-managment/statistik';
 import React, { useState, useEffect } from 'react';
-import { Doughnut } from 'react-chartjs-2'; // Import Doughnut chart
+import { Doughnut } from 'react-chartjs-2'; 
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,31 +10,37 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement, // Import for pie/doughnut chart
+  ArcElement, 
 } from 'chart.js';
 
-// Register the necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const ChartOne = () => {
   const [chartData, setChartData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { setStatistikData } = useStatistik();
-
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-  ];
+  const { setYearData } = useStudentYear();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await getStudentStatictik((statData: any) => {
-          const months = statData.map((item: { month: number }) => monthNames[item.month - 1]);
+          if (statData.length === 0) {
+            setChartData(null); // Set null if no data
+            return;
+          }
+
+          const months = statData.map((item: { monthName: string }) => item.monthName);
           const totalScores = statData.map((item: { totalScore: number }) => item.totalScore);
 
-          setStatistikData(statData);
+          // Check if all totalScores are 0
+          const allZero = totalScores.every((score: number) => score === 0);
+          if (allZero) {
+            setChartData(null); // Don't render the chart if all scores are 0
+            return;
+          }
+
+          setYearData(statData);
 
           setChartData({
             labels: months,
@@ -65,7 +71,7 @@ const ChartOne = () => {
     };
 
     fetchData();
-  }, [setStatistikData]);
+  }, [setYearData]);
 
   const options = {
     responsive: true,
@@ -73,21 +79,22 @@ const ChartOne = () => {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context:any) {
+          label: function (context: any) {
             const label = context.label || '';
             const value = context.raw || '';
-            return `${label}: ${value} ball`; 
-          }
-        }
-      }
-    }
+            return `${label}: ${value} ball`;
+          },
+        },
+      },
+    },
   };
 
   return (
     <div className="flex flex-col items-center">
       {isLoading && <p>Loading chart data...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      {!isLoading && !error && (
+      {!isLoading && !error && !chartData && <p>No data available</p>}
+      {!isLoading && !error && chartData && (
         <div className="w-full max-w-md" style={{ height: '350px' }}>
           <Doughnut data={chartData} options={options} />
         </div>

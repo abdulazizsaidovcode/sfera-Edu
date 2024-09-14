@@ -23,6 +23,8 @@ function Login() {
 
     useEffect(() => {
         if (response) {
+            console.log(response, 111);
+            
             const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
             localStorage.setItem('token', response?.token);
             localStorage.setItem('ROLE', response?.role);

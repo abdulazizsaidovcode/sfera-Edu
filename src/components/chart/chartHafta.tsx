@@ -1,7 +1,7 @@
 import { getStudentStatictik, getStudentWeek } from '@/context/logic/course';
-import { useStatistik } from '@/context/logic/state-managment/statistik';
+import { useStatistik, useWeek } from '@/context/logic/state-managment/statistik';
 import React, { useState, useEffect } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2'; // Import Doughnut chart
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,47 +10,41 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement,
+  ArcElement, // Import for pie/doughnut chart
 } from 'chart.js';
 
+// Register the necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const ChartWeek = () => {
   const [chartData, setChartData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { setStatistikData } = useStatistik();
+  const {setWeekStudent} = useWeek()
 
-  const weekDays = [
-    'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba',
-  ];
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await getStudentWeek((statData: any) => {
-          // Ma'lumotlar to'g'riligini tekshirish
-          const validData = statData.filter((item: any) => item.week >= 1 && item.week <= 7);
+          const months = statData.map((item: { weekDay: string }) => item.weekDay);
+          const totalScores = statData.map((item: { count: number }) => item.count);
 
-          const days = validData.map((item: { week: number }) => weekDays[item.week - 1]);
-          const totalScores = validData.map((item: { count: number }) => item.count);
+          setWeekStudent(statData);
 
-          setStatistikData(statData);
-          
           setChartData({
-            labels: days,
+            labels: months,
             datasets: [
               {
                 label: 'Umumiy bal',
                 data: totalScores,
                 backgroundColor: [
-                  '#FF6384', 
-                  '#36A2EB', 
-                  '#FFCE56', 
-                  '#4BC0C0', 
-                  '#9966FF', 
-                  '#FF9F40', 
-                  '#C9CBCF', 
+                  'rgba(75,192,192,0.6)',
+                  'rgba(255,99,132,0.6)',
+                  'rgba(255,206,86,0.6)',
+                  'rgba(75,192,192,0.6)',
+                  'rgba(153,102,255,0.6)',
                 ],
                 borderColor: 'white',
                 borderWidth: 4,
@@ -68,7 +62,7 @@ const ChartWeek = () => {
     };
 
     fetchData();
-  }, [setStatistikData]);
+  }, [setWeekStudent]);
 
   const options = {
     responsive: true,
@@ -76,14 +70,14 @@ const ChartWeek = () => {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function(context:any) {
             const label = context.label || '';
             const value = context.raw || '';
-            return `${label}: ${value} ta`;
-          },
-        },
-      },
-    },
+            return `${label}: ${value} ball`; 
+          }
+        }
+      }
+    }
   };
 
   return (
