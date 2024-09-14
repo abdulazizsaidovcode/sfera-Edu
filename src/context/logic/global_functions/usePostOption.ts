@@ -16,6 +16,7 @@ export function usePost<T>(url: string, data: T, config?: any): UsePostResponse<
   const mutation = useMutation({
     mutationFn: async () => {
       const result = await axios.post(url, data, config ? config : {});
+      console.log(data);
       if (result.data.error) {
         toastMessage(result.data.error.code);
         throw new Error(result.data.error.message);
