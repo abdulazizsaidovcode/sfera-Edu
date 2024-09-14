@@ -9,6 +9,7 @@ import { getStudentScore } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import ChartOne from '@/components/chart/chart';
 import Tables from '@/components/custom/table';
+import { FaUsers } from "react-icons/fa";
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -18,7 +19,7 @@ export const dashboardThead = [
 ];
 
 const Dashboard = () => {
-  
+
   const { data, getData, loading } = useGet(getStudentScore, config);
   const { setWeekStudent } = useWeek();
   const { setYearData } = useStudentYear();
@@ -84,6 +85,10 @@ const Dashboard = () => {
 
       {/* Statistika kartalari uchun joy */}
       <div className="mt-10">
+        <div className=" flex items-center mb-6">
+          <h2 className="mr-2 font-bold text-xl">O'quvchilar</h2><span className='text-2xl'><FaUsers /></span>
+        </div>
+
         <Tables thead={dashboardThead}>
           {(!tableStatistik || tableStatistik.length === 0) ? (
             <tr>
@@ -109,6 +114,7 @@ const Dashboard = () => {
           )}
         </Tables>
       </div>
+
     </div>
   );
 };
