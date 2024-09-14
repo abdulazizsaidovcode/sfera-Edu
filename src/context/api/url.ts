@@ -12,6 +12,9 @@ export const lesson_see:string = `${base_url}`
 // file upload 
 export const file_upload : string = `${base_url}file/upload`
 
+//get file
+export const get_file:string=`${base_url}file/files/` 
+
 // get category one student 
 
 export const getCategory : string = `${base_url}student/course`

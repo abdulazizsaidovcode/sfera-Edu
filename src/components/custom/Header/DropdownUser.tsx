@@ -16,6 +16,7 @@ const DropdownUser = () => {
         setIsOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -30,8 +31,6 @@ const DropdownUser = () => {
   };
   const { data, getData } = useGet(get_Mee, config);
   useEffect(() => {
-    console.log(data);
-
     getData();
   }, []);
   return (
