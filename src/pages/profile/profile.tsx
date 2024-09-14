@@ -54,10 +54,10 @@ const Profile = () => {
               />
               <h1 className='text-2xl font-semibold'>Sardorbek Sayfulllayev</h1>
               <h2 className='text-lg'>+998942939449</h2>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
-              <FileUpload onFileChange={handleFileChange} />
+              <div className="mb-4">
+                <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
+                <FileUpload onFileChange={handleFileChange} />
+              </div>
             </div>
           </div>
 
@@ -65,7 +65,7 @@ const Profile = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
             {/* Banner for Front End */}
             <div className="relativeflex mb-2 items-center justify-center">
-              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden">
+              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-10">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
                   <SlightFlip word="Guruhingiz:Front end" className="text-3xl md:text-2xl font-bold text-black" />
@@ -76,7 +76,7 @@ const Profile = () => {
             <form className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="block text-gray-300 text-sm font-semibold mb-1">First Name</label>
+                  <label className="block text-gray-300 text-sm font-semibold mb-2">First Name</label>
                   <TextInput
                     type="text"
                     placeholder="Enter First Name"
