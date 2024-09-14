@@ -73,13 +73,14 @@ const Profile = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
             {/* Banner for Front End */}
             <div className="relativeflex mb-2 items-center justify-center">
-              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-10">
+              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
                   <SlightFlip word="Guruhingiz:Front end" className="text-3xl md:text-2xl font-bold text-black" />
                   <p className="text-black mt-2 font-semibold">Darslarni hoziroq boshlang</p>
                 </div>
               </ShineBorder>
+              <p className='text-black font-semibold text-2xl'>Edit</p>
             </div>
             <form className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
