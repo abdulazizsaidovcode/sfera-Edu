@@ -3,7 +3,7 @@ export const base_url: string ="http://142.93.106.195:8080/"
 export const register_URl:string=`${base_url}auth/register`
 //login url
 export const login_URl:string=`${base_url}auth/login`
-
+export const user_Edit:string=`${base_url}user/?fileId=`
 //User me 
 export const get_Mee:string = `${base_url}user/get/me`
 

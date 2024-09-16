@@ -10,18 +10,28 @@ import ShinyButton from '@/components/magicui/shiny-button';
 import FileUpload from '@/components/Inputs/fileUpolatInput';
 import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { get_Mee } from '@/context/api/url';
+import { get_file, get_Mee } from '@/context/api/url';
 import { config } from '@/context/api/token';
+import PasswordInput from '@/components/Inputs/passwordInput';
 
 const Profile = () => {
-  const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber } = useProfile();
+  const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber,checkPassword,password,setPassword,setCheckPassword } = useProfile();
   const [isFormValid, setIsFormValid] = useState(false);
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null); // State to store uploaded image URL
   const { data, getData } = useGet(get_Mee, config);
+  const { getData: fileGetFunction } = useGet(`${get_file}${saveImg}`, config);
+ 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (saveImg) {
+      fileGetFunction();
+    }
+  }, [saveImg])
+
   const handleInputChange = () => {
     const isPhoneNumberValid = phoneNumber.trim().length === 11;
     const isValid =
@@ -31,14 +41,10 @@ const Profile = () => {
     setIsFormValid(isValid);
   };
   const handleFileChange = async (file: File) => {
-    let imgID = await checkImgUpload(file);
-    setSaveImg(imgID);
-
-    // Create a URL for the uploaded file and save it in state
+    await checkImgUpload(file, setSaveImg);
     const imageUrl = URL.createObjectURL(file);
     setUploadedImg(imageUrl);
   };
-
   const handleSave = () => {
     if (isFormValid) {
       console.log('Saved First Name:', firstName);
@@ -47,12 +53,10 @@ const Profile = () => {
       console.log('Uploaded Image ID:', saveImg);
     }
   };
-
   return (
     <div className="min-h-auto flex items-center justify-center bg-gray-900 py-8">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Right side - Profile Card */}
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2 flex justify-center items-center">
             <div className="flex flex-col items-center">
               <img
@@ -68,10 +72,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          {/* Left side - Edit Profile Form */}
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
-            {/* Banner for Front End */}
             <div className="relativeflex mb-2 items-center justify-center">
               <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
@@ -121,6 +122,30 @@ const Profile = () => {
                     handleInputChange();
                   }}
                 />
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block text-gray-300 text-sm font-semibold mb-2">Password</label>
+                  <PasswordInput
+                    placeholder="assword"
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 text-sm font-semibold mb-2">Confirm Password</label>
+                  <PasswordInput
+                    placeholder="Confirm password"
+                    className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                    value={checkPassword}
+                    onChange={(e) => {
+                      setCheckPassword(e.target.value);
+                    }}
+                  />
+                </div>
               </div>
               <ShinyButton
                 text="Save"
