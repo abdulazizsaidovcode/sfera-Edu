@@ -127,7 +127,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isOpenModal, setIsOpenModal }: S
           </div>
         </nav>
       </div>
-
     </aside>
   );
 };
