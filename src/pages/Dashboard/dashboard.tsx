@@ -10,6 +10,7 @@ import { config } from '@/context/api/token';
 import ChartOne from '@/components/chart/chart';
 import Tables from '@/components/custom/table';
 import { FaUsers } from "react-icons/fa";
+import SlightFlip from '@/components/magicui/flip-text';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -39,6 +40,10 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto px-4">
+      <SlightFlip
+        word="Dashboard"
+        justify="right"
+        className="text-3xl font-bold mb-10 text-gray-800" />
       {/* Statistic Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-5 gap-4">
         <StatisticCard
@@ -85,8 +90,12 @@ const Dashboard = () => {
 
       {/* Statistika kartalari uchun joy */}
       <div className="mt-10">
+
         <div className=" flex items-center mb-6">
-          <h2 className="mr-2 font-bold text-xl">O'quvchilar</h2><span className='text-2xl'><FaUsers /></span>
+        <SlightFlip
+        word="O'quvchilar"
+        justify="right"
+        className="text-3xl font-bold  text-gray-800" /><span className='text-3xl ml-2'><FaUsers /></span>
         </div>
 
         <Tables thead={dashboardThead}>
