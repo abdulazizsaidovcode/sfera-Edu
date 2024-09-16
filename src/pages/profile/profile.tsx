@@ -140,9 +140,9 @@ const Profile: React.FC = () => {
                 alt="Profile"
                 className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />
-              <h1 className="text-2xl font-semibold">{data?.firstName} {data?.lastName}</h1>
+              <h1 className="text-2xl font-semibold text-center">{data?.firstName} {data?.lastName}</h1>
               <h2 className="text-lg">+{data?.phoneNumber}</h2>
-              <div className="mb-4">
+              <div className="mb-4 w-full">
                 <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
                 <FileUpload onFileChange={handleFileChange} />
               </div>
