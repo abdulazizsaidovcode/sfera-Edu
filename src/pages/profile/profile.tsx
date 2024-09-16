@@ -1,10 +1,10 @@
+import React, { useState, useEffect } from 'react';
 import PhoneInput from '@/components/Inputs/PhoneInput';
 import TextInput from '@/components/Inputs/TextInput';
 import SlightFlip from '@/components/magicui/flip-text';
 import Particles from '@/components/magicui/particles';
 import ShineBorder from '@/components/magicui/shine-border';
 import { useProfile } from '@/storys/loginValue';
-import { useEffect, useState } from 'react';
 import defaultLogo from '@/assets/images/user.jpg';
 import ShinyButton from '@/components/magicui/shiny-button';
 import FileUpload from '@/components/Inputs/fileUpolatInput';
@@ -14,14 +14,27 @@ import { get_file, get_Mee } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import PasswordInput from '@/components/Inputs/passwordInput';
 
-const Profile = () => {
-  const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber,checkPassword,password,setPassword,setCheckPassword } = useProfile();
-  const [isFormValid, setIsFormValid] = useState(false);
+const Profile: React.FC = () => {
+  const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null); // State to store uploaded image URL
   const { data, getData } = useGet(get_Mee, config);
   const { getData: fileGetFunction } = useGet(`${get_file}${saveImg}`, config);
- 
+
+  const [errors, setErrors] = useState<{
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    password: string;
+    checkPassword: string;
+  }>({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    password: '',
+    checkPassword: '',
+  });
+
   useEffect(() => {
     getData();
   }, []);
@@ -30,29 +43,92 @@ const Profile = () => {
     if (saveImg) {
       fileGetFunction();
     }
-  }, [saveImg])
+  }, [saveImg]);
 
-  const handleInputChange = () => {
-    const isPhoneNumberValid = phoneNumber.trim().length === 11;
-    const isValid =
-      firstName.trim() !== '' &&
-      lastName.trim() !== '' &&
-      isPhoneNumberValid;
-    setIsFormValid(isValid);
-  };
   const handleFileChange = async (file: File) => {
     await checkImgUpload(file, setSaveImg);
     const imageUrl = URL.createObjectURL(file);
     setUploadedImg(imageUrl);
   };
-  const handleSave = () => {
-    if (isFormValid) {
+
+  const validateField = (field: string, value: string) => {
+    let newErrors = { ...errors };
+    switch (field) {
+      case 'firstName':
+        newErrors.firstName = value.trim() ? '' : 'Ism bo\'sh bo\'lmasligi kerak';
+        break;
+      case 'lastName':
+        newErrors.lastName = value.trim() ? '' : 'Familiya bo\'sh bo\'lmasligi kerak';
+        break;
+      case 'phoneNumber':
+        newErrors.phoneNumber = value.length === 12 ? '' : 'Telefon raqam 12 ta belgidan iborat bo\'lishi kerak';
+        break;
+      case 'password':
+        newErrors.password = value.length >= 5 ? '' : 'Parol kamida 5 ta belgidan iborat bo\'lishi kerak';
+        break;
+      case 'checkPassword':
+        newErrors.checkPassword = value === password ? '' : 'Parol mos emas';
+        break;
+      default:
+        break;
+    }
+    setErrors(newErrors);
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    let newErrors = { ...errors };
+
+    if (!firstName.trim()) {
+      newErrors.firstName = 'Ism bo\'sh bo\'lmasligi kerak';
+      valid = false;
+    } else {
+      newErrors.firstName = '';
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Familiya bo\'sh bo\'lmasligi kerak';
+      valid = false;
+    } else {
+      newErrors.lastName = '';
+    }
+
+    if (phoneNumber.length !== 12) {
+      newErrors.phoneNumber = 'Telefon raqam 12 ta belgidan iborat bo\'lishi kerak';
+      valid = false;
+    } else {
+      newErrors.phoneNumber = '';
+    }
+
+    if (password.length < 5) {
+      newErrors.password = 'Parol kamida 5 ta belgidan iborat bo\'lishi kerak';
+      valid = false;
+    } else {
+      newErrors.password = '';
+    }
+
+    if (password !== checkPassword) {
+      newErrors.checkPassword = 'Parol mos emas';
+      valid = false;
+    } else {
+      newErrors.checkPassword = '';
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleSave = (event: React.FormEvent) => {
+    event.preventDefault(); // Sahifa yangilanishining oldini olish
+    if (validateForm()) {
       console.log('Saved First Name:', firstName);
       console.log('Saved Last Name:', lastName);
       console.log('Saved Phone Number:', phoneNumber);
       console.log('Uploaded Image ID:', saveImg);
+      // Ma'lumotlarni saqlash yoki yuborish logikasini qo'shish mumkin
     }
   };
+
   return (
     <div className="min-h-auto flex items-center justify-center bg-gray-900 py-8">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
@@ -73,15 +149,14 @@ const Profile = () => {
             </div>
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
-            <div className="relativeflex mb-2 items-center justify-center">
-              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
+            <div className="relative flex mb-2 items-center justify-center">
+              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
-                  <SlightFlip word="Guruhingiz:Front end" className="text-3xl md:text-2xl font-bold text-black" />
-                  <p className="text-black mt-2 font-semibold">Darslarni hoziroq boshlang</p>
+                  <SlightFlip word="Front end" className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">Guruhingiz</p>
                 </div>
               </ShineBorder>
-              <p className='text-black font-semibold text-2xl'>Edit</p>
             </div>
             <form className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -94,9 +169,10 @@ const Profile = () => {
                     value={firstName}
                     onChange={(e) => {
                       setFirstName(e.target.value);
-                      handleInputChange();
+                      validateField('firstName', e.target.value);
                     }}
                   />
+                  {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
                 </div>
                 <div>
                   <label className="block text-gray-300 text-sm font-semibold mb-2">Last Name</label>
@@ -107,33 +183,37 @@ const Profile = () => {
                     value={lastName}
                     onChange={(e) => {
                       setLastName(e.target.value);
-                      handleInputChange();
+                      validateField('lastName', e.target.value);
                     }}
                   />
+                  {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 text-sm mb-2">Phone Number</label>
+                <label className="block text-gray-300 text-sm font-semibold mb-2">Phone Number</label>
                 <PhoneInput
                   placeholder="Enter Phone Number"
                   value={phoneNumber}
-                  onChange={(e) => {
-                    setPhoneNumber(e);
-                    handleInputChange();
+                  onChange={(value) => {
+                    setPhoneNumber(value);
+                    validateField('phoneNumber', value);
                   }}
                 />
+                {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="block text-gray-300 text-sm font-semibold mb-2">Password</label>
                   <PasswordInput
-                    placeholder="assword"
+                    placeholder="Password"
                     className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
+                      validateField('password', e.target.value);
                     }}
                   />
+                  {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                 </div>
                 <div>
                   <label className="block text-gray-300 text-sm font-semibold mb-2">Confirm Password</label>
@@ -143,14 +223,15 @@ const Profile = () => {
                     value={checkPassword}
                     onChange={(e) => {
                       setCheckPassword(e.target.value);
+                      validateField('checkPassword', e.target.value);
                     }}
                   />
+                  {errors.checkPassword && <p className="text-red-500 text-sm">{errors.checkPassword}</p>}
                 </div>
               </div>
               <ShinyButton
                 text="Save"
-                className={`w-full bg-[#063d36] border-none  ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={!isFormValid}
+                className="w-full bg-[#063d36] border-none"
                 onClick={handleSave}
               />
             </form>
