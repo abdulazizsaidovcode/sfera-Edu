@@ -20,13 +20,4 @@ export const useLesson = create<LessonType>((set) => ({
   setLessonData: (data) => set({lessonData: data}),
 }));
 
-interface LessonTypeOne {
-  lessonDataOne: any;
-  setLessonDataOne: (data: any) => void;
-}
-
-export const useLessonOne = create<LessonTypeOne>((set) => ({
-  lessonDataOne: null,
-  setLessonDataOne: (data) => set({lessonDataOne: data}),
-}));
 

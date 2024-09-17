@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCategory, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, studentRating, studentWeek } from '../api/url';
+import { getCategory, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, studentRating, studentWeek } from '../api/url';
 import { config } from '../api/token';
 
 
@@ -36,7 +36,6 @@ export const getModules = async (id: any, setData: any) => {
 // Modulga tegishli bo'lgan lessonlarni chiqarib beradi 
 export const getLesson = async (id: any, setData: any) => {
   const response = await axios.get(`${getLessonStudent}/${id}`, config);
-  console.log("responsescsdsd",response.data.data);
   try {
     if (response.data.data) {
       setData(response.data.data)
@@ -53,10 +52,24 @@ export const getLesson = async (id: any, setData: any) => {
 // Lesson / one bitta lessonni chiqarib beradi
 export const getLessonOne = async (id: any, setData: any) => {
   try {
-    console.log("Fetching data for lessonId:", id); 
     const response = await axios.get(`${getLessonOnes}/${id}`, config);
     if (response.data?.data) {
-      console.log("Data received from API:", response.data.data); 
+      setData(response.data.data); 
+    } else {
+      console.log("Error in response data:", response.data.error); 
+      setData([]); 
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error); 
+    setData([]); 
+  }
+};
+
+//Lesson one task 
+export const getLessonOneTask = async (id: any, setData: any) => {
+  try {
+    const response = await axios.get(`${getTask}/${id}`, config);
+    if (response.data?.data) {
       setData(response.data.data); 
     } else {
       console.log("Error in response data:", response.data.error); 

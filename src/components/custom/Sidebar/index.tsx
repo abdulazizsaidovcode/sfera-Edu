@@ -58,7 +58,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const setVideoLink = (videoLink: string | null) => {
     setCurrentVideoLink(videoLink);
-    console.log("Current Video Link:", videoLink);
   };
  
 
@@ -102,7 +101,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <NavLink to="/" className={''}>
             <img src={logo} alt="Sfera" className='w-46 pt-4 flex justify-center items-center' />
           </NavLink>
-
           <button
             ref={trigger}
             onClick={() => setSidebarOpen(!sidebarOpen)}

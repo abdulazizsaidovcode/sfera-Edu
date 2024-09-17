@@ -30,6 +30,7 @@ export const getModule: string = `${base_url}module/byCategory`
 // get Lesson 
 export const getLessonStudent : string = `${base_url}lesson/list/edu`
 export const getLessonOnes : string = `${base_url}lesson`
+export const getTask : string = `${base_url}task/getTaskByLesson`
 
 
 // get student task bal 

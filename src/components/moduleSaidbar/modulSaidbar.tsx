@@ -6,9 +6,9 @@ import { NavLink } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { getCourses, getLesson, getModules } from "@/context/logic/course";
 import { useCategory, useLesson } from "@/context/logic/state-managment/course";
-import { useModule } from "@/context/logic/state-managment/module";
-import { ClipLoader,ClockLoader,BarLoader } from "react-spinners"; // For loading spinner
-import { FaLock,FaLockOpen } from "react-icons/fa";
+import { useLessonONe, useModule } from "@/context/logic/state-managment/module";
+import { ClipLoader, ClockLoader, BarLoader } from "react-spinners"; // For loading spinner
+import { FaLock, FaLockOpen } from "react-icons/fa";
 
 export interface ModuleSidebarProps {
   modules: { moduleId: number; name: string; categoryId: number }[];
@@ -19,18 +19,24 @@ export interface ModuleSidebarProps {
     description: string | null;
     videoLink: string | null;
     videoTime: number | null;
-    userActive: boolean; // Add userActive flag for lock/unlock state
+    userActive: boolean;
   }[];
   setVideoLink: (videoLink: string | null) => void;
 }
 
-const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVideoLink }) => {
+const ModuleSidebar: React.FC<ModuleSidebarProps> = ({
+  modules,
+  lessons,
+  setVideoLink,
+}) => {
   const [activeModule, setActiveModule] = useState<number | null>(null);
   const { setCategoryData, categoryData } = useCategory();
   const [loading, setLoading] = useState<boolean>(true);
   const { setModuleData, moduleData } = useModule();
   const { setLessonData, lessonData } = useLesson();
+  const {setLessonOneSave} = useLessonONe()
   const [lessonLoading, setLessonLoading] = useState<boolean>(false); // Track lesson loading state
+
 
   useEffect(() => {
     if (!categoryData || !categoryData.name) {
@@ -48,13 +54,13 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
 
   useEffect(() => {
     if (moduleData && moduleData.length > 0) {
-      setActiveModule(moduleData[0].moduleId); 
+      setActiveModule(moduleData[0].moduleId);
     }
   }, [moduleData]);
 
   useEffect(() => {
     if (activeModule) {
-      setLessonLoading(true); 
+      setLessonLoading(true);
       getLesson(activeModule, setLessonData).finally(() => setLessonLoading(false));
     }
   }, [activeModule, setLessonData]);
@@ -63,15 +69,19 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
     setActiveModule((prevModule) => (prevModule === moduleId ? null : moduleId));
   };
 
-  const handleLessonClick = (lessonId: number, videoLink: string | null, userActive: boolean) => {
-    if (userActive) {
-      setVideoLink(videoLink);
+  const handleLessonClick = (lesson: any) => {
+    if (lesson.userActive) {
+      console.log(lesson); 
+      setLessonOneSave(lesson); 
+      setVideoLink(lesson.videoLink); 
     }
-  };
-
+  };  
   return (
     <div>
-      <NavLink to="/" className="flex items-center gap-2 mb-4 ml-4 text-white hover:text-gray-300">
+      <NavLink
+        to="/"
+        className="flex items-center gap-2 mb-4 ml-4 text-white hover:text-gray-300"
+      >
         <IoIosArrowBack size={20} />
         <span>Orqaga</span>
       </NavLink>
@@ -106,7 +116,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
                     <ul className="p-4 space-y-2">
                       {lessonLoading ? (
                         <div className="flex justify-center items-center py-4">
-                          <BarLoader color="#6A9C89" /> {/* Spinner during loading */}
+                          <BarLoader color="#6A9C89" />
                         </div>
                       ) : lessonData && lessonData.length > 0 ? (
                         lessonData.map((lesson: any) => (
@@ -117,9 +127,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
                                 ? "text-[#16423C] font-bold hover:text-[#6A9C89]"
                                 : "text-gray-500 cursor-not-allowed"
                             }`}
-                            onClick={() =>
-                              handleLessonClick(lesson.lessonId, lesson.videoLink, lesson.userActive)
-                            }
+                            onClick={() => handleLessonClick(lesson)} // Lesson tanlash
                           >
                             <span>{lesson.name || "No name"}</span>
                             {lesson.userActive ? (
@@ -130,7 +138,9 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
                           </li>
                         ))
                       ) : (
-                        <li className="text-base text-red-500">Bu modulda hali darslar mavjud emas</li>
+                        <li className="text-base text-red-500">
+                          Bu modulda hali darslar mavjud emas
+                        </li>
                       )}
                     </ul>
                   </motion.div>
