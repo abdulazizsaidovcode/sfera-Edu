@@ -21,7 +21,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
         autoPlay={false}
       >
         {/* <source src="MY_VIDEO.mp4" type="video/mp4" /> */}
-        <source src={`${videoId}`} type="video/youtube" />
+        <source src='https://youtu.be/cu6RLdjLSlQ?si=w4OZhor3s9JNhThv' type="" />
       </video>
     </div>
   );
