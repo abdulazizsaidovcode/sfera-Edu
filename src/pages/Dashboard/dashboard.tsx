@@ -11,6 +11,7 @@ import ChartOne from '@/components/chart/chart';
 import Tables from '@/components/custom/table';
 import { FaUsers } from "react-icons/fa";
 import SlightFlip from '@/components/magicui/flip-text';
+import VideoPlayer from '@/components/lesson/lessonVideo';
 
 
 export const dashboardThead = [

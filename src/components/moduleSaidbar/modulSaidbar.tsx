@@ -7,8 +7,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { getCourses, getLesson, getModules } from "@/context/logic/course";
 import { useCategory, useLesson } from "@/context/logic/state-managment/course";
 import { useModule } from "@/context/logic/state-managment/module";
-import { AiFillLock, AiFillUnlock } from "react-icons/ai"; // Lock and Unlock icons
-import { ClipLoader } from "react-spinners"; // For loading spinner
+import { ClipLoader,ClockLoader,BarLoader } from "react-spinners"; // For loading spinner
+import { FaLock,FaLockOpen } from "react-icons/fa";
 
 export interface ModuleSidebarProps {
   modules: { moduleId: number; name: string; categoryId: number }[];
@@ -48,14 +48,14 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
 
   useEffect(() => {
     if (moduleData && moduleData.length > 0) {
-      setActiveModule(moduleData[0].moduleId); // Automatically open the first module
+      setActiveModule(moduleData[0].moduleId); 
     }
   }, [moduleData]);
 
   useEffect(() => {
     if (activeModule) {
-      setLessonLoading(true); // Start lesson loading
-      getLesson(activeModule, setLessonData).finally(() => setLessonLoading(false)); // Stop when finished
+      setLessonLoading(true); 
+      getLesson(activeModule, setLessonData).finally(() => setLessonLoading(false));
     }
   }, [activeModule, setLessonData]);
 
@@ -106,7 +106,7 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
                     <ul className="p-4 space-y-2">
                       {lessonLoading ? (
                         <div className="flex justify-center items-center py-4">
-                          <ClipLoader color="#6A9C89" size={30} /> {/* Spinner during loading */}
+                          <BarLoader color="#6A9C89" /> {/* Spinner during loading */}
                         </div>
                       ) : lessonData && lessonData.length > 0 ? (
                         lessonData.map((lesson: any) => (
@@ -123,9 +123,9 @@ const ModuleSidebar: React.FC<ModuleSidebarProps> = ({ modules, lessons, setVide
                           >
                             <span>{lesson.name || "No name"}</span>
                             {lesson.userActive ? (
-                              <AiFillUnlock className="text-xl text-green-600" />
+                              <FaLockOpen className="text-lg text-green-600" />
                             ) : (
-                              <AiFillLock className="text-xl text-red-500" />
+                              <FaLock className="text-lg text-red-500" />
                             )}
                           </li>
                         ))

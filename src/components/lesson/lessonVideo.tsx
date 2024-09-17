@@ -1,22 +1,30 @@
-import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
+import React, { useEffect, useRef } from "react";
 
-export function HeroVideoDialogDemoTopInBottomOut() {
+interface VideoPlayerProps {
+  videoId: string;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
+ 
+
   return (
-    <div className="relative">
-      <HeroVideoDialog
-        className="dark:hidden block"
-        animationStyle="top-in-bottom-out"
-        videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-        thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-        thumbnailAlt="Hero Video"
-      />
-      <HeroVideoDialog
-        className="hidden dark:block"
-        animationStyle="top-in-bottom-out"
-        videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-        thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-        thumbnailAlt="Hero Video"
-      />
+    <div data-vjs-player>
+      <video
+        id="my-video"
+        className="video-js w-full h-auto" 
+        controls
+        preload="auto"
+        loop={false}
+       
+        poster="MY_VIDEO_POSTER.jpg"
+        data-setup="{}"
+        autoPlay={false}
+      >
+        {/* <source src="MY_VIDEO.mp4" type="video/mp4" /> */}
+        <source src={`${videoId}`} type="video/youtube" />
+      </video>
     </div>
   );
-}
+};
+
+export default VideoPlayer;
