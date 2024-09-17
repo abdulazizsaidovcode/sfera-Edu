@@ -3,13 +3,14 @@ export const base_url: string = "http://142.93.106.195:8080/"
 export const register_URl: string = `${base_url}auth/register`
 //login url
 export const login_URl: string = `${base_url}auth/login`
-export const user_Edit: string = `${base_url}user/?fileId=`
+export const user_Edit: string = `${base_url}user?fileId=`
 //User me 
 export const get_Mee: string = `${base_url}user/get/me`
 
 //notification url
 export const notification_count: string = `${base_url}notification/count`
 export const notification_all_view:string =`${base_url}notification/all`
+export const notification_read:string=`${base_url}notification/read`
 
 export const lesson_see: string = `${base_url}`
 
