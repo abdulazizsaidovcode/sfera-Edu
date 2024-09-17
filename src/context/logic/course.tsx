@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { getCategory, getModule, getStudentScore, getStudentStatistic, studentRating, studentWeek } from '../api/url';
+import { getCategory, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, studentRating, studentWeek } from '../api/url';
 import { config } from '../api/token';
 
 
+// Qaysi categoryda o'qishini chiqarib beradi 
 export const getCourses = async (setData: any) => {
   const response = await axios.get(getCategory, config);
   try {
@@ -16,7 +17,7 @@ export const getCourses = async (setData: any) => {
   }
 };
 
-
+// Category id orqali modulni chiqarib beradi 
 export const getModules = async (id: any, setData: any) => {
   const response = await axios.get(`${getModule}/${id}`, config);
   try {
@@ -32,10 +33,44 @@ export const getModules = async (id: any, setData: any) => {
   }
 };
 
+// Modulga tegishli bo'lgan lessonlarni chiqarib beradi 
+export const getLesson = async (id: any, setData: any) => {
+  const response = await axios.get(`${getLessonStudent}/${id}`, config);
+  console.log("responsescsdsd",response.data.data);
+  try {
+    if (response.data.data) {
+      setData(response.data.data)
+    } else {
+      console.log("Error:", response.data.error);
+      setData([]);
+    }
+  } catch (error) {
+    console.error("Error fetching statistics:", error);
+    setData([]);
+  }
+};
+
+// Lesson / one bitta lessonni chiqarib beradi
+export const getLessonOne = async (id: any, setData: any) => {
+  try {
+    console.log("Fetching data for lessonId:", id); 
+    const response = await axios.get(`${getLessonOnes}/${id}`, config);
+    if (response.data?.data) {
+      console.log("Data received from API:", response.data.data); 
+      setData(response.data.data); 
+    } else {
+      console.log("Error in response data:", response.data.error); 
+      setData([]); 
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error); 
+    setData([]); 
+  }
+};
+
 // student info yani bu cardlarga chiqqan ma'lumotlar 
 
 export const getStudentInfo = async (setData: any) => {
-  console.log("config", config);
   if (config.headers) {
     try {
       const res = await axios.get(`${getStudentScore}`, config)

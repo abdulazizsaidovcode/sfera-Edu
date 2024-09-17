@@ -4,8 +4,8 @@ import HyperText from '@/components/magicui/hyper-text'
 import ShineBorder from '@/components/magicui/shine-border'
 
 const StatisticCard: React.FC<StatisticCardTypes> = ({ title, firstNumber, secondNumber, twoNumbers = false, iconVisible = false, icon }) => {
-    const displayFirstNumber = firstNumber ?? 0;
-    const displaySecondNumber = secondNumber ?? 0;
+    const displayFirstNumber = firstNumber;
+    const displaySecondNumber = secondNumber;
 
     return (
         <ShineBorder color={'#16423C'} borderWidth={1.5} className="bg-white shadow-md dark:bg-boxdark w-full px-3 py-5 rounded-lg flex flex-col items-center justify-center whitespace-nowrap">

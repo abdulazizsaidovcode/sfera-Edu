@@ -12,6 +12,7 @@ import Tables from '@/components/custom/table';
 import { FaUsers } from "react-icons/fa";
 import SlightFlip from '@/components/magicui/flip-text';
 
+
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
   { id: 2, name: 'Familiya' },
@@ -38,6 +39,8 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+   console.log(data);
+   
   return (
     <div className="container mx-auto px-4">
       <SlightFlip
@@ -123,7 +126,6 @@ const Dashboard = () => {
           )}
         </Tables>
       </div>
-
     </div>
   );
 };
