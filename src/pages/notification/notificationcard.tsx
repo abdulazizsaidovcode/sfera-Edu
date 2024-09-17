@@ -4,16 +4,16 @@ interface NotificationCardProps {
   title: string;
   message: string;
   time: string;
-  type: 'true' | 'false' // Xabarning turi
+  type: string // Xabarning turi
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({ title, message, time, type }) => {
   const getTypeStyles = (type: string) => {
     switch (type) {
       case 'true':
-        return 'bg-[#f0fff4] text-green-600 border-[#057313]';
+        return 'bg-[#fff] text-black border-[#057313]';
       default:
-        return 'bg-red-100 text-gray-600 border-red-400';
+        return 'bg-green-100 text-green-600 border-green-400';
     }
   };
 

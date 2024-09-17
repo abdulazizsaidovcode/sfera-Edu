@@ -66,26 +66,26 @@ const Header = (props: {
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
-          {data ? (
-            <>
-              <ul className="flex items-center gap-2 2xsm:gap-4 relative">
-                <Link to={'/notification'} >
-                  <IoMdNotificationsOutline size={34} className='font-[900] cursor-pointer text-white ' />
-                </Link>
-                <div className='absolute w-4 h-4 flex items-center justify-center top-0 right-0 rounded-full bg-red-900'>
-                  <span className='text-[10px] text-white font-bold'>{data}</span>
-                </div>
-              </ul></>
-          ) : (
-            <></>
-          )}
+          <ul className="flex items-center gap-2 2xsm:gap-4 relative">
+            <Link to={'/notification'} >
+              <IoMdNotificationsOutline size={34} className='font-[900] cursor-pointer text-white ' />
+            </Link>
+            {data ? (
+              <div className='absolute w-4 h-4 flex items-center justify-center top-0 right-0 rounded-full bg-red-900'>
+                <span className='text-[10px] text-white font-bold'>{data}</span>
+              </div>
+            ) : (
+              <></>
+            )
+            }
+          </ul>
 
           {/* <!-- User Area --> */}
           <DropdownUser />
           {/* <!-- User Area --> */}
         </div>
       </div>
-    </header>
+    </header >
   );
 };
 
