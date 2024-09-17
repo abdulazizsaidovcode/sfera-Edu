@@ -36,12 +36,10 @@ const Notification = () => {
         // Agar o'qilmagan xabarlar bo'lsa, ID-larni yig'ib yuborish
         if (unreadNotifications?.length > 0) {
             const notificationIds = unreadNotifications.map((notification: any) => notification.id);
-            window.location.reload();
             setDataID(notificationIds); // ID-larni state-ga yuklash
             await postData(); // postData orqali yuborish
-
-            // Xabarlarni o'qilgan qilib belgilash (front-endda ma'lumotni yangilash)
-            getData();
+            getData(); // Xabarlarni o'qilgan qilib belgilash
+            window.location.reload();
         }
     };
 
@@ -52,7 +50,6 @@ const Notification = () => {
                     justify='left'
                     word='Notification'
                     className="text-3xl font-bold mb-6 text-gray-800" />
-                {/* Faqat o'qilmagan xabarlar bo'lsa funksiya ishlaydi */}
                 <IoCheckmarkDone
                     onClick={markAllAsRead}
                     size={30}
@@ -61,15 +58,18 @@ const Notification = () => {
                 />
             </div>
             {data?.length > 0 ? (
-                data?.map((notification: any) => (
-                    <NotificationCard
-                        key={notification?.id}
-                        title={notification?.title}
-                        message={notification?.content}
-                        time={formatDate(notification?.create)} // Sanani formatlash
-                        type={String(notification?.read)}
-                    />
-                ))
+                // Xabarlarni sanasi bo'yicha saralash
+                data
+                    .sort((a: any, b: any) => new Date(b.create).getTime() - new Date(a.create).getTime())
+                    .map((notification: any) => (
+                        <NotificationCard
+                            key={notification?.id}
+                            title={notification?.title}
+                            message={notification?.content}
+                            time={formatDate(notification?.create)} // Sanani formatlash
+                            type={String(notification?.read)}
+                        />
+                    ))
             ) : (
                 <p className="text-center text-gray-600">Sizda yangi xabarlar yo'q</p>
             )}
