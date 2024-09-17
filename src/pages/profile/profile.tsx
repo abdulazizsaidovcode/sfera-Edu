@@ -10,7 +10,7 @@ import ShinyButton from '@/components/magicui/shiny-button';
 import FileUpload from '@/components/Inputs/fileUpolatInput';
 import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { get_file, get_Mee, user_Edit } from '@/context/api/url';
+import { get_Mee, user_Edit } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import PasswordInput from '@/components/Inputs/passwordInput';
 import { useEdit } from '@/context/logic/global_functions/useEditOption';
@@ -18,9 +18,8 @@ import { useEdit } from '@/context/logic/global_functions/useEditOption';
 const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
-  const [uploadedImg, setUploadedImg] = useState<string | null>(null); // State to store uploaded image URL
+  const [uploadedImg, setUploadedImg] = useState<string | null>(null);
   const { data, getData } = useGet(get_Mee, config);
-  const { getData: fileGetFunction } = useGet(`${get_file}${saveImg}`, config);
   const { editData, response } = useEdit(`${user_Edit}${saveImg}`, {
     firstName: firstName,
     lastName: lastName,
@@ -44,13 +43,6 @@ const Profile: React.FC = () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (saveImg) {
-      fileGetFunction();
-    }
-  }, [saveImg]);
-
   const handleFileChange = async (file: File) => {
     await checkImgUpload(file, setSaveImg);
     const imageUrl = URL.createObjectURL(file);
@@ -125,7 +117,7 @@ const Profile: React.FC = () => {
   };
 
   const handleSave = (event: React.FormEvent) => {
-    event.preventDefault(); // Sahifa yangilanishining oldini olish
+    event.preventDefault();
     if (validateForm()) {
       console.log('Saved First Name:', firstName);
       console.log('Saved Last Name:', lastName);
@@ -133,7 +125,9 @@ const Profile: React.FC = () => {
       console.log('Uploaded Image ID:', saveImg);
 
       editData();
-      console.log('response:', response);
+      console.log(response);
+      localStorage.clear();
+      window.location.reload();
 
     }
   };
