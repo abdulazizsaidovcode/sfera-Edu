@@ -47,6 +47,9 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange, placeholder })
         // Remove non-numeric characters for the actual value
         const rawValue = inputValue.replace(/\D/g, '');
 
+        // Limit the raw value to 11 digits (after the +998 code)
+        if (rawValue.length > 12) return;
+
         // Set the internal value (formatted) for display purposes
         const formattedValue = formatPhoneNumber(rawValue);
         setInternalValue(formattedValue);

@@ -1,12 +1,22 @@
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import DropdownUser from './DropdownUser';
 import { Link } from 'react-router-dom';
+import { useGet } from '@/context/logic/global_functions/useGetOption';
+import { config } from '@/context/api/token';
+import { notification_count } from '@/context/api/url';
+import { useEffect } from 'react';
 // import DarkModeSwitcher from './DarkModeSwitcher';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+  const { data, getData } = useGet(notification_count, config)
+
+  useEffect(() => {
+    getData()
+  }, [])
+  console.log(data);
 
   return (
     <header className="sticky top-0 z-9999 flex w-full bg-[#16423C] drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
@@ -56,12 +66,19 @@ const Header = (props: {
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
-          <ul className="flex items-center gap-2 2xsm:gap-4 relative">
-            <Link to={'/notification'} >
-              <IoMdNotificationsOutline size={34} className='font-[900] cursor-pointer text-white ' />
-            </Link>
-            <div className='absolute w-2 h-2 top-1 right-1.5 rounded-full bg-red-900'></div>
-          </ul>
+          {data ? (
+            <>
+              <ul className="flex items-center gap-2 2xsm:gap-4 relative">
+                <Link to={'/notification'} >
+                  <IoMdNotificationsOutline size={34} className='font-[900] cursor-pointer text-white ' />
+                </Link>
+                <div className='absolute w-4 h-4 flex items-center justify-center top-0 right-0 rounded-full bg-red-900'>
+                  <span className='text-[10px] text-white font-bold'>{data}</span>
+                </div>
+              </ul></>
+          ) : (
+            <></>
+          )}
 
           {/* <!-- User Area --> */}
           <DropdownUser />

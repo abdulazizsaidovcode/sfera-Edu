@@ -125,7 +125,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </svg>
           </button>
         </div>
-
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear flex-grow">
           {location.pathname === '/course' ? (
             <ModuleSidebar modules={module} lessons={lesson} setVideoLink={setVideoLink}/>

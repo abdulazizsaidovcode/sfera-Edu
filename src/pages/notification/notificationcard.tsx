@@ -13,7 +13,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ title, message, tim
       case 'true':
         return 'bg-[#f0fff4] text-green-600 border-[#057313]';
       default:
-        return 'bg-gray-100 text-gray-600 border-gray-400';
+        return 'bg-red-100 text-gray-600 border-red-400';
     }
   };
 

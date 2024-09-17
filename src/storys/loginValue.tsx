@@ -31,6 +31,10 @@ interface Profile {
     firstName: string;
     lastName: string;
     phoneNumber: string;
+    password: string;
+    checkPassword: string
+    setPassword: (password: string) => void;
+    setCheckPassword: (checkPassword: string) => void
     setFirstName: (firstName: string) => void;
     setLastName: (lastName: string) => void;
     setPhoneNumber: (phoneNumber: string) => void;
@@ -39,6 +43,10 @@ export const useProfile = create<Profile>((set) => ({
     firstName: '',
     lastName: '',
     phoneNumber: '',
+    password: '',
+    checkPassword: '',
+    setPassword: (password: string) => set({ password }),
+    setCheckPassword: (checkPassword: string) => set({ checkPassword }),
     setFirstName: (firstName: string) => set({ firstName }),
     setLastName: (lastName: string) => set({ lastName }),
     setPhoneNumber: (phoneNumber: string) => set({ phoneNumber }),

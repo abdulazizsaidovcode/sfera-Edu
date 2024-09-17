@@ -1,6 +1,7 @@
 // FileUpload.tsx
 import React, { useState } from 'react';
 import upload from '@/assets/images/upload.svg'
+import ShineBorder from '../magicui/shine-border';
 
 interface FileUploadProps {
     onFileChange: (file: File) => void;
@@ -18,7 +19,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
     };
 
     return (
-        <div className="border-2 border-dashed border-[#126D4D] p-6 text-center rounded-lg bg-gray-100">
+        <div className="border-2 border-dashed border-[#126D4D] p-6 text-center rounded-lg bg-gray-100 w-full" >
             <input
                 type="file"
                 accept="image/*"
@@ -30,7 +31,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
                 <div className="flex flex-col items-center justify-center">
                     <img src={upload} alt="Upload Icon" className="mb-4 w-12 h-12 " />
                     <span className="text-lg font-medium text-[#126D4D]">
-                        {fileName || "Faylni yuklang yoki sudrab olib keling"}
+                        {fileName || "Profile rasmingizni yuklang"}
                     </span>
                 </div>
             </label>
