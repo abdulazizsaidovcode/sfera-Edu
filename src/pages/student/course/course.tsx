@@ -3,6 +3,7 @@ import { useLessonONe, useLessonTask } from "@/context/logic/state-managment/mod
 import VideoPlayer from "@/components/lesson/lessonVideo";
 import { getLessonOneTask } from "@/context/logic/course";
 import axios from "axios";
+import { get_file } from "@/context/api/url";
 
 const Course = () => {
   const { lessonOneSave } = useLessonONe();
@@ -23,30 +24,8 @@ const Course = () => {
     setSelectedFile(file || null);
   };
 
-  // Handle file upload
-  const handleFileUpload = async (taskId: number) => {
-    if (!selectedFile) {
-      setUploadStatus("Iltimos, fayl tanlang.");
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      // Replace with your actual file upload API endpoint
-      const response = await axios.post(`/api/upload/${taskId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setUploadStatus("Fayl yuklandi muvaffaqiyatli!");
-      console.log("Uploaded File:", response.data);
-    } catch (error) {
-      console.error("File upload failed:", error);
-      setUploadStatus("Faylni yuklashda xatolik yuz berdi.");
-    }
-  };
+ 
 
   return (
     <div className="hs-accordion-group">
@@ -74,17 +53,17 @@ const Course = () => {
         {lessonTaskSave ? (
           <>
             {lessonTaskSave?.map((task: any, index: number) => (
-              <div key={index} className="mb-4 bg-gray-600 p-3 border-2 border-gray-900 rounded-xl">
-                <p>Savol: {task.name || "Task Name"}</p>
+              <div key={index} className="mb-4 bg-gray-600 p-3  border-gray-900 rounded-xl">
+                <p>Kim qo'shgan bo'lsa o'sha  crud: {task.name || "Task Name"}</p>
                 <p>Savolga izoh: {task.description || "Task Description"}</p>
 
                 {/* Check if fileId exists */}
                 {task.fileId ? (
                   <div>
-                    <p>Fayl yuklandi: 
+                    <p>Dars davomida ishlatilgan qo'llanmani yuklab olish :  
                       <a
-                        href={`/api/download/${task.fileId}`} // Download link based on file ID
-                        className="text-blue-500 underline"
+                        href={`${get_file}${task.fileId}`} 
+                        className="mb-4 bg-gray-600 p-3 border-2  rounded-xl"
                         download
                       >
                         Yuklab olish
@@ -93,16 +72,16 @@ const Course = () => {
                   </div>
                 ) : (
                   <div>
-                    {/* File Upload Section if no file is uploaded */}
+                    {/* File Upload Section if no file is uploaded
                     <label className="block mb-2 font-bold">{task.name} savoliga javob bering</label>
                     <input type="file" onChange={handleFileChange} className="mb-2" />
                     <button
                       className="bg-[#4A5568] text-white py-2 px-4 rounded-lg"
-                      onClick={() => handleFileUpload(task.id)}
+                      // onClick={() => handleFileUpload(task.id)}
                     >
                       Faylni yuklash
                     </button>
-                    {uploadStatus && <p className="mt-2 text-red-500">{uploadStatus}</p>}
+                    {uploadStatus && <p className="mt-2 text-red-500">{uploadStatus}</p>} */}
                   </div>
                 )}
               </div>

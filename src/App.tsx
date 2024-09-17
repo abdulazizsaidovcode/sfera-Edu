@@ -7,10 +7,13 @@ import Home from './pages/home/home'
 import Course from './pages/student/course/course'
 import Dashboard from './pages/student/Dashboard/dashboard'
 import Register from './pages/auth/register'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { setConfig } from './context/api/token'
 import Notification from './pages/notification/notification'
 import Profile from './pages/profile/profile'
+import DashboardTeacher from './pages/teacher/dashboard/dashboard'
+import Students from './pages/teacher/students/students'
+import Lessons from './pages/teacher/lessons/lessons'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -18,6 +21,7 @@ function App() {
   const tokenExpiry = localStorage.getItem('tokenExpiry');
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [pageTitle, setPageTitle] = useState("");
 
   useEffect(() => {
     setConfig();
@@ -39,8 +43,7 @@ function App() {
         else navigate('/dashboard');
       } else if (role === 'ROLE_TEACHER') {
         if (!tokens) navigate('/auth/login');
-        // kamchiolik bor qilish kk
-        else navigate('/dashboard');
+        else navigate('/teacherDashboard');
       }
     }
 
@@ -59,7 +62,15 @@ function App() {
 
     if (!tokens && !pathname.startsWith('/auth')) navigate('/auth/login');
     if (!tokens && pathname.startsWith('/auth')) sessionStorage.removeItem('refreshes');
-  }, [pathname, tokens, navigate]);
+  }, [pathname, tokens, navigate, role]);
+
+  useEffect(() => {
+    if (role === 'ROLE_TEACHER') {
+      setPageTitle('Teacher | Dashboard');
+    } else if (role === 'ROLE_STUDENT') {
+      setPageTitle('Student | Dashboard');
+    }
+  }, [role]);
 
   return (
     <DefaultLayout>
@@ -69,8 +80,18 @@ function App() {
           path={`/dashboard`}
           element={
             <>
-              <PageTitle title="Admin | Dashboard" />
+              <PageTitle title={pageTitle} />
               <Dashboard />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/teacherDashboard`}
+          element={
+            <>
+              <PageTitle title={pageTitle} />
+              <DashboardTeacher />
             </>
           }
         />
@@ -81,6 +102,26 @@ function App() {
             <>
               <PageTitle title="Login" />
               <Login />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/Student`}
+          element={
+            <>
+              <PageTitle title="Student" />
+              <Students/>
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/lesson`}
+          element={
+            <>
+              <PageTitle title="Student" />
+              <Lessons/>
             </>
           }
         />
@@ -134,19 +175,9 @@ function App() {
             </>
           }
         />
-        {/* <Route 
-        index
-        path="/lessons/:lessonId"
-         element={
-          <>
-          <PageTitle title='Lesson'/>
-          <LessonVideo />
-          </>
-          } 
-         /> */}
       </Routes>
     </DefaultLayout>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -6,6 +6,8 @@ import { IoIosArrowBack, IoIosLogOut, IoMdNotificationsOutline } from 'react-ico
 import logo from '@/assets/images/Sfer 2.png';
 import { MdOutlinePlayLesson } from 'react-icons/md';
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
+import { FaUserGraduate } from "react-icons/fa6";
+import { FaTasks } from "react-icons/fa";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -131,7 +133,47 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <div className='flex flex-col'>
                 <ul className="mb-6 flex flex-col">
                   <li>
+                  {role === 'ROLE_TEACHER' ? (
+                    <>
                     <MenuItem
+                      title='Dashboard'
+                      icon={<LuLayoutDashboard size={20} />}
+                      pathname={location.pathname}
+                      to='/teacher/dashboard'
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                    <MenuItem
+                      title='Student'
+                      icon={<FaUserGraduate size={20} />}
+                      pathname={location.pathname}
+                      to='/Student'
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                    <MenuItem
+                      title='Lesson'
+                      icon={<MdOutlinePlayLesson size={20} />}
+                      pathname={location.pathname}
+                      to='/lesson'
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                    <MenuItem
+                      title='Notification'
+                      icon={<IoMdNotificationsOutline size={20} />}
+                      pathname={location.pathname}
+                      to='/notification'
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                    <MenuItem
+                      title='Task done'
+                      icon={<FaTasks size={20} />}
+                      pathname={location.pathname}
+                      to='/task'
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                    </>
+                  ):(
+                    <>
+                   <MenuItem
                       title='Dashboard'
                       icon={<LuLayoutDashboard size={20} />}
                       pathname={location.pathname}
@@ -159,6 +201,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       to='/notification'
                       setSidebarOpen={setSidebarOpen}
                     />
+                    </>
+                  ) }
+                    
                   </li>
                 </ul>
               </div>
