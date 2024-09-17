@@ -36,6 +36,7 @@ const Notification = () => {
         // Agar o'qilmagan xabarlar bo'lsa, ID-larni yig'ib yuborish
         if (unreadNotifications?.length > 0) {
             const notificationIds = unreadNotifications.map((notification: any) => notification.id);
+            window.location.reload();
             setDataID(notificationIds); // ID-larni state-ga yuklash
             await postData(); // postData orqali yuborish
 
