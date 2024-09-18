@@ -3,6 +3,7 @@ import Tables from '@/components/custom/table';
 import ShinyButton from '@/components/magicui/shiny-button';
 import { SelectComponent } from '@/components/select/select';
 
+
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
   { id: 2, name: 'Familiya' },
