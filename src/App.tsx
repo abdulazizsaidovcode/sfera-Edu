@@ -43,7 +43,7 @@ function App() {
         else navigate('/dashboard');
       } else if (role === 'ROLE_TEACHER') {
         if (!tokens) navigate('/auth/login');
-        else navigate('/teacherDashboard');
+        else navigate('/teacher/Dashboard');
       }
     }
 
@@ -87,7 +87,7 @@ function App() {
         />
         <Route
           index
-          path={`/teacherDashboard`}
+          path={`/teacher/Dashboard`}
           element={
             <>
               <PageTitle title={pageTitle} />
@@ -107,10 +107,10 @@ function App() {
         />
         <Route
           index
-          path={`/Student`}
+          path={`/student`}
           element={
             <>
-              <PageTitle title="Student" />
+              <PageTitle title="Teacher | Student" />
               <Students/>
             </>
           }
@@ -120,8 +120,28 @@ function App() {
           path={`/lesson`}
           element={
             <>
-              <PageTitle title="Student" />
+              <PageTitle title="Teacher | Lesson" />
               <Lessons/>
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/notifications`}
+          element={
+            <>
+              <PageTitle title="Teacher | Notification" />
+              <Notification />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/taskdone`}
+          element={
+            <>
+              <PageTitle title="Teacher | Taskdone" />
+              <Notification />
             </>
           }
         />
@@ -175,6 +195,7 @@ function App() {
             </>
           }
         />
+        
       </Routes>
     </DefaultLayout>
   );

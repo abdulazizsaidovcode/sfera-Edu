@@ -160,14 +160,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       title='Notification'
                       icon={<IoMdNotificationsOutline size={20} />}
                       pathname={location.pathname}
-                      to='/notification'
+                      to='/notifications'
                       setSidebarOpen={setSidebarOpen}
                     />
                     <MenuItem
                       title='Task done'
                       icon={<FaTasks size={20} />}
                       pathname={location.pathname}
-                      to='/task'
+                      to='/taskdone'
                       setSidebarOpen={setSidebarOpen}
                     />
                     </>
