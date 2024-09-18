@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Tables from '@/components/custom/table';
 import ShinyButton from '@/components/magicui/shiny-button';
-import { SelectDemo } from '@/components/select/select';
+import { SelectComponent } from '@/components/select/select';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -26,8 +26,18 @@ const Lessons = () => {
       <div className='mb-3'>
         <div className='flex justify-between space-x-4 mb-6'>
           <ShinyButton text="Lesson qo'shish" className='bg-[#16423C] shadow-lg py-2 px-3' />
-          <div className='shadow-lg'><SelectDemo /></div>
-          
+          <div className='shadow-xl'>
+          <SelectComponent
+            label="Fruits"
+            options={[
+              { value: "apple", label: "Apple" },
+              { value: "banana", label: "Banana" },
+              { value: "blueberry", label: "Blueberry" },
+              { value: "grapes", label: "Grapes" },
+              { value: "pineapple", label: "Pineapple" },
+            ]}
+            placeholder="Select Category" />
+          </div>
         </div>
         <div>
           <Tables thead={dashboardThead}>
