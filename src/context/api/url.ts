@@ -39,3 +39,14 @@ export const getStudentScore: string = `${base_url}student/info`
 export const getStudentStatistic = `${base_url}statistic/student-yearly-statistic`
 export const studentRating = `${base_url}student/rating`
 export const studentWeek = `${base_url}statistic/student-statistic`
+
+// Teacherga tegishli bo'lgan studentlar qaytadi
+export const getTeachetStudent : string = `${base_url}user/searchUser`
+
+//Teacherga tegishli categorylarni chiqarib beradi 
+
+export const getCategoryTeacher : string = `${base_url}category/teacher`
+
+//Teacher hamma lessonlarni ko'radi 
+export const getTeacherLesson : string = `${base_url}lesson/search`
+
