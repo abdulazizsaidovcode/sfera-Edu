@@ -86,16 +86,16 @@ const Lessons = () => {
             {lessonData?.body?.length > 0 ? (
               lessonData.body.map((lesson: any, index: number) => (
                 <tr key={lesson.id || index} className="hover:bg-gray duration-100">
-                  <td className="border-b border-[#eee] min-w-[200px] p-5 dark:border-strokedark">
+                  <td className="border-b border-[#eee] min-w-[200px] p-5">
                     <p className="text-black dark:text-white">{index + 1 + currentPage * pageSize}</p>
                   </td>
-                  <td className="border-b border-[#eee] min-w-[200px] p-5 dark:border-strokedark">
+                  <td className="border-b border-[#eee] min-w-[200px] p-5 ">
                     <p className="text-black dark:text-white">{lesson.name ?? 'N/A'}</p>
                   </td>
-                  <td className="border-b border-[#eee] min-w-[200px] p-5 dark:border-strokedark">
+                  <td className="border-b border-[#eee] min-w-[200px] p-5 ">
                     <p className="text-black dark:text-white">{lesson.description ?? 'N/A'}</p>
                   </td>
-                  <td className="border-b border-[#eee] min-w-[160px] p-5 dark:border-strokedark">
+                  <td className="border-b border-[#eee] min-w-[160px] p-5 ">
                     <p className="text-black dark:text-white">{lesson.videoTime ?? 'N/A'} min</p>
                   </td>
                   <td className="border-b border-[#eee] min-w-[160px]">

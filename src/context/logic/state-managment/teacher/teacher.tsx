@@ -31,3 +31,45 @@ export const useTeacherLesson = create<TeacherLesson>((set) => ({
     teacherLesson:null,
     setTeacherLesson: (data) => set({teacherLesson: data}),
 }));
+
+interface TeacherStatistic {
+    teacherStatistik:any
+    setTeacherStatistic: (data: any) => void;
+}
+export const useTeacherStatistic = create<TeacherStatistic>((set) => ({
+    teacherStatistik:null,
+    setTeacherStatistic: (data) => set({teacherStatistik: data}),
+}));
+
+//Top guruh teacherga tegishli bo'lgan 
+
+interface topGroup {
+    teacherTopGroup:any
+    setTeacherTopGroup: (data: any) => void;
+}
+export const useTeacherTopGuruh = create<topGroup>((set) => ({
+    teacherTopGroup:null,
+    setTeacherTopGroup: (data) => set({teacherTopGroup: data}),
+}));
+
+//Top 5 student
+
+interface topStudent {
+    teacherTopStudent:any
+    setTeacherTopStudent: (data: any) => void;
+}
+export const useTeacherTopStudent = create<topStudent>((set) => ({
+    teacherTopStudent:null,
+    setTeacherTopStudent: (data) => set({teacherTopStudent: data}),
+}));
+
+//Teacher hamma ma'lumotni ko'radi neshta guruh neshta student va neshta o'qituvchi borligini 
+interface teacherAll {
+    teacherAll:any
+    setTeacherAll: (data: any) => void;
+}
+
+export const useTeacherAll = create<teacherAll>((set) => ({
+    teacherAll:null,
+    setTeacherAll: (data) => set({teacherAll: data}),
+}));

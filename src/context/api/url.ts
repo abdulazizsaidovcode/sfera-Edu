@@ -50,3 +50,15 @@ export const getCategoryTeacher : string = `${base_url}category/teacher`
 //Teacher hamma lessonlarni ko'radi 
 export const getTeacherLesson : string = `${base_url}lesson/search`
 
+//Teacher dashboard uchun yillik statistika guruhlarga 
+export const getTeacherStatistik:string = `${base_url}statistic/teacher-dashboard`
+
+//Teacher top guruhlarni ko'radi 
+export const getTopGroups : string = `${base_url}statistic/top/group-teacher`
+
+//Teacher top 5 student
+export const getTopStudent : string = `${base_url}statistic/top/student-teacher`
+
+//Teacher jami o'qituvchilar sonini guruhlar sonini va teacherlar soni 
+export const getAllTeacher : string = `${base_url}statistic/count-dashboard`
+
