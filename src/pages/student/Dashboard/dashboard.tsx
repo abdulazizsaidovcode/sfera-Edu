@@ -11,6 +11,7 @@ import ChartOne from '@/components/chart/chart';
 import Tables from '@/components/custom/table';
 import { FaUsers } from "react-icons/fa";
 import SlightFlip from '@/components/magicui/flip-text';
+import LoadingModal from '@/components/Loading/loading';
 
 
 
@@ -37,11 +38,10 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <>
+      <LoadingModal isVisible={loading} />
+    </>;
   }
-
-   console.log(data);
-   
   return (
     <div className="container mx-auto px-4">
       <SlightFlip
@@ -78,14 +78,14 @@ const Dashboard = () => {
       <div className="flex flex-col lg:flex-row w-full gap-4">
         <div className="w-full lg:w-1/2 p-2 shadow-lg rounded-xl bg-[#FFF5E0]">
           <span className="font-bold text-black mb-4 p-2 text-xl mt-3">Oylik Natijalar</span>
-          <TfiStatsUp className="text-2xl font-bold text-red-900 inline-block mb-1 ml-2" />
+          <TfiStatsUp className="text-2xl font-bold text-[#16A34A] inline-block mb-1 ml-2" />
           <div className="mb-3">
-            <ChartOne />
+            <ChartOne  />
           </div>
         </div>
         <div className="w-full lg:w-1/2 p-2 shadow-lg rounded-xl bg-[#FFF5E0]">
           <span className="font-bold text-black mb-4 p-2 text-xl mt-3">Haftalik Natijalar</span>
-          <TfiStatsUp className="text-2xl font-bold text-red-900 inline-block mb-1 ml-2" />
+          <TfiStatsUp className="text-2xl font-bold text-[#16A34A] inline-block mb-1 ml-2" />
           <div className="mb-3">
             <ChartWeek />
           </div>
@@ -96,10 +96,10 @@ const Dashboard = () => {
       <div className="mt-10">
 
         <div className=" flex items-center mb-6">
-        <SlightFlip
-        word="O'quvchilar"
-        justify="right"
-        className="text-3xl font-bold  text-gray-800" /><span className='text-3xl ml-2'><FaUsers /></span>
+          <SlightFlip
+            word="O'quvchilar"
+            justify="right"
+            className="text-3xl font-bold  text-gray-800" /><span className='text-3xl ml-2'><FaUsers /></span>
         </div>
 
         <Tables thead={dashboardThead}>
@@ -109,7 +109,7 @@ const Dashboard = () => {
             </tr>
           ) : (
             tableStatistik.map((student: any, index: any) => (
-              <tr key={student.id || index} className="hover:bg-gray duration-100">
+              <tr key={student.id || index} className="hover:bg-green-100 duration-100">
                 <td className="border-b border-[#eee] min-w-[200px] p-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{index + 1}</p>
                 </td>

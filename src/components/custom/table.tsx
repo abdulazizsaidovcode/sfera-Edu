@@ -18,7 +18,7 @@ const Tables: React.FC<IMasterTableProps> = ({thead, children}) => {
             <div className="max-w-full overflow-x-auto w-[100%]">
                 <table className="w-full table-auto">
                     <thead>
-                        <tr className="text-left bg-whiter">
+                        <tr className="text-left bg-green-200">
                             {thead.map((item) => (
                                 <th
                                     key={item.id}

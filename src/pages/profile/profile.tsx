@@ -156,7 +156,7 @@ const Profile: React.FC = () => {
               <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
-                  <SlightFlip word="Front end" className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
+                  <SlightFlip word={data===undefined?(String(data?.groupName)):'Sizda guruh yo\'q'} className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
                   <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">Guruhingiz</p>
                 </div>
               </ShineBorder>
