@@ -1,7 +1,7 @@
 import SlightFlip from '@/components/magicui/flip-text';
 import NotificationCard from './notificationcard';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { notification_all_view, notification_read } from '@/context/api/url';
+import { notification_all_view, notification_count, notification_read } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import { useEffect, useState } from 'react';
 import { IoCheckmarkDone } from "react-icons/io5";
@@ -39,7 +39,6 @@ const Notification = () => {
             setDataID(notificationIds); // ID-larni state-ga yuklash
             await postData(); // postData orqali yuborish
             getData(); // Xabarlarni o'qilgan qilib belgilash
-            window.location.reload();
         }
     };
 

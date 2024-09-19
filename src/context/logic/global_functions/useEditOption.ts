@@ -22,7 +22,7 @@ export function useEdit<T>(url: string, data: T, config?: any): UseEditResponse<
         toastMessage(result.data.error)
         throw new Error(result.data.error);
       }
-      return result.data.data;
+      return result?.data?.data;
     },
     onError: (error: any) => {
       // Custom error handling if needed
