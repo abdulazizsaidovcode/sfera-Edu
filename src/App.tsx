@@ -14,6 +14,8 @@ import Profile from './pages/profile/profile'
 import DashboardTeacher from './pages/teacher/dashboard/dashboard'
 import Students from './pages/teacher/students/students'
 import Lessons from './pages/teacher/lessons/lessons'
+import toast from 'react-hot-toast'
+import Confirmeted from './confirmeted'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -44,7 +46,7 @@ function App() {
       } else if (role === 'ROLE_TEACHER') {
         if (!tokens) navigate('/auth/login');
         else navigate('/teacher/Dashboard');
-      }
+      } 
     }
 
     if (tokens && tokenExpiry) {
@@ -69,7 +71,7 @@ function App() {
       setPageTitle('Teacher | Dashboard');
     } else if (role === 'ROLE_STUDENT') {
       setPageTitle('Student | Dashboard');
-    }
+    } 
   }, [role]);
 
   return (
@@ -111,7 +113,7 @@ function App() {
           element={
             <>
               <PageTitle title="Teacher | Student" />
-              <Students/>
+              <Students />
             </>
           }
         />
@@ -121,7 +123,7 @@ function App() {
           element={
             <>
               <PageTitle title="Teacher | Lesson" />
-              <Lessons/>
+              <Lessons />
             </>
           }
         />
@@ -195,7 +197,17 @@ function App() {
             </>
           }
         />
-        
+        <Route
+          index
+          path={`/confirm`}
+          element={
+            <>
+              <PageTitle title="Confirem" />
+              <Confirmeted />
+            </>
+          }
+        />
+
       </Routes>
     </DefaultLayout>
   );

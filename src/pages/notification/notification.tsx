@@ -1,7 +1,7 @@
 import SlightFlip from '@/components/magicui/flip-text';
 import NotificationCard from './notificationcard';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { notification_all_view, notification_count, notification_read } from '@/context/api/url';
+import { notification_all_view, notification_read } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import { useEffect, useState } from 'react';
 import { IoCheckmarkDone } from "react-icons/io5";
@@ -24,21 +24,18 @@ const Notification = () => {
     const { data, getData } = useGet(notification_all_view, config);
     const [dataID, setDataID] = useState<any>([]);
     const { postData } = usePost(notification_read, { ids: dataID }, config);
-
     useEffect(() => {
         getData();
     }, []);
 
     const markAllAsRead = async () => {
-        // O'qilmagan xabarlarni yig'ish
         const unreadNotifications = data?.filter((notification: any) => !notification.read);
-
-        // Agar o'qilmagan xabarlar bo'lsa, ID-larni yig'ib yuborish
         if (unreadNotifications?.length > 0) {
             const notificationIds = unreadNotifications.map((notification: any) => notification.id);
-            setDataID(notificationIds); // ID-larni state-ga yuklash
-            await postData(); // postData orqali yuborish
-            getData(); // Xabarlarni o'qilgan qilib belgilash
+            setDataID(notificationIds); 
+            await postData(); 
+            getData();
+            window.location.reload()
         }
     };
 

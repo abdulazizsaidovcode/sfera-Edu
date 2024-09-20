@@ -10,7 +10,7 @@ interface UseEditOptions<T> {
 interface UseEditResponse<T> {
   loading: boolean;
   error: any;
-  response: T | null;
+  response: any;
   editData: () => void;
 }
 

@@ -14,6 +14,7 @@ import { get_Mee, user_Edit } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import PasswordInput from '@/components/Inputs/passwordInput';
 import { useEdit } from '@/context/logic/global_functions/useEditOption';
+import toast from 'react-hot-toast';
 
 const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
@@ -43,6 +44,22 @@ const Profile: React.FC = () => {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    async function check() {
+      if (response) {
+        await new Promise((res) => {
+          localStorage.setItem("token", response?.token);
+          localStorage.setItem("ROLE", response?.role);
+          res("salom"); 
+        });
+        await getData();
+        await window.location.reload()
+      }
+    }
+
+    check(); // check funktsiyasini chaqirish
+  }, [response]);
+
   const handleFileChange = async (file: File) => {
     await checkImgUpload(file, setSaveImg);
     const imageUrl = URL.createObjectURL(file);
@@ -116,21 +133,12 @@ const Profile: React.FC = () => {
     return valid;
   };
 
-  const handleSave = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSave = async (event: React.FormEvent) => {
     if (validateForm()) {
-      console.log('Saved First Name:', firstName);
-      console.log('Saved Last Name:', lastName);
-      console.log('Saved Phone Number:', phoneNumber);
-      console.log('Uploaded Image ID:', saveImg);
-
       editData();
-      console.log(response);
-      localStorage.clear();
-      window.location.reload();
-
     }
   };
+
 
   return (
     <div className="min-h-auto flex items-center justify-center bg-gray-900 py-8">
@@ -156,12 +164,12 @@ const Profile: React.FC = () => {
               <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
                 <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
                 <div className="relative z-10 text-center">
-                  <SlightFlip word={data===undefined?(String(data?.groupName)):'Sizda guruh yo\'q'} className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
+                  <SlightFlip word={data === undefined ? (String(data?.groupName)) : 'Sizda guruh yo\'q'} className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
                   <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">Guruhingiz</p>
                 </div>
               </ShineBorder>
             </div>
-            <form className="space-y-4">
+            <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="block text-gray-300 text-sm font-semibold mb-2">First Name</label>
@@ -237,7 +245,7 @@ const Profile: React.FC = () => {
                 className="w-full bg-[#063d36] border-none"
                 onClick={handleSave}
               />
-            </form>
+            </div>
           </div>
         </div>
       </div>
