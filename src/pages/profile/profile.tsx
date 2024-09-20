@@ -10,7 +10,7 @@ import ShinyButton from '@/components/magicui/shiny-button';
 import FileUpload from '@/components/Inputs/fileUpolatInput';
 import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { get_Mee, user_Edit } from '@/context/api/url';
+import { get_file, get_Mee, user_Edit } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import PasswordInput from '@/components/Inputs/passwordInput';
 import { useEdit } from '@/context/logic/global_functions/useEditOption';
@@ -20,13 +20,17 @@ const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null);
+  const [getFileId, setGetFileId] = useState(0)
+
   const { data, getData } = useGet(get_Mee, config);
+
   const { editData, response } = useEdit(`${user_Edit}${saveImg}`, {
     firstName: firstName,
     lastName: lastName,
     phoneNumber: phoneNumber,
     password: password
   }, config)
+
   const [errors, setErrors] = useState<{
     firstName: string;
     lastName: string;
@@ -40,6 +44,7 @@ const Profile: React.FC = () => {
     password: '',
     checkPassword: '',
   });
+  console.log();
 
   useEffect(() => {
     getData();
@@ -50,7 +55,7 @@ const Profile: React.FC = () => {
         await new Promise((res) => {
           localStorage.setItem("token", response?.token);
           localStorage.setItem("ROLE", response?.role);
-          res("salom"); 
+          res("salom");
         });
         await getData();
         await window.location.reload()
@@ -147,7 +152,7 @@ const Profile: React.FC = () => {
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-1 md:col-end-2 flex justify-center items-center">
             <div className="flex flex-col items-center">
               <img
-                src={uploadedImg || defaultLogo}
+                src={data?.fileId ? `${get_file}${data?.fileId}` : defaultLogo}
                 alt="Profile"
                 className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />

@@ -3,7 +3,7 @@ import userImage from '@/assets/images/user.jpg';
 import ShinyButton from '@/components/magicui/shiny-button';
 import { IoIosLogOut } from 'react-icons/io';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { get_Mee } from '@/context/api/url';
+import { get_file, get_Mee } from '@/context/api/url';
 import { config } from '@/context/api/token';
 
 const DropdownUser = () => {
@@ -41,7 +41,7 @@ const DropdownUser = () => {
       >
         <span className="h-12 w-12 rounded-full bg-slate-600 object-cover overflow-hidden">
           <img
-            src={userImage}
+            src={data?.fileId ? `${get_file}${data?.fileId}` : userImage}
             alt="User"
             className="w-full h-full"
           />
