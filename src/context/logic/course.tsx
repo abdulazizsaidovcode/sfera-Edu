@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, studentRating, studentWeek } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, studentRating, studentWeek } from '../api/url';
 import { config } from '../api/token';
 
 
@@ -149,11 +149,25 @@ export const getStudentWeek = async (setData: any) => {
 
 // Teacherga tegishli bo'lgan studentlar keladi 
 
-export const getStudenTeacher = async (setData: (data: any) => void, page: number, size: number,id:number) => {
+export const getStudenTeacher = async (
+  setData: (data: any) => void,
+  page: number,
+  size: number,
+  id?: number,
+  name?: string 
+) => {
   try {
-    const url = `${getTeachetStudent}?page=${page}&size=${size}`;
+    let url = `${getTeachetStudent}?page=${page}&size=${size}`;
+    if (id) {
+      url += `&groupId=${id}`;
+    }
+    if (name) {
+      url += `&name=${encodeURIComponent(name)}`; 
+    }
     const res = await axios.get(url, config);
+    
     if (res.data.data) {
+      console.log('Data received:', res.data);
       setData({
         body: res.data
       });
@@ -166,6 +180,7 @@ export const getStudenTeacher = async (setData: (data: any) => void, page: numbe
     setData(null);
   }
 };
+
 
 //Teacherga tegishli bo'lgan guruhlarni chiqarib beradi 
 export const getCategoryTeachers = async (setData: any) => {
@@ -186,6 +201,8 @@ export const getTeacherLessons = async (setData: (data: any) => void, page: numb
   const res = await axios.get(`${getTeacherLesson}?page=${page}&size=${size}`, config)
   try {
     if (res.data.data) {
+      console.log(121232132443443,res.data);
+      
       setData(res.data.data)
     } else if (res.data.data) {
       console.log("error", res.data.error);
@@ -198,6 +215,20 @@ export const getTeacherLessons = async (setData: (data: any) => void, page: numb
 //Teacherni guruhlarini yillik statistikasini chiqarib beradi
 export const getStatistikTeacher = async (setData: any) => {
   const res = await axios.get(`${getTeacherStatistik}`, config)
+  try {
+    if (res.data.data) {
+      setData(res.data.data)
+    } else if (res.data.data) {
+      console.log("error", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+//Teacherga tegishli bo'lgan guruhlar 
+export const getTeacherGroup = async (setData: any) => {
+  const res = await axios.get(`${getAllGroupTeacher}`, config)
   try {
     if (res.data.data) {
       setData(res.data.data)
@@ -246,6 +277,29 @@ export const getTeacherAllCount = async (setData: any) => {
       setData(res.data.data)
     } else if (res.data.data) {
       console.log("error", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+//Teacher lesson qo'shadi 
+interface LessonData {
+  name: string;
+  description: string;
+  videoLink: string;
+  videoTime: number;
+  moduleId: number;
+  fileId: number;
+}
+
+export const postLessonTeacher = async (lessonData: LessonData, setData: any) => {
+  try {
+    const res = await axios.post(`${LessonAdd}`, lessonData);
+    if (res.data && res.data.data) {
+      setData(res.data.data);
+    } else if (res.data && res.data.error) {
+      console.log("Error:", res.data.error);
     }
   } catch (error) {
     console.log("Error", error);

@@ -3,10 +3,14 @@ import Tables from '@/components/custom/table';
 import ShinyButton from '@/components/magicui/shiny-button';
 import { SelectComponent } from '@/components/select/select';
 import { FaEdit } from 'react-icons/fa';
-import AnimatedModal from '@/components/Modal/modal';
-import TextInput from '@/components/Inputs/TextInput';
-import { getTeacherLessons } from '@/context/logic/course';
+import Modal from '@/components/moduleSaidbar/modulTeacher';
+import { Input } from '@/components/ui/input';
+import { getCategoryTeachers, getTeacherLessons } from '@/context/logic/course';
 import { useLesson } from '@/context/logic/state-managment/course';
+import { useTeacherCategory } from '@/context/logic/state-managment/teacher/teacher';
+import { usePost } from '@/context/logic/global_functions/usePostOption';
+import { LessonAdd } from '@/context/api/url';
+import { config } from '@/context/api/token';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -18,27 +22,76 @@ export const dashboardThead = [
 
 const Lessons = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(''); 
+  const [lessonAdd, setLessonAdd] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
   const { setLessonData, lessonData } = useLesson();
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages] = useState(0);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [lessonName, setLessonName] = useState('');
+  const [description, setDescription] = useState('');
+  const [videoLink, setVideoLink] = useState<string>('');
+  const [duration, setDuration] = useState<number | null>(null);
+  const [lessonNameError, setLessonNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [videoLinkError, setVideoLinkError] = useState('');
+  const [durationError, setDurationError] = useState('');
+  const { setTeacherCategory, teacherCategory } = useTeacherCategory();
 
   const openModal = (type: string, lesson: any) => {
-    setModalContent(type);
     setSelectedLesson(lesson);
     setIsModalOpen(true);
+    // if (type === 'edit') {
+    //   setLessonName(lesson.name);
+    //   setDescription(lesson.description);
+    //   setVideoLink(lesson.videoTime);
+    //   setDuration(lesson.duration);
+    //   setLessonAdd(false);
+    // } else {
+    //   setLessonAdd(true);
+    //   // clearForm();
+    // }
   };
+
+  // const clearForm = () => {
+  //   setLessonName('');
+  //   setDescription('');
+  //   setVideoLink('');
+  //   setDuration(null);
+  //   setLessonNameError('');
+  //   setDescriptionError('');
+  //   setVideoLinkError('');
+  //   setDurationError('');
+  // };
+
+  const {postData, response} = usePost(LessonAdd, {
+    name: lessonName,
+    description: description,
+    videoLink: videoLink,
+    videoTime: duration,
+    moduleId: 2,
+    fileId: 0
+  }, config)
 
   useEffect(() => {
     getTeacherLessons(setLessonData, currentPage, pageSize);
+    getCategoryTeachers(setTeacherCategory);
   }, [currentPage, pageSize, setLessonData]);
+
+  useEffect(() => {
+    getTeacherLessons(setLessonData, currentPage, pageSize);
+  }, [response])
+  
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
       setCurrentPage(newPage);
     }
+  };
+
+  const handleSelectChange = (selectedValue: string) => {
+    setSelectedId(selectedValue);
   };
 
   const getPageNumbers = () => {
@@ -58,123 +111,207 @@ const Lessons = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setModalContent('');
-    setSelectedLesson(null);
+    setLessonAdd(false);
+    clearForm();
+  };
+
+  const handleSubmit = () => {
+    let hasError = false;
+
+    if (!lessonName) {
+      setLessonNameError('Lesson name is required');
+      hasError = true;
+    }
+    if (!description) {
+      setDescriptionError('Description is required');
+      hasError = true;
+    }
+    if (!videoLink || isNaN(Number(videoLink))) {
+      setVideoLinkError('Video link (duration) is required and must be a number');
+      hasError = true;
+    }
+    if (!duration || isNaN(Number(duration))) {
+      setDurationError('Duration is required and must be a number');
+      hasError = true;
+    }
+
+    if (hasError) return;
+    console.log({
+      name: lessonName,
+      description: description,
+      videoLink: videoLink,
+      videoTime: duration,
+      moduleId: 2,
+      fileId: 0
+    });
+    postData()
+    closeModal();
+    
+    // setLessonNameError('');
+    // setDescriptionError('');
+    // setVideoLinkError('');
+    // setDurationError('');
   };
 
   return (
-    <div>
-      <div className='mb-3'>
-        <div className='flex justify-between space-x-4 mb-6'>
-          <ShinyButton text="Add Lesson" className='bg-[#16423C] shadow-lg py-2 px-3' />
-          <div className='shadow-xl'>
-            <SelectComponent
-              label="Category"
-              options={[
-                { value: "apple", label: "Apple" },
-                { value: "banana", label: "Banana" },
-                { value: "blueberry", label: "Blueberry" },
-                { value: "grapes", label: "Grapes" },
-                { value: "pineapple", label: "Pineapple" },
-              ]}
-              placeholder="Select Category"
-            />
-          </div>
+    <div className='mb-3'>
+      <div className='flex justify-between space-x-4 mb-6'>
+        <ShinyButton
+          text="Add Lesson"
+          className='bg-[#16423C] shadow-lg py-2 px-3 text-white'
+          onClick={() => openModal('add', null)}
+        />
+        <div className='shadow'>
+          <SelectComponent
+            label=""
+            options={teacherCategory?.map((category: any) => ({
+              value: category.id,
+              label: category.name,
+            })) || []}
+            placeholder="Kategoriyani tanlang"
+            onChange={handleSelectChange}
+          />
         </div>
-        <div>
-          <Tables thead={dashboardThead}>
-            {lessonData?.body?.length > 0 ? (
-              lessonData.body.map((lesson: any, index: number) => (
-                <tr key={lesson.id || index} className="hover:bg-gray duration-100">
-                  <td className="border-b border-[#eee] min-w-[200px] p-5">
-                    <p className="text-black dark:text-white">{index + 1 + currentPage * pageSize}</p>
-                  </td>
-                  <td className="border-b border-[#eee] min-w-[200px] p-5 ">
-                    <p className="text-black dark:text-white">{lesson.name ?? 'N/A'}</p>
-                  </td>
-                  <td className="border-b border-[#eee] min-w-[200px] p-5 ">
-                    <p className="text-black dark:text-white">{lesson.description ?? 'N/A'}</p>
-                  </td>
-                  <td className="border-b border-[#eee] min-w-[160px] p-5 ">
-                    <p className="text-black dark:text-white">{lesson.videoTime ?? 'N/A'} min</p>
-                  </td>
-                  <td className="border-b border-[#eee] min-w-[160px]">
-                    <div className="flex gap-10">
-                      <div
-                        className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
-                        onClick={() => openModal('edit', lesson)}
-                      >
-                        <FaEdit />
-                      </div>
+      </div>
+      <div>
+        <Tables thead={dashboardThead}>
+          {lessonData?.body?.length > 0 ? (
+            lessonData.body.map((lesson: any, index: number) => (
+              <tr key={lesson.id || index} className="hover:bg-gray duration-100">
+                <td className="border-b border-[#eee] min-w-[200px] p-5">
+                  <p className="text-black dark:text-white">{index + 1 + currentPage * pageSize}</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[200px] p-5 ">
+                  <p className="text-black dark:text-white">{lesson.name ?? 'N/A'}</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[200px] p-5 ">
+                  <p className="text-black dark:text-white">{lesson.description ?? 'N/A'}</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[160px] p-5 ">
+                  <p className="text-black dark:text-white">{lesson.videoTime ?? '0'} min</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[160px]">
+                  <div className="flex gap-10">
+                    <div
+                      className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
+                      onClick={() => openModal('edit', lesson)}
+                    >
+                      <FaEdit />
                     </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={dashboardThead.length} className="text-center py-4">
-                  No data available
+                  </div>
                 </td>
               </tr>
-            )}
-          </Tables>
-        </div>
-        <div className="flex justify-center items-center space-x-3 p-3">
-          {getPageNumbers().map((page, index) => (
-            <button
-              key={index}
-              onClick={() => page !== '...' && handlePageChange(page as number)}
-              className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
-              disabled={page === '...'}
-            >
-              {page === '...' ? '...' : `${page + 1}`}
-            </button>
-          ))}
-        </div>
-        {/* Modal Component */}
-      <AnimatedModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title={modalContent === 'edit' ? 'Edit Lesson' : 'Delete Lesson'}
-      >
-        {modalContent === 'edit' && selectedLesson ? (
-          <div>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className='mb-4'>
-                <label>Lesson Name:</label>
-                <TextInput defaultValue={selectedLesson?.name} />
-              </div>
-              <div className='mb-4'>
-                <label>Description:</label>
-                <TextInput defaultValue={selectedLesson?.description} />
-              </div>
-              <div className='mb-4'>
-                <label>Video Link:</label>
-                <TextInput defaultValue={selectedLesson?.videoLink} />
-              </div>
-              <div className='mb-4'>
-                <label>Duration (min):</label>
-                <TextInput defaultValue={selectedLesson?.videoTime} />
-              </div>
-              <ShinyButton  
-                text="Edit" 
-                className='bg-[#16423C] shadow-lg' 
-                onClick={closeModal}
-              />
-            </form>
-          </div>
-        ) : (
-          <div>
-            <p>Are you sure you want to delete the lesson "{selectedLesson?.name}"?</p>
-            <button onClick={() => {/* Handle delete logic */}}>Yes, delete</button>
-            <button onClick={closeModal}>Cancel</button>
-          </div>
-        )}
-      </AnimatedModal>
-    </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={dashboardThead.length} className="text-center py-4">
+                No data available
+              </td>
+            </tr>
+          )}
+        </Tables>
+      </div>
+      <div className="flex justify-center items-center space-x-3 p-3">
+        {getPageNumbers().map((page, index) => (
+          <button
+            key={index}
+            onClick={() => page !== '...' && handlePageChange(page as number)}
+            className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
+            disabled={page === '...'}
+          >
+            {page === '...' ? '...' : `${+page + 1}`}
+          </button>
+        ))}
       </div>
 
-  )
-}
+      {/* Add/Edit Lesson Modal */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2 className="text-xl font-bold mb-4">{lessonAdd ? 'Add Lesson' : 'Edit Lesson'}</h2>
+        <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
+          <div className='mb-4'>
+          <SelectComponent
+            label=""
+            options={teacherCategory?.map((category: any) => ({
+              value: category.id,
+              label: category.name,
+            })) || []}
+            placeholder="Kategoriyani tanlang"
+            onChange={handleSelectChange}
+            width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
+          />
+          </div>
+          
+         <div className='mb-3'>
+         <SelectComponent
+            label=""
+            options={teacherCategory?.map((category: any) => ({
+              value: category.id,
+              label: category.name,
+            })) || []}
+            placeholder="Kategoriyani tanlang"
+            onChange={handleSelectChange}
+            width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
+          />
+         </div>
+          
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Dars mavzusi:
+              </label>
+              <Input
+                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
+                value={lessonName}
+                onChange={(e) => setLessonName(e.target.value)}
+              />
+              {lessonNameError && <p className="text-red-500">{lessonNameError}</p>}
+            </div>
+
+            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Dars haqida ma'lumot:
+              </label>
+              <Input
+                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              {descriptionError && <p className="text-red-500">{descriptionError}</p>}
+            </div>
+            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Video vaqt (min):
+              </label>
+              <Input
+                type="text"
+                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)}
+              />
+              {videoLinkError && <p className="text-red-500">{videoLinkError}</p>}
+            </div>
+            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Davomiylik (min):
+              </label>
+              <Input
+                type="number"
+                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
+                value={duration?.toString() || ''}
+                onChange={(e) => setDuration(parseInt(e.target.value, 10))}
+              />
+              {durationError && <p className="text-red-500">{durationError}</p>}
+            </div>
+
+            <div className='flex justify-between space-x-3'>
+              <ShinyButton text="Saqlash" className='bg-green-600' onClick={handleSubmit} />
+              <ShinyButton text="Bekor qilish" className='bg-red-600' onClick={closeModal} />
+            </div>
+          </form>
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
 export default Lessons;

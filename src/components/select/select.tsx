@@ -1,5 +1,4 @@
-import * as React from "react"
-
+import * as React from "react";
 import {
   Select,
   SelectContent,
@@ -8,18 +7,26 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface SelectComponentProps {
   label: string;
   options: { value: string; label: string }[];
   placeholder: string;
+  onChange: (value: string) => void;
+  width?: string; // Add width prop
 }
 
-export function SelectComponent({ label, options, placeholder }: SelectComponentProps) {
+export function SelectComponent({
+  label,
+  options,
+  placeholder,
+  onChange,
+  width = "180px", // Default width if not provided
+}: SelectComponentProps) {
   return (
-    <Select>
-      <SelectTrigger className="w-[180px] py-6 shadow-lg">
+    <Select onValueChange={onChange}>
+      <SelectTrigger className={`py-6`} style={{ width }}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

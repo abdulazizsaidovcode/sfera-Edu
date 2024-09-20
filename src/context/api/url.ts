@@ -62,3 +62,10 @@ export const getTopStudent : string = `${base_url}statistic/top/student-teacher`
 //Teacher jami o'qituvchilar sonini guruhlar sonini va teacherlar soni 
 export const getAllTeacher : string = `${base_url}statistic/count-dashboard`
 
+//Teacherga tegishli guruhlar 
+export const getAllGroupTeacher : string = `${base_url}group/teacher`
+
+//Teacher lesson qo'shadi 
+export const LessonAdd : string = `${base_url}lesson`
+
+

@@ -73,3 +73,15 @@ export const useTeacherAll = create<teacherAll>((set) => ({
     teacherAll:null,
     setTeacherAll: (data) => set({teacherAll: data}),
 }));
+
+// Teacher o'ziga tegishli bo'lgan guruhlari 
+
+interface teacherAllGroup {
+    teacherAllGroup:any
+    setTeacherAllGroup: (data: any) => void;
+}
+
+export const useTeacherAllGroup = create<teacherAllGroup>((set) => ({
+    teacherAllGroup:null,
+    setTeacherAllGroup: (data) => set({teacherAllGroup: data}),
+}));

@@ -1,8 +1,8 @@
 import Tables from "@/components/custom/table";
 import TextInput from "@/components/Inputs/TextInput";
 import { SelectComponent } from "@/components/select/select";
-import { getCategoryTeachers, getStudenTeacher } from "@/context/logic/course";
-import { useTeacherCategory, useTeacherStudent } from "@/context/logic/state-managment/teacher/teacher";
+import { getCategoryTeachers, getStudenTeacher, getTeacherGroup } from "@/context/logic/course";
+import { useTeacherAll, useTeacherAllGroup, useTeacherCategory, useTeacherStudent } from "@/context/logic/state-managment/teacher/teacher";
 import { useEffect, useState } from "react";
 import { FadeLoader } from "react-spinners";
 
@@ -17,17 +17,33 @@ export const dashboardThead = [
 const Students = () => {
   const { teacherStudent, setTeacherStudent } = useTeacherStudent();
   const { setTeacherCategory, teacherCategory } = useTeacherCategory();
+  const { teacherAllGroup, setTeacherAllGroup } = useTeacherAllGroup();
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize] = useState(10);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState<number | undefined>(undefined);
+  const [search, setSearch] = useState('');
+
+  const handleSelectChange = (selectedValue: number | undefined) => {
+    setSelectedId(selectedValue);
+  };
+
+  console.log(12121323213213,search);
+  
 
   useEffect(() => {
-    setLoading(true); // Start loading
-    getStudenTeacher(setTeacherStudent, currentPage, pageSize).finally(() => {
-      setLoading(false); // End loading
-    });
+    setLoading(true);
+    getTeacherGroup(setTeacherAllGroup);
     getCategoryTeachers(setTeacherCategory);
-  }, [currentPage, pageSize, setTeacherStudent, setTeacherCategory]);
+    setLoading(false);
+  }, [setTeacherAllGroup, setTeacherCategory]);
+
+  useEffect(() => {
+    setLoading(true);
+    getStudenTeacher(setTeacherStudent, currentPage, pageSize, selectedId).finally(() => {
+      setLoading(false);
+    });
+  }, [currentPage, pageSize, selectedId, setTeacherStudent]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -56,12 +72,13 @@ const Students = () => {
       <div className="flex flex-wrap gap-6 mb-8 justify-between">
         <div className="md:w-auto flex-1">
           <SelectComponent
-            label="Kategoriyalar"
-            options={teacherCategory?.map((category: any) => ({
+            label=""
+            options={teacherAllGroup?.map((category: any) => ({
               value: category.id,
               label: category.name,
             })) || []}
-            placeholder="Kategoriyani tanlang"
+            placeholder="Guruhni tanlang"
+            onChange={handleSelectChange}
           />
         </div>
         <div className="md:w-auto flex-1">
@@ -118,11 +135,10 @@ const Students = () => {
           <button
             key={index}
             onClick={() => page !== '...' && handlePageChange(page as number)}
-            className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'
-              }`}
+            className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
             disabled={page === '...'}
           >
-            {page === '...' ? '...' : `${page+1}`}
+            {page === '...' ? '...' : `${page + 1}`}
           </button>
         ))}
       </div>
