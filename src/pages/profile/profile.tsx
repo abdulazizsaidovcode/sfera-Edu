@@ -20,6 +20,7 @@ const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null);
+  const role = localStorage.getItem('ROLE')
   const { data, getData } = useGet(get_Mee, config);
 
   const { editData, response } = useEdit(`${user_Edit}${saveImg}`, {
@@ -154,8 +155,14 @@ const Profile: React.FC = () => {
                 alt="Profile"
                 className="w-48 h-48 rounded-full border-4 border-[#16423C] mb-4"
               />
-              <h1 className="text-2xl font-semibold text-center">{data?.firstName} {data?.lastName}</h1>
-              <h2 className="text-lg">+{data?.phoneNumber}</h2>
+              {role === 'ROLE_TEACHER' ? (
+                <>
+                </>
+              ) : (
+                <>
+                  <h1 className="text-2xl font-semibold text-center">{data?.firstName} {data?.lastName}</h1>
+                  <h2 className="text-lg">+{data?.phoneNumber}</h2></>
+              )}
               <div className="mb-4 w-full">
                 <label className="block text-gray-300 text-sm mb-2">Profil rasmini yuklang</label>
                 <FileUpload onFileChange={handleFileChange} />
@@ -164,13 +171,23 @@ const Profile: React.FC = () => {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg md:col-start-2 md:col-end-3">
             <div className="relative flex mb-2 items-center justify-center">
-              <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
-                <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
-                <div className="relative z-10 text-center">
-                  <SlightFlip word={data === undefined ? (String(data?.groupName)) : 'Sizda guruh yo\'q'} className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">Guruhingiz</p>
-                </div>
-              </ShineBorder>
+              {role === 'ROLE_TEACHER' ? (
+                <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
+                  <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
+                  <div className="relative z-10 text-center">
+                    <h1 className="text-2xl font-semibold text-center">{data?.firstName} {data?.lastName}</h1>
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">+{data?.phoneNumber}</p>
+                  </div>
+                </ShineBorder>
+              ) : (
+                <ShineBorder color={'#16423C'} borderWidth={1.5} duration={10} className="shine-border bg-[#fff] h-40 w-full flex items-center justify-center rounded-lg shadow-lg overflow-hidden mb-7">
+                  <Particles className="absolute inset-0" quantity={100} ease={80} color={'#16423C'} refresh />
+                  <div className="relative z-10 text-center">
+                    <SlightFlip word={data === undefined ? 'Sizda guruh yo\'q' : (String(data?.groupName))} className="text-2xl md:text-3xl lg:text-4xl font-bold text-black" />
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black mt-2 font-semibold">Guruhingiz</p>
+                  </div>
+                </ShineBorder>
+              )}
             </div>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
