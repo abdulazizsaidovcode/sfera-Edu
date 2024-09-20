@@ -16,6 +16,7 @@ import Students from './pages/teacher/students/students'
 import Lessons from './pages/teacher/lessons/lessons'
 import toast from 'react-hot-toast'
 import Confirmeted from './confirmeted'
+import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -204,6 +205,16 @@ function App() {
             <>
               <PageTitle title="Confirem" />
               <Confirmeted />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/tasks`}
+          element={
+            <>
+              <PageTitle title="Completed tasks" />
+              <Completed_tasks />
             </>
           }
         />

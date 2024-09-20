@@ -20,8 +20,6 @@ const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null);
-  const [getFileId, setGetFileId] = useState(0)
-
   const { data, getData } = useGet(get_Mee, config);
 
   const { editData, response } = useEdit(`${user_Edit}${saveImg}`, {

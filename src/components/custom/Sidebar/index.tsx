@@ -7,7 +7,7 @@ import logo from '@/assets/images/Sfer 2.png';
 import { MdOutlinePlayLesson } from 'react-icons/md';
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
 import { FaUserGraduate } from "react-icons/fa6";
-import { FaTasks } from "react-icons/fa";
+import { FaCheck, FaTasks } from "react-icons/fa";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -45,28 +45,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     { moduleId: 2, name: "Module 2", categoryId: 2 },
     { moduleId: 2, name: "Module 2", categoryId: 2 },
     { moduleId: 2, name: "Module 2", categoryId: 2 },
- 
+
   ];
 
   const lesson = [
     { moduleId: 1, name: "Lesson 1", lessonId: 1, description: "Description", videoLink: "https://example.com/video1", videoTime: 120 },
     { moduleId: 1, name: "Lesson 2", lessonId: 2, description: "Description", videoLink: "https://example.com/video2", videoTime: 130 },
     { moduleId: 2, name: "Lesson 3", lessonId: 3, description: "Description", videoLink: "https://example.com/video3", videoTime: 140 },
-   
+
   ];
 
-  
+
   const [currentVideoLink, setCurrentVideoLink] = useState<string | null>(null);
 
   const setVideoLink = (videoLink: string | null) => {
     setCurrentVideoLink(videoLink);
   };
- 
+
 
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  
+
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
@@ -127,83 +127,90 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         </div>
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear flex-grow">
           {location.pathname === '/course' ? (
-            <ModuleSidebar modules={module} lessons={lesson} setVideoLink={setVideoLink}/>
+            <ModuleSidebar modules={module} lessons={lesson} setVideoLink={setVideoLink} />
           ) : (
             <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
               <div className='flex flex-col'>
                 <ul className="mb-6 flex flex-col">
                   <li>
-                  {role === 'ROLE_TEACHER' ? (
-                    <>
-                    <MenuItem
-                      title='Dashboard'
-                      icon={<LuLayoutDashboard size={20} />}
-                      pathname={location.pathname}
-                      to='/teacher/dashboard'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Student'
-                      icon={<FaUserGraduate size={20} />}
-                      pathname={location.pathname}
-                      to='/Student'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Lesson'
-                      icon={<MdOutlinePlayLesson size={20} />}
-                      pathname={location.pathname}
-                      to='/lesson'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Notification'
-                      icon={<IoMdNotificationsOutline size={20} />}
-                      pathname={location.pathname}
-                      to='/notifications'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Task done'
-                      icon={<FaTasks size={20} />}
-                      pathname={location.pathname}
-                      to='/taskdone'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    </>
-                  ):(
-                    <>
-                   <MenuItem
-                      title='Dashboard'
-                      icon={<LuLayoutDashboard size={20} />}
-                      pathname={location.pathname}
-                      to='/dashboard'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Lesson'
-                      icon={<MdOutlinePlayLesson size={20} />}
-                      pathname={location.pathname}
-                      to='/course'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Profile'
-                      icon={<PiStudentFill size={20} />}
-                      pathname={location.pathname}
-                      to='/profile'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    <MenuItem
-                      title='Notification'
-                      icon={<IoMdNotificationsOutline size={20} />}
-                      pathname={location.pathname}
-                      to='/notification'
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                    </>
-                  ) }
-                    
+                    {role === 'ROLE_TEACHER' ? (
+                      <>
+                        <MenuItem
+                          title='Dashboard'
+                          icon={<LuLayoutDashboard size={20} />}
+                          pathname={location.pathname}
+                          to='/teacher/dashboard'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Student'
+                          icon={<FaUserGraduate size={20} />}
+                          pathname={location.pathname}
+                          to='/Student'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Lesson'
+                          icon={<MdOutlinePlayLesson size={20} />}
+                          pathname={location.pathname}
+                          to='/lesson'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Completed tasks'
+                          icon={<FaCheck size={20} />}
+                          pathname={location.pathname}
+                          to='/tasks'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Profile'
+                          icon={<PiStudentFill size={20} />}
+                          pathname={location.pathname}
+                          to='/profile'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Notification'
+                          icon={<IoMdNotificationsOutline size={20} />}
+                          pathname={location.pathname}
+                          to='/notifications'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <MenuItem
+                          title='Dashboard'
+                          icon={<LuLayoutDashboard size={20} />}
+                          pathname={location.pathname}
+                          to='/dashboard'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Lesson'
+                          icon={<MdOutlinePlayLesson size={20} />}
+                          pathname={location.pathname}
+                          to='/course'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Notification'
+                          icon={<IoMdNotificationsOutline size={20} />}
+                          pathname={location.pathname}
+                          to='/notification'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Profile'
+                          icon={<PiStudentFill size={20} />}
+                          pathname={location.pathname}
+                          to='/profile'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                      </>
+                    )}
+
                   </li>
                 </ul>
               </div>
