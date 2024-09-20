@@ -4,6 +4,8 @@ import VideoPlayer from "@/components/lesson/lessonVideo";
 import { getLessonOneTask } from "@/context/logic/course";
 import axios from "axios";
 import { get_file } from "@/context/api/url";
+import Buttons from "@/components/custom/buttons";
+import ShinyButton from "@/components/magicui/shiny-button";
 
 const Course = () => {
   const { lessonOneSave } = useLessonONe();
@@ -90,6 +92,8 @@ const Course = () => {
         ) : (
           <p>Topshiriqlar yuklanmoqda...</p> // Show a loading message or placeholder if data isn't available
         )}
+                <ShinyButton text="Vazifa yuklash" />
+
       </div>
     </div>
   );

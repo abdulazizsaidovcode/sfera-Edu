@@ -102,16 +102,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playerRef = useRef<any>(null);
 
+  console.log(videoId);
   useEffect(() => {
-    if (videoRef.current) {
-      const videoElement = videoRef.current;
+    const videoElement = videoRef.current;
+    console.log('render');
+    
+
+    if (videoElement && document.contains(videoElement)) {
+      console.log('0o');
+
       if (!playerRef.current) {
+        console.log(playerRef.current, 'v1 video');
+
         // Video.js pleerni yaratamiz
         playerRef.current = videojs(videoElement, {
           techOrder: ["youtube"],
           sources: [
             {
-              src: `https://www.youtube.com/watch?v=KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`,
+              src: `https://www.youtube.com/watch?v=KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP}`,
               type: "video/youtube",
             },
           ],
@@ -122,11 +130,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
           },
         });
       } else {
-        // URL o'zgarganda yangi manbani yuklaymiz
-        playerRef.current.src({
-          src: `https://www.youtube.com/watch?v=KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`,
-          type: "video/youtube",
-        });
+        console.log(playerRef.current, 'v2 video');
+
+        // Avval pleerni reset qilamiz, so'ngra yangi videoni yuklaymiz
+        playerRef.current.src([
+          {
+            src: `https://www.youtube.com/embed/zKmRwUB3rFQ`,
+            type: "video/youtube",
+          },
+        ]);
+        playerRef.current.load(); // Yangi videoni yuklaymiz
       }
     }
 
@@ -151,4 +164,3 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
 };
 
 export default VideoPlayer;
-
