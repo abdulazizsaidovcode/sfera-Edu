@@ -1,66 +1,75 @@
-import React, { useState } from "react";
-
-interface VideoPlayerProps {
-  videoId: string;
-}
-
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
-  const [isReadyToPlay, setIsReadyToPlay] = useState(false);
-
-  const handlePlayClick = () => {
-    setIsReadyToPlay(true); // Set to true after user interaction
-  };
-
-  return (
-    <div className="video-container w-full h-auto">
-      {isReadyToPlay ? (
-        // Embed the YouTube video with iframe after user clicks Play
-        <iframe
-          width="100%" // Full width for responsive design
-          height="500" // Adjust height as needed
-          src={`https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`} // autoplay=1 to start playing after clicking play
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      ) : (
-        // Display the play button until user clicks it
-        <button onClick={handlePlayClick} className="play-button">
-          Play Video
-        </button>
-      )}
-    </div>
-  );
-};
-
-export default VideoPlayer;
-
-
-
-// import React from "react";
+// import React, { useEffect, useRef } from "react";
 
 // interface VideoPlayerProps {
 //   videoId: string;
 // }
 
 // const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
+//   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+//   useEffect(() => {
+//     // videoId o'zgarganda video elementining src manbasini yangilaymiz
+//     if (videoRef.current) {
+//       const videoElement = videoRef.current;
+//       videoElement.pause(); // Avvalgi videoni to'xtatish
+//       videoElement.setAttribute('src', `https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`);
+//       videoElement.load(); // Videoni yangidan yuklash
+//       videoElement.play(); // Agar siz avtomatik ravishda play qilishni xohlasangiz
+//     }
+//   }, [videoId]); // videoId o'zgarganini kuzatamiz
+//   console.log(videoId,123);
+
 //   return (
-//     <div className="w-full h-auto">
-//       <iframe
-//         width="100%"
-//         height="480"
-//         src={`https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`}
-//         title="YouTube video player"
-//         frameBorder="0"
-//         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-//         allowFullScreen
-//       ></iframe>
+//     <div data-vjs-player>
+//       <video
+//         ref={videoRef}
+//         id="my-video"
+//         className="video-js w-full h-auto"
+//         controls
+//         preload="auto"
+//         loop={false}
+//         poster="MY_VIDEO_POSTER.jpg"
+//         autoPlay={false} // avto o'ynashni o'chirish
+//       >
+//         <source src={`https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP`} type="video/mp4" />
+//       </video>
 //     </div>
 //   );
 // };
 
 // export default VideoPlayer;
+
+import React from "react";
+
+interface VideoPlayerProps {
+  videoId: string;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
+  console.log(videoId,123);
+  
+  return (
+    <div className="w-full h-auto">
+      {
+      videoId ? <iframe
+        width="100%"
+        height="480"
+        src={'https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP'}
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+      : 
+      <div className="w-full h-90 rounded-xl bg-[#6a9c89] flex justify-center items-center">
+        <p className="text-white text-center">Video yuklanmagan ?</p>
+      </div>
+      }
+    </div>
+  );
+};
+
+export default VideoPlayer;
 // import React from "react";
 // import ReactPlayer from "react-player";
 
