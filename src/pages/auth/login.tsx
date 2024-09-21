@@ -21,14 +21,22 @@ function Login() {
     });
 
     useEffect(() => {
-        if (response) {
+        if (response?.token && response?.role) {
             const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
-            localStorage.setItem('token', response?.token);
-            localStorage.setItem('ROLE', response?.role);
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('ROLE', response.role);
             localStorage.setItem('tokenExpiry', expiryTime.toString());
-            navigate("/dashboard");
+    
+            if (response.role === 'ROLE_TEACHER') {
+                navigate("/teacher/dashboard"); 
+            } else if (response.role === 'ROLE_STUDENT') {
+                navigate("/dashboard"); 
+            } else {
+                navigate("/dashboard");
+            }
         }
     }, [response?.role, response?.token]);
+    
 
     const handleSubmit = async () => {
         if (phoneNumber.length > 11 && passwordRef.current?.value) {
