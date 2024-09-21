@@ -15,6 +15,7 @@ interface SelectComponentProps {
   placeholder: string;
   onChange: (value: string) => void;
   width?: string; // Add width prop
+  zIndex:number;
 }
 
 export function SelectComponent({
@@ -22,7 +23,8 @@ export function SelectComponent({
   options,
   placeholder,
   onChange,
-  width = "180px", // Default width if not provided
+  width = "180px", 
+  zIndex,
 }: SelectComponentProps) {
   return (
     <Select onValueChange={onChange}>

@@ -5,12 +5,13 @@ import { SelectComponent } from '@/components/select/select';
 import { FaEdit } from 'react-icons/fa';
 import Modal from '@/components/moduleSaidbar/modulTeacher';
 import { Input } from '@/components/ui/input';
-import { getCategoryTeachers, getTeacherLessons } from '@/context/logic/course';
+import { getCategoryTeachers, getTeacherGroup, getTeacherLessons } from '@/context/logic/course';
 import { useLesson } from '@/context/logic/state-managment/course';
-import { useTeacherCategory } from '@/context/logic/state-managment/teacher/teacher';
+import { useTeacherAllGroup, useTeacherCategory, useTeacherTopGuruh } from '@/context/logic/state-managment/teacher/teacher';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
 import { LessonAdd } from '@/context/api/url';
 import { config } from '@/context/api/token';
+import SelectTeacher from '@/components/select/selectTeacher';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -18,11 +19,13 @@ export const dashboardThead = [
   { id: 3, name: "Dars haqida ma'lumot" },
   { id: 4, name: 'Davomiylik vaqti (min)' },
   { id: 5, name: 'Darsni tahrirlash' },
+  { id: 6, name: 'Darsga ruhsat berish' }
 ];
 
 const Lessons = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lessonAdd, setLessonAdd] = useState(false);
+  const [lessonModal, setLessonModal] = useState(false)
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
   const { setLessonData, lessonData } = useLesson();
   const [currentPage, setCurrentPage] = useState(0);
@@ -38,6 +41,7 @@ const Lessons = () => {
   const [videoLinkError, setVideoLinkError] = useState('');
   const [durationError, setDurationError] = useState('');
   const { setTeacherCategory, teacherCategory } = useTeacherCategory();
+  const { teacherAllGroup, setTeacherAllGroup } = useTeacherAllGroup();
 
   const openModal = (type: string, lesson: any) => {
     setSelectedLesson(lesson);
@@ -53,6 +57,9 @@ const Lessons = () => {
     //   // clearForm();
     // }
   };
+  const modalLesson = () => {
+    setLessonModal(true);
+  }
 
   // const clearForm = () => {
   //   setLessonName('');
@@ -65,7 +72,7 @@ const Lessons = () => {
   //   setDurationError('');
   // };
 
-  const {postData, response} = usePost(LessonAdd, {
+  const { postData, response } = usePost(LessonAdd, {
     name: lessonName,
     description: description,
     videoLink: videoLink,
@@ -77,12 +84,14 @@ const Lessons = () => {
   useEffect(() => {
     getTeacherLessons(setLessonData, currentPage, pageSize);
     getCategoryTeachers(setTeacherCategory);
+    getTeacherGroup(setTeacherAllGroup);
   }, [currentPage, pageSize, setLessonData]);
 
   useEffect(() => {
     getTeacherLessons(setLessonData, currentPage, pageSize);
+
   }, [response])
-  
+
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -112,7 +121,7 @@ const Lessons = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setLessonAdd(false);
-    clearForm();
+    // clearForm();
   };
 
   const handleSubmit = () => {
@@ -146,7 +155,7 @@ const Lessons = () => {
     });
     postData()
     closeModal();
-    
+
     // setLessonNameError('');
     // setDescriptionError('');
     // setVideoLinkError('');
@@ -200,6 +209,16 @@ const Lessons = () => {
                     </div>
                   </div>
                 </td>
+                <td className="border-b border-[#eee] min-w-[160px]">
+                  <div className="flex gap-10">
+                    <div
+                      className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
+                      onClick={modalLesson}
+                    >
+                      <ShinyButton text="O'zgartirish" className='bg-blue-500' />
+                    </div>
+                  </div>
+                </td>
               </tr>
             ))
           ) : (
@@ -229,31 +248,31 @@ const Lessons = () => {
         <h2 className="text-xl font-bold mb-4">{lessonAdd ? 'Add Lesson' : 'Edit Lesson'}</h2>
         <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
           <div className='mb-4'>
-          <SelectComponent
-            label=""
-            options={teacherCategory?.map((category: any) => ({
-              value: category.id,
-              label: category.name,
-            })) || []}
-            placeholder="Kategoriyani tanlang"
-            onChange={handleSelectChange}
-            width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
-          />
+            <SelectComponent
+              label=""
+              options={teacherCategory?.map((category: any) => ({
+                value: category.id,
+                label: category.name,
+              })) || []}
+              placeholder="Kategoriyani tanlang"
+              onChange={handleSelectChange}
+              width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
+            />
           </div>
-          
-         <div className='mb-3'>
-         <SelectComponent
-            label=""
-            options={teacherCategory?.map((category: any) => ({
-              value: category.id,
-              label: category.name,
-            })) || []}
-            placeholder="Kategoriyani tanlang"
-            onChange={handleSelectChange}
-            width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
-          />
-         </div>
-          
+
+          <div className='mb-3'>
+            <SelectComponent
+              label=""
+              options={teacherCategory?.map((category: any) => ({
+                value: category.id,
+                label: category.name,
+              })) || []}
+              placeholder="Kategoriyani tanlang"
+              onChange={handleSelectChange}
+              width='min-w-54 sm:w-64 md:w-96 lg:w-[40rem]'
+            />
+          </div>
+
           <form onSubmit={(e) => e.preventDefault()}>
             <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -310,6 +329,28 @@ const Lessons = () => {
           </form>
         </div>
       </Modal>
+      <Modal isOpen={lessonModal} onClose={closeModal}>
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h2 className="font-bold mb-3">Guruhni tanlang</h2>
+            <div className="flex mb-4">
+              <SelectTeacher
+                style={{ width: 200, backgroundColor: "#f0f0f0" }}
+                dropdownStyle={{ zIndex: 9999 }}
+                getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement} // Ensure dropdown stays within modal
+                onChange={(value) => console.log(`New value selected: ${value}`)}
+                options={teacherAllGroup?.map((teacher: any) => ({
+                  value: teacher.id,
+                  label: teacher.name,
+                }))}
+              />
+            </div>
+          </div>
+          <ShinyButton text="Yuborish" className="bg-blue-600 self-end" />
+        </div>
+      </Modal>
+      
+
     </div>
   );
 };

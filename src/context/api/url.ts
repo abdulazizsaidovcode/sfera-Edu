@@ -68,4 +68,7 @@ export const getAllGroupTeacher : string = `${base_url}group/teacher`
 //Teacher lesson qo'shadi 
 export const LessonAdd : string = `${base_url}lesson`
 
+//Teacher task qo'shadi 
+export const TaskAdd : string = `${base_url}task`
+
 

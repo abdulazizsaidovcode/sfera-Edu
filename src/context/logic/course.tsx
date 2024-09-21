@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, studentRating, studentWeek } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
 
 
@@ -296,6 +296,27 @@ interface LessonData {
 export const postLessonTeacher = async (lessonData: LessonData, setData: any) => {
   try {
     const res = await axios.post(`${LessonAdd}`, lessonData);
+    if (res.data && res.data.data) {
+      setData(res.data.data);
+    } else if (res.data && res.data.error) {
+      console.log("Error:", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+// Teacher task qo'shadi 
+
+interface Task {
+  name: string;
+  description: string;
+  fileId:number
+  
+}
+export const postTaskTeacher = async (lessonData: LessonData, setData: any) => {
+  try {
+    const res = await axios.post(`${TaskAdd}`, lessonData);
     if (res.data && res.data.data) {
       setData(res.data.data);
     } else if (res.data && res.data.error) {
