@@ -12,6 +12,7 @@ import {
   Legend,
 } from 'chart.js';
 
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ChartTeacher = () => {
@@ -107,7 +108,9 @@ const ChartTeacher = () => {
       {error && <p className="text-red-500">{error}</p>}
       {!isLoading && !error && !chartData && <p>No data available</p>}
       {!isLoading && !error && chartData && (
-        <div className="w-full shadow-xl" style={{ height: '350px' }}>
+        <div className="w-full shadow-xl" style={{ height: '350px' }} onClick={()=>{
+          
+        }}>
           <Bar data={chartData} options={options} />
         </div>
       )}

@@ -177,6 +177,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           to='/notifications'
                           setSidebarOpen={setSidebarOpen}
                         />
+                        <MenuItem
+                          title='TaskSection'
+                          icon={<IoMdNotificationsOutline size={20} />}
+                          pathname={location.pathname}
+                          to='/task'
+                          setSidebarOpen={setSidebarOpen}
+                        />
                       </>
                     ) : (
                       <>

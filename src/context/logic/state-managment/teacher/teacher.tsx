@@ -85,3 +85,15 @@ export const useTeacherAllGroup = create<teacherAllGroup>((set) => ({
     teacherAllGroup:null,
     setTeacherAllGroup: (data) => set({teacherAllGroup: data}),
 }));
+
+//Teacher lesson tracing 
+
+interface teacherAllLessonTracing {
+    teacherAllTracing:any
+    setTeacherLessonTracing: (data: any) => void;
+}
+
+export const useLessonTracing = create<teacherAllLessonTracing>((set) => ({
+    teacherAllTracing:null,
+    setTeacherLessonTracing: (data) => set({teacherAllTracing: data}),
+}));

@@ -138,7 +138,7 @@ const Students = () => {
             className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
             disabled={page === '...'}
           >
-            {page === '...' ? '...' : `${page + 1}`}
+            {page === '...' ? '...' : `${+page + 1}`}
           </button>
         ))}
       </div>
