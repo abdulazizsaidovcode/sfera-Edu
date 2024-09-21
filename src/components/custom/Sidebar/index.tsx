@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import { LuLayoutDashboard } from 'react-icons/lu';
-import { PiStudentFill } from 'react-icons/pi';
+import { PiStudentFill, PiUsersThreeFill } from 'react-icons/pi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import logo from '@/assets/images/Sfer 2.png';
-import { MdOutlinePlayLesson } from 'react-icons/md';
+import { MdNotificationsActive, MdOutlinePlayLesson } from 'react-icons/md';
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
 import { FaUserGraduate } from "react-icons/fa6";
 import { FaCheck, } from "react-icons/fa";
@@ -128,7 +128,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear flex-grow">
           {location.pathname === '/course' ? (
             <ModuleSidebar modules={module} lessons={lesson} setVideoLink={setVideoLink} />
-          ) : ( 
+          ) : (
             <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
               <div className='flex flex-col'>
                 <ul className="mb-6 flex flex-col">
@@ -144,7 +144,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         />
                         <MenuItem
                           title='Student'
-                          icon={<FaUserGraduate size={20} />}
+                          icon={<PiUsersThreeFill size={20} /> }
                           pathname={location.pathname}
                           to='/Student'
                           setSidebarOpen={setSidebarOpen}
@@ -179,7 +179,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         />
                         <MenuItem
                           title='TaskSection'
-                          icon={<IoMdNotificationsOutline size={20} />}
+                          icon={<MdNotificationsActive size={20} />}
                           pathname={location.pathname}
                           to='/task'
                           setSidebarOpen={setSidebarOpen}
