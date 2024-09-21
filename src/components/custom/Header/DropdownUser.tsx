@@ -5,10 +5,12 @@ import { IoIosLogOut } from 'react-icons/io';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
 import { get_file, get_Mee } from '@/context/api/url';
 import { config } from '@/context/api/token';
+import { useNavigate } from 'react-router-dom';
 
 const DropdownUser = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -23,11 +25,8 @@ const DropdownUser = () => {
     };
   }, []);
   const handleLogout = () => {
-    const confirmLogout = window.confirm('Tizimdan chiqmoqchimisiz?');
-    if (confirmLogout) {
-      localStorage.clear();
-      window.location.reload();
-    }
+    sessionStorage.clear();
+    navigate('/auth/login');
   };
   const { data, getData } = useGet(get_Mee, config);
   useEffect(() => {

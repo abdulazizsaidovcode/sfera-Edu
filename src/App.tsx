@@ -18,9 +18,8 @@ import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
 import TaskSection from './pages/teacher/taskSection/taskSection'
 
 function App() {
-  const tokens = localStorage.getItem('token');
-  const role = localStorage.getItem('ROLE');
-  const tokenExpiry = localStorage.getItem('tokenExpiry');
+  const tokens = sessionStorage.getItem('token');
+  const role = sessionStorage.getItem('ROLE');
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [pageTitle, setPageTitle] = useState("");
@@ -48,20 +47,6 @@ function App() {
         else navigate('/teacher/Dashboard');
       } 
     }
-
-    if (tokens && tokenExpiry) {
-      const now = new Date().getTime();
-      if (now > parseInt(tokenExpiry)) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('tokenExpiry');
-        localStorage.removeItem('ROLE');
-      }
-    } else {
-      localStorage.removeItem('token');
-      localStorage.removeItem('tokenExpiry');
-      localStorage.removeItem('ROLE');
-    }
-
     if (!tokens && !pathname.startsWith('/auth')) navigate('/auth/login');
     if (!tokens && pathname.startsWith('/auth')) sessionStorage.removeItem('refreshes');
   }, [pathname, tokens, navigate, role]);

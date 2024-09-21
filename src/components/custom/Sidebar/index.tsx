@@ -38,7 +38,7 @@ const MenuItem = ({ title, to, pathname, icon, setSidebarOpen }: { pathname: any
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
-  const role = localStorage.getItem('ROLE');
+  const role = sessionStorage.getItem('ROLE');
 
   const module = [
     { moduleId: 1, name: "Module 1", categoryId: 1 },
@@ -128,7 +128,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear flex-grow">
           {location.pathname === '/course' ? (
             <ModuleSidebar modules={module} lessons={lesson} setVideoLink={setVideoLink} />
-          ) : (
+          ) : ( 
             <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
               <div className='flex flex-col'>
                 <ul className="mb-6 flex flex-col">

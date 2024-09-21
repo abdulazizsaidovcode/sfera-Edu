@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { PiStudentFill } from 'react-icons/pi';
 import { GiTeacher } from "react-icons/gi";
 import { MdGroups } from "react-icons/md";
+import { setConfig } from '@/context/api/token';
 
 
 export const dashboardThead = [
@@ -36,6 +37,7 @@ const DashboardTeacher = () => {
   const { teacherAll,setTeacherAll } = useTeacherAll();
 
   useEffect(() => {
+    setConfig()
     getTopGroup(setTeacherTopGroup);
     getTopStudentTEacher(setTeacherTopStudent)
     getTeacherAllCount(setTeacherAll)

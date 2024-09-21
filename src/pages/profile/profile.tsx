@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();
   const [saveImg, setSaveImg] = useState(0);
   const [uploadedImg, setUploadedImg] = useState<string | null>(null);
-  const role = localStorage.getItem('ROLE')
+  const role = sessionStorage.getItem('ROLE')
   const { data, getData } = useGet(get_Mee, config);
 
   const { editData, response } = useEdit(`${user_Edit}${saveImg}`, {

@@ -22,31 +22,28 @@ function Login() {
 
     useEffect(() => {
         if (response?.token && response?.role) {
-            const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('ROLE', response.role);
-            localStorage.setItem('tokenExpiry', expiryTime.toString());
-    
+            // const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
+            sessionStorage.setItem('token', response.token);
+            sessionStorage.setItem('ROLE', response.role);
+            toast.success('Muvaffaqiyatli kirdingiz!');
+            setPhoneNumber('');
+            setPassword('');
             if (response.role === 'ROLE_TEACHER') {
-                navigate("/teacher/dashboard"); 
+                navigate("/teacher/dashboard");
             } else if (response.role === 'ROLE_STUDENT') {
-                navigate("/dashboard"); 
+                navigate("/dashboard");
             } else {
                 navigate("/dashboard");
             }
         }
     }, [response?.role, response?.token]);
-    
+
 
     const handleSubmit = async () => {
         if (phoneNumber.length > 11 && passwordRef.current?.value) {
             setIsSubmitting(true);
             try {
                 await postData();
-                navigate('/dashboard', { replace: true });
-                toast.success('Muvaffaqiyatli kirdingiz!');
-                setPhoneNumber('');
-                setPassword('');
             } catch (err) {
                 console.log('Xatolik yuz berdi:', error);
                 ('Login amalga oshmadi!');
