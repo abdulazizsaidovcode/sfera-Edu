@@ -14,7 +14,6 @@ import { get_file, get_Mee, user_Edit } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import PasswordInput from '@/components/Inputs/passwordInput';
 import { useEdit } from '@/context/logic/global_functions/useEditOption';
-import toast from 'react-hot-toast';
 
 const Profile: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, phoneNumber, setPhoneNumber, checkPassword, password, setPassword, setCheckPassword } = useProfile();

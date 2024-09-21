@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { PiStudentFill } from 'react-icons/pi';
-import { IoIosArrowBack, IoIosLogOut, IoMdNotificationsOutline } from 'react-icons/io';
+import { IoMdNotificationsOutline } from 'react-icons/io';
 import logo from '@/assets/images/Sfer 2.png';
 import { MdOutlinePlayLesson } from 'react-icons/md';
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
 import { FaUserGraduate } from "react-icons/fa6";
-import { FaCheck, FaTasks } from "react-icons/fa";
+import { FaCheck, } from "react-icons/fa";
 
 interface SidebarProps {
   sidebarOpen: boolean;
