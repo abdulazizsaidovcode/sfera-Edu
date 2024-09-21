@@ -9,8 +9,8 @@ export const get_Mee: string = `${base_url}user/get/me`
 
 //notification url
 export const notification_count: string = `${base_url}notification/count`
-export const notification_all_view:string =`${base_url}notification/all`
-export const notification_read:string=`${base_url}notification/read`
+export const notification_all_view: string = `${base_url}notification/all`
+export const notification_read: string = `${base_url}notification/read`
 
 export const lesson_see: string = `${base_url}`
 
@@ -29,9 +29,9 @@ export const getCategory: string = `${base_url}student/course`
 export const getModule: string = `${base_url}module/byCategory`
 
 // get Lesson 
-export const getLessonStudent : string = `${base_url}lesson/list/edu`
-export const getLessonOnes : string = `${base_url}lesson`
-export const getTask : string = `${base_url}task/getTaskByLesson`
+export const getLessonStudent: string = `${base_url}lesson/list/edu`
+export const getLessonOnes: string = `${base_url}lesson`
+export const getTask: string = `${base_url}task/getTaskByLesson`
 
 
 // get student task bal 
@@ -40,32 +40,36 @@ export const getStudentStatistic = `${base_url}statistic/student-yearly-statisti
 export const studentRating = `${base_url}student/rating`
 export const studentWeek = `${base_url}statistic/student-statistic`
 
+//Homework api url
+export const getHomeWork_all_url: string = `${base_url}homework/list/all`
+export const getHomework_list_url: string = `${base_url}homework/list/`
+
 // Teacherga tegishli bo'lgan studentlar qaytadi
-export const getTeachetStudent : string = `${base_url}user/searchUser`
+export const getTeachetStudent: string = `${base_url}user/searchUser`
 
 //Teacherga tegishli categorylarni chiqarib beradi 
 
-export const getCategoryTeacher : string = `${base_url}category/teacher`
+export const getCategoryTeacher: string = `${base_url}category/teacher`
 
 //Teacher hamma lessonlarni ko'radi 
-export const getTeacherLesson : string = `${base_url}lesson/search`
+export const getTeacherLesson: string = `${base_url}lesson/search`
 
 //Teacher dashboard uchun yillik statistika guruhlarga 
-export const getTeacherStatistik:string = `${base_url}statistic/teacher-dashboard`
+export const getTeacherStatistik: string = `${base_url}statistic/teacher-dashboard`
 
 //Teacher top guruhlarni ko'radi 
-export const getTopGroups : string = `${base_url}statistic/top/group-teacher`
+export const getTopGroups: string = `${base_url}statistic/top/group-teacher`
 
 //Teacher top 5 student
-export const getTopStudent : string = `${base_url}statistic/top/student-teacher`
+export const getTopStudent: string = `${base_url}statistic/top/student-teacher`
 
 //Teacher jami o'qituvchilar sonini guruhlar sonini va teacherlar soni 
-export const getAllTeacher : string = `${base_url}statistic/count-dashboard`
+export const getAllTeacher: string = `${base_url}statistic/count-dashboard`
 
 //Teacherga tegishli guruhlar 
-export const getAllGroupTeacher : string = `${base_url}group/teacher`
+export const getAllGroupTeacher: string = `${base_url}group/teacher`
 
 //Teacher lesson qo'shadi 
-export const LessonAdd : string = `${base_url}lesson`
+export const LessonAdd: string = `${base_url}lesson`
 
 
