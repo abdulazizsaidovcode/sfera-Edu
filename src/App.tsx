@@ -209,7 +209,7 @@ function App() {
         />
         <Route
           index
-          path={`/tasks/:id`}
+          path={`/completed`}
           element={
             <>
               <PageTitle title="Completed tasks" />

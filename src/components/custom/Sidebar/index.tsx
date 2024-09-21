@@ -160,7 +160,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           title='Completed tasks'
                           icon={<FaCheck size={20} />}
                           pathname={location.pathname}
-                          to='/tasks'
+                          to='/completed'
                           setSidebarOpen={setSidebarOpen}
                         />
                         <MenuItem
