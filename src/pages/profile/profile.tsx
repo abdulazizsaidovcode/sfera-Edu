@@ -42,7 +42,6 @@ const Profile: React.FC = () => {
     password: '',
     checkPassword: '',
   });
-  console.log();
 
   useEffect(() => {
     getData();

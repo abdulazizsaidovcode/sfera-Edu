@@ -23,9 +23,13 @@ const Completed_tasks: React.FC = () => {
         }
     }, [studentId]);
 
-
     const handleAccordionOpen = (id: number) => {
         setStudentId((prevId) => (prevId === id ? null : id));
+    };
+
+    // Har bir input uchun to'g'ridan-to'g'ri qiymat olish
+    const handleInputChange = (homeIndex: number, value: string) => {
+        console.log(`Ball for homeIndex ${homeIndex}:`, value); // Input qiymatini ko'rsatish
     };
 
     if (loading) {
@@ -77,7 +81,7 @@ const Completed_tasks: React.FC = () => {
                                                                     {homeWork.fileId ? (
                                                                         <a href={`${get_file}${homeWork.fileId}`}
                                                                             download
-                                                                            className='bg-transparent border-b-2 px-2 border-b-[#316651] flex items-center cursor-pointer'>
+                                                                            className='bg-transparent border-b-2 px-2 border-b-[#316651]  text-[#316651] hover:text-[#316651] flex items-center cursor-pointer'>
                                                                             <span>Download</span>
                                                                             <RiFolderDownloadLine size={20} className="ml-1" />
                                                                         </a>
@@ -91,6 +95,7 @@ const Completed_tasks: React.FC = () => {
                                                                     type="number"
                                                                     className='border border-[#e0e0e0] rounded-md px-2 py-1 text-sm w-24 focus:outline-none focus:ring-2 focus:ring-green-500 bg-transparent'
                                                                     placeholder="Ball"
+                                                                    onChange={(e) => handleInputChange(homeIndex, e.target.value)} // Qiymatni olish
                                                                 />
                                                             </td>
                                                             <td className="py-2 border text-center text-sm md:px-4 md:py-2">

@@ -1,7 +1,7 @@
 import SlightFlip from '@/components/magicui/flip-text';
 import NotificationCard from './notificationcard';
 import { useGet } from '@/context/logic/global_functions/useGetOption';
-import { notification_all_view, notification_read } from '@/context/api/url';
+import { notification_all_view, notification_count, notification_read } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import { useEffect, useState } from 'react';
 import { IoCheckmarkDone } from "react-icons/io5";
@@ -32,8 +32,8 @@ const Notification = () => {
         const unreadNotifications = data?.filter((notification: any) => !notification.read);
         if (unreadNotifications?.length > 0) {
             const notificationIds = unreadNotifications.map((notification: any) => notification.id);
-            setDataID(notificationIds); 
-            await postData(); 
+            setDataID(notificationIds);
+            await postData();
             getData();
             window.location.reload()
         }
