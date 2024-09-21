@@ -17,6 +17,7 @@ import Lessons from './pages/teacher/lessons/lessons'
 import toast from 'react-hot-toast'
 import Confirmeted from './confirmeted'
 import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
+import TaskSection from './pages/teacher/taskSection/taskSection'
 
 function App() {
   const tokens = localStorage.getItem('token');
@@ -210,11 +211,21 @@ function App() {
         />
         <Route
           index
-          path={`/tasks`}
+          path={`/tasks/:id`}
           element={
             <>
               <PageTitle title="Completed tasks" />
               <Completed_tasks />
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/task`}
+          element={
+            <>
+              <PageTitle title="TaskSection" />
+              <TaskSection/>
             </>
           }
         />

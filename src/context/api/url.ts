@@ -70,5 +70,8 @@ export const LessonAdd : string = `${base_url}lesson`
 
 //Teacher task qo'shadi 
 export const TaskAdd : string = `${base_url}task`
+//Teacher darsga ruhsat beradi 
+export const LessonTracing: string = `${base_url}lesson/tracking`
+// export const LessonTracingPost: string = `${base_url}lesson/tracking`
 
 
