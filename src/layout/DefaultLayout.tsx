@@ -5,17 +5,36 @@ import { useLocation } from 'react-router-dom';
 import ShineBorder from '@/components/magicui/shine-border';
 import ShinyButton from '@/components/magicui/shiny-button';
 import DotPattern from '@/components/magicui/dot-pattern';
+import { useGet } from '@/context/logic/global_functions/useGetOption';
+import { get_Mee } from '@/context/api/url';
+import { config } from '@/context/api/token';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isvisibleSidebar, setIsvisibleSidebar] = useState(false);
   const { pathname } = useLocation();
   const role = sessionStorage.getItem('ROLE');
-
+  const token = sessionStorage.getItem('token');
+  const getMee = useGet(get_Mee, config);
   useEffect(() => {
     let check = !(pathname.startsWith('/auth') || (pathname.startsWith('/home')) || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/'))
     setIsvisibleSidebar(check)
-  }, [pathname, role])
+  }, [pathname, role]);
+
+  useEffect(() => {
+    if (role && token) {
+      getMee.getData();
+    }
+  }, [])
+
+  useEffect(() => {
+    if (role && token && getMee.data) {
+      if (getMee.data.role === 'ROLE_STUDENT') {
+        sessionStorage.setItem('ROLE', getMee.data.role)
+        console.log('ishladi');
+      }
+    }
+  }, [])
 
   return (
     <div className="bg-[#fff] text-black">
