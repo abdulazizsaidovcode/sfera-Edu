@@ -97,3 +97,15 @@ export const useLessonTracing = create<teacherAllLessonTracing>((set) => ({
     teacherAllTracing:null,
     setTeacherLessonTracing: (data) => set({teacherAllTracing: data}),
 }));
+
+// Teacher lesson tracing get 
+
+interface teacherallGetLesson {
+    teacherAllGetLesson:any
+    setTeacherAllGetLesson: (data: any) => void;
+}
+
+export const useTeacherAllLessonTracing= create<teacherallGetLesson>((set) => ({
+    teacherAllGetLesson:null,
+    setTeacherAllGetLesson: (data) => set({teacherAllGetLesson: data}),
+}));

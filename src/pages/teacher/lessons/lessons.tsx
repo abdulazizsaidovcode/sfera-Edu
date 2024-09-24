@@ -5,14 +5,17 @@ import { SelectComponent } from '@/components/select/select';
 import { FaEdit } from 'react-icons/fa';
 import Modal from '@/components/moduleSaidbar/modulTeacher';
 import { Input } from '@/components/ui/input';
-import { getCategoryTeachers, getModules, getTeacherGroup, getTeacherLessons,} from '@/context/logic/course';
+import { getCategoryTeachers, getModules, getTeacherGroup, getTeacherLessons, lessonTRacings } from '@/context/logic/course';
 import { useLesson } from '@/context/logic/state-managment/course';
-import { useTeacherAllGroup, useTeacherCategory, useTeacherTopGuruh } from '@/context/logic/state-managment/teacher/teacher';
+import { useTeacherAllGroup, useTeacherCategory } from '@/context/logic/state-managment/teacher/teacher';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
-import { LessonAdd } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import SelectTeacher from '@/components/select/selectTeacher';
 import { useModule } from '@/context/logic/state-managment/module';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Toastify style
+import { InputDemo } from '@/components/Inputs/InputDemo';
+import LessonModal from '@/components/lesson/lessonModal';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -26,146 +29,92 @@ export const dashboardThead = [
 const Lessons = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lessonAdd, setLessonAdd] = useState(false);
-  const [lessonModal, setLessonModal] = useState(false)
-  const [selectedLesson, setSelectedLesson] = useState<any>(null);
+  const [lessonModal, setLessonModal] = useState(false);
+  const [editlessonModal, seteditLessonModal] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState({});
   const { setLessonData, lessonData } = useLesson();
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize] = useState(10);
-  const { setModuleData, moduleData } = useModule();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [lessonName, setLessonName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [modulId, setModulId] = useState<string | null>(null);
-  const [description, setDescription] = useState('');
-  const [videoLink, setVideoLink] = useState<string>('');
-  const [duration, setDuration] = useState<number | null>(null);
-  const [lessonNameError, setLessonNameError] = useState('');
-  const [descriptionError, setDescriptionError] = useState('');
-  const [videoLinkError, setVideoLinkError] = useState('');
-  const [durationError, setDurationError] = useState('');
+  const { setModuleData } = useModule();
   const { setTeacherCategory, teacherCategory } = useTeacherCategory();
   const { teacherAllGroup, setTeacherAllGroup } = useTeacherAllGroup();
-  const [selectedTeacherId, setSelectedTeacherId] = useState<string | null>(null);
-  const [data, setData] = useState<any>(null);
-
-  const openModal = (type: string, lesson: any) => {
-    setSelectedLesson(lesson);
-    setIsModalOpen(true);
-  };
-  const { postData, response } = usePost(LessonAdd, {
-    name: lessonName,
-    description: description,
-    videoLink: videoLink,
-    videoTime: duration,
-    moduleId: selectedCategory,
-    fileId: 0
-  }, config)
+  const [lessonName, setLessonName] = useState('');
+  const [description, setDescription] = useState('');
+  const [videoLink, setVideoLink] = useState<string>('');
+  const [duration, setDuration] = useState<number>();
+  const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+ 
 
   useEffect(() => {
     getTeacherLessons(setLessonData, currentPage, pageSize);
     getCategoryTeachers(setTeacherCategory);
     getTeacherGroup(setTeacherAllGroup);
-    getModules(modulId, setModuleData)
-  }, [currentPage, pageSize, setLessonData]);
- 
-  useEffect(() => {
-    getTeacherLessons(setLessonData, currentPage, pageSize);
-  }, [response])
+    getModules(selectedCategory, setModuleData);
+  }, [currentPage, pageSize, setLessonData, selectedCategory]);
 
-  const LessonData = {
-    groupId: 1,
-    lessonId: 2,
-    active: true,
-  };
-  // const handlePageChange = (newPage: number) => {
-  //   if (newPage >= 0 && newPage < totalPages) {
-  //     setCurrentPage(newPage);
-  //   }
-  // };
-  const modalLesson = () => {
-    setLessonModal(true);
-    setSelectedTeacherId(null);
-  };
-  const handleSubmitTeacher = () => {
-    if (selectedLesson && selectedTeacherId) {
-      console.log(`Lesson ID: ${selectedLesson.id}, Selected Teacher ID: ${selectedTeacherId}`);
-    } else {
-      console.error('Please select a teacher before submitting.');
-    }
-  };
 
-  const handleSelectChange = (selectedValue: string) => {
-    setSelectedId(selectedValue);
-  };
 
   const lessons = lessonData?.body || [];
   const totalPages = lessonData?.body?.data?.totalPage || 1;
 
-   
-  const getPageNumbers = () => {
-    if (totalPages <= 5) {
-      return Array.from({ length: totalPages }, (_, index) => index);
+  const openModal = (type: string, lesson: any) => {
+    setSelectedLesson(lesson);
+    setIsModalOpen(true);
+    setLessonAdd(type === 'add');
+    if (type === 'edit') {
+      setLessonName(lesson.name);
+      setDescription(lesson.description);
+      setVideoLink(lesson.videoLink);
+      setDuration(lesson.duration);
     }
-    const pageNumbers = [];
-    if (currentPage < 3) {
-      pageNumbers.push(0, 1, 2, 3, '...', totalPages - 1);
-    } else if (currentPage >= totalPages - 3) {
-      pageNumbers.push(0, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1);
-    } else {
-      pageNumbers.push(0, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages - 1);
-    }
-    return pageNumbers;
   };
+
+
+  const handleEditLesson = (lesson: any) => {
+    setSelectedLesson(lesson);
+    seteditLessonModal(true);
+    setLessonName(lesson.name);
+    setDescription(lesson.description);
+    setVideoLink(lesson.videoLink);
+    setDuration(lesson.videoTime);
+  };
+
+  const handleAllowLesson = (lesson: any) => {
+    setSelectedLessonId(lesson.id);
+    setLessonModal(true);
+  };
+
+  const handleAdd = () => {
+    setLessonAdd(true)
+  }
+
+  const handleSubmitTeacher = async () => {
+    try {
+      const taskGroup = {
+        groupId: parseInt(selectedCategory ?? "0"),
+        lessonId: parseInt(selectedLessonId ?? "0"),
+        active: true,
+      };
+
+      await lessonTRacings(taskGroup, setLessonData);
+      closeModal();
+      getTeacherLessons(setLessonData, currentPage, pageSize);
+    } catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const closeModal = () => {
     setIsModalOpen(false);
     setLessonAdd(false);
-    // clearForm();
+    setLessonModal(false);
+    seteditLessonModal(false);
   };
-  const closeLessonModal = () =>{
-    setLessonModal(false)
-  }
-
-  const handleSubmit = () => {
-    let hasError = false;
-
-    if (!lessonName) {
-      setLessonNameError('Lesson name is required');
-      hasError = true;
-    }
-    if (!description) {
-      setDescriptionError('Description is required');
-      hasError = true;
-    }
-    if (!videoLink || isNaN(Number(videoLink))) {
-      setVideoLinkError('Video link (duration) is required and must be a number');
-      hasError = true;
-    }
-    if (!duration || isNaN(Number(duration))) {
-      setDurationError('Duration is required and must be a number');
-      hasError = true;
-    }
-
-    if (hasError) return;
-    console.log({
-      name: lessonName,
-      description: description,
-      videoLink: videoLink,
-      videoTime: duration,
-      moduleId: selectedCategory,
-      fileId: 0
-    });
-    postData()
-    closeModal();
-
-    // setLessonNameError('');
-    // setDescriptionError('');
-    // setVideoLinkError('');
-    // setDurationError('');
-  };
-  // const handleSubmits = async () => {
-  //   await LessonTracingPosts(lessonData, setData);
-  // };
 
   return (
     <div className='mb-3'>
@@ -173,17 +122,19 @@ const Lessons = () => {
         <ShinyButton
           text="Add Lesson"
           className='bg-[#16423C] shadow-lg py-2 px-3 text-white'
-          onClick={() => openModal('add', null)}
+          onClick={() => handleAdd()}
         />
         <div className='shadow'>
           <SelectComponent
-            label=""
+            label=''
             options={teacherCategory?.map((category: any) => ({
               value: category.id,
               label: category.name,
             })) || []}
             placeholder="Kategoriyani tanlang"
-            onChange={handleSelectChange}
+            onChange={(value: string) => {
+              setSelectedCategory(value);
+            }}
           />
         </div>
       </div>
@@ -208,8 +159,7 @@ const Lessons = () => {
                   <div className="flex gap-10">
                     <div
                       className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
-                      onClick={() => openModal('edit', lesson)
-                      }
+                      onClick={() => handleEditLesson(lesson)}
                     >
                       <FaEdit />
                     </div>
@@ -219,7 +169,7 @@ const Lessons = () => {
                   <div className="flex gap-10">
                     <div
                       className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
-                      onClick={modalLesson}
+                      onClick={() => handleAllowLesson(lesson)}
                     >
                       <ShinyButton text="O'zgartirish" className='bg-blue-500' />
                     </div>
@@ -236,166 +186,113 @@ const Lessons = () => {
           )}
         </Tables>
       </div>
-      {/* Pagination */}
-      <div className="mt-4 flex justify-center  items-center space-x-3 p-3">
-        {getPageNumbers().map((page, index) => (
-          <button
-            key={index}
-            onClick={() => page !== '...' && handlePageChange(page as number)}
-            className={`shadow-lg py-1 px-3 text-black text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
-            disabled={page === '...'}
-          >
-            {page === '...' ? '...' : `${+page + 1}`}
-          </button>
-        ))}
-      </div>
 
-      {/* Add/Edit Lesson Modal */}
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h2 className="text-xl font-bold mb-4">{lessonAdd ? 'Add Lesson' : 'Edit Lesson'}</h2>
-        <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
-          <div className='mb-4'>
-            <SelectTeacher
-              style={{
-                width: '640px',
-                height: '44px',
-                backgroundColor: "#f0f0f0",
-                borderRadius: '8px',
-              }}
-              dropdownStyle={{ zIndex: 9999 }}
-              getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
-              onChange={(value) =>{
-                setModulId(value);
-              }}
-              options={teacherCategory?.map((teacher: any) => ({
-                value: teacher.id,
-                label: teacher.name,
-              }))}
-            />
-          </div>
-          <div className='mb-3'>
-            <SelectTeacher
-              style={{
-                width: '640px',
-                height: '44px',
-                backgroundColor: "#f0f0f0",
-                borderRadius: '8px',
-              }}
-              dropdownStyle={{ zIndex: 9999 }}
-              getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
-              onChange={(value) => {
-                setSelectedCategory(value); 
-              }}
-              options={teacherAllGroup?.map((teacher: any) => ({
-                value: teacher.id,
-                label: teacher.name,
-              }))}
-            />
-          </div>
-
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Dars mavzusi:
-              </label>
-              <Input
-                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
-                value={lessonName}
-                onChange={(e) => setLessonName(e.target.value)}
-              />
-              {lessonNameError && <p className="text-red-500">{lessonNameError}</p>}
-            </div>
-
-            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Dars haqida ma'lumot:
-              </label>
-              <Input
-                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              {descriptionError && <p className="text-red-500">{descriptionError}</p>}
-            </div>
-            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Video vaqt (min):
-              </label>
-              <Input
-                type="text"
-                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
-                value={videoLink}
-                onChange={(e) => setVideoLink(e.target.value)}
-              />
-              {videoLinkError && <p className="text-red-500">{videoLinkError}</p>}
-            </div>
-            <div className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3'>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Davomiylik (min):
-              </label>
-              <Input
-                type="number"
-                className='min-w-54 sm:w-64 md:w-96 lg:w-[40rem] mb-3 p-2 bg-white border rounded-lg'
-                value={duration?.toString() || ''}
-                onChange={(e) => setDuration(parseInt(e.target.value, 10))}
-              />
-              {durationError && <p className="text-red-500">{durationError}</p>}
-            </div>
-
-            <div className='flex justify-between space-x-3'>
-              <ShinyButton text="Saqlash" className='bg-green-600' onClick={handleSubmit} />
-              <ShinyButton text="Bekor qilish" className='bg-red-600' onClick={closeModal} />
-            </div>
-          </form>
-        </div>
-      </Modal>
-      <Modal isOpen={lessonModal} onClose={closeLessonModal}>
+      <Modal isOpen={lessonModal} onClose={closeModal}>
         <h2 className="text-xl font-bold mb-4">Guruhga dars qo'shish</h2>
         <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
-          {/* <div className='mb-4'>
-            <SelectTeacher
-              style={{
-                width: '640px',
-                height: '44px',
-                backgroundColor: "#f0f0f0",
-                borderRadius: '8px',
-              }}
-              dropdownStyle={{ zIndex: 9999 }}
-              getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
-              onChange={(value) =>{
-                setTeacherAllGroup(value);
-              }}
-              options={teacherCategory?.map((teacher: any) => ({
-                value: teacher.id,
-                label: teacher.name,
-              }))}
-            />
-          </div> */}
           <div className='mb-15'>
             <SelectTeacher
               style={{
                 width: '640px',
                 height: '44px',
                 backgroundColor: "#f0f0f0",
-                borderRadius: '8px',
+                borderRadius: '6px'
               }}
               dropdownStyle={{ zIndex: 9999 }}
-              getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
-              onChange={(value) => {
-                setSelectedCategory(value); 
+              options={teacherAllGroup?.map((group: any) => ({
+                value: group.id,
+                label: group.name,
+              })) || []}
+              onChange={(value: string) => {
+                setSelectedCategory(value);
               }}
-              options={teacherAllGroup?.map((teacher: any) => ({
-                value: teacher.id,
-                label: teacher.name,
-              }))}
             />
           </div>
-          <div className='flex  space-x-3'>
-              {/* <ShinyButton text="Saqlash" className='bg-green-600' onClick={handleSubmits} /> */}
-              <ShinyButton text="Bekor qilish" className='bg-red-600' onClick={closeModal} />
-            </div>
+        </div>
+
+        <div className="flex justify-center">
+          <ShinyButton
+            text={loading ? "Loading..." : "Saqlash"}
+            className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
+            onClick={handleSubmitTeacher}
+            disabled={loading}
+          />
         </div>
       </Modal>
+      <Modal isOpen={editlessonModal} onClose={closeModal}>
+        <h2 className="text-xl font-bold mb-4">Darsni tahrirlash </h2>
+        <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
+          <div className='mb-15'>
+            <SelectTeacher
+              style={{
+                width: '640px',
+                height: '44px',
+                backgroundColor: "#f0f0f0",
+                borderRadius: '6px'
+              }}
+              dropdownStyle={{ zIndex: 9999 }}
+            // options={selectedLesson((module:any) => ({
+            //   value: module.id, // yoki module.name, kerakli maydon
+            //   label: module.name // yoki module.description, kerakli maydon
+            // }))}
+            />
+            <div className='mb-3'>
+              <InputDemo
+                label='Dars mavzusini kiriting: '
+                type="text"
+                placeholder="Dars mavzusini kiriting"
+                value={lessonName}
+                onChange={(e) => setLessonName(e.target.value)}
+              />
+            </div>
+            <div className='mb-3'>
+              <InputDemo label='Dars yuzasidan izoh yozing : ' type="text" placeholder="Dars yuzasidan izoh yozing"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)} />
+            </div>
+            <div className='mb-3'>
+              <InputDemo label='Darsni videosini urlni joylang : ' type="text" placeholder="Darsni videosini urlni joylang"
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)} />
+            </div>
+            <div className='mb-3'>
+              <InputDemo label='Videoni davomiylik vaqtini kiriting : ' type="number" placeholder="Videoni davomiylik vaqtini kiriting"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <ShinyButton
+            text={loading ? "Loading..." : "Saqlash"}
+            className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
+            onClick={handleSubmitTeacher}
+            disabled={loading}
+          />
+          <ShinyButton
+            text={loading ? "Loading..." : "Bekor qilish "}
+            className="bg-red-600 shadow-lg py-2 px-6 text-white"
+            onClick={closeModal}
+            disabled={loading}
+          />
+        </div>
+      </Modal>
+      
+      <LessonModal lessonAdd={lessonAdd} closeModal={closeModal} />
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

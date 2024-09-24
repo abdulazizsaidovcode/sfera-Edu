@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { setConfig } from '@/context/api/token';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -22,6 +23,7 @@ const ChartTeacher = () => {
   const { setYearData } = useStudentYear();
 
   useEffect(() => {
+    setConfig()
     const fetchData = async () => {
       try {
         await getStatistikTeacher((statData: any) => {

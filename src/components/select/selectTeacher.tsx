@@ -10,7 +10,7 @@ interface SelectTeacherProps {
 }
 
 const SelectTeacher: React.FC<SelectTeacherProps> = ({
-  defaultValue = 'Guruhni tanlang',
+  defaultValue,
   style,
   dropdownStyle,
   options = [

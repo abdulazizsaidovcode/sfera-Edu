@@ -101,7 +101,7 @@ const DashboardTeacher = () => {
        {/* Top 5 Students Table */}
       <div className='mb-10'>
         <h2 className="font-bold text-xl p-2 mb-5" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
-          Guruh  natijalari
+          O'quvchilar   natijalari
         </h2>
         <Tables thead={TopStudent}>
           {teacherTopStudent?.length > 0 ? (

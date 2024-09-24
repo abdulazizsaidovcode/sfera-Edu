@@ -12,6 +12,7 @@ import {
   Legend,
   ArcElement, 
 } from 'chart.js';
+import { setConfig } from '@/context/api/token';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -22,21 +23,22 @@ const ChartOne = () => {
   const { setYearData } = useStudentYear();
 
   useEffect(() => {
+    setConfig()
     const fetchData = async () => {
       try {
         await getStudentStatictik((statData: any) => {
           if (statData.length === 0) {
-            setChartData(null); // Set null if no data
+            setChartData(null); 
             return;
           }
 
           const months = statData.map((item: { monthName: string }) => item.monthName);
           const totalScores = statData.map((item: { totalScore: number }) => item.totalScore);
 
-          // Check if all totalScores are 0
+          
           const allZero = totalScores.every((score: number) => score === 0);
           if (allZero) {
-            setChartData(null); // Don't render the chart if all scores are 0
+            setChartData(null); 
             return;
           }
 

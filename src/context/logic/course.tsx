@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonTracing, studentRating, studentWeek, TaskAdd } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
+import { toast } from 'react-toastify'; 
 
 
 // Qaysi categoryda o'qishini chiqarib beradi 
@@ -198,11 +199,9 @@ export const getCategoryTeachers = async (setData: any) => {
 
 // Teacher hamma lessonni ko'radi 
 export const getTeacherLessons = async (setData: (data: any) => void, page: number, size: number) => {
-  const res = await axios.get(`${getTeacherLesson}?page=${page}&size=${size}`, config)
+  const res = await axios.get(`${getTeacherLesson}?categoryEnum=${`EDUCATION`}&page=${page}&size=${size}`, config)
   try {
     if (res.data.data) {
-      console.log(121232132443443,res.data);
-      
       setData(res.data.data)
     } else if (res.data.data) {
       console.log("error", res.data.error);
@@ -273,7 +272,6 @@ export const getTeacherAllCount = async (setData: any) => {
   const res = await axios.get(`${getAllTeacher}`, config)
   try {
     if (res.data.data) {
-      console.log(" malumotlar " ,res.data);
       setData(res.data.data)
     } else if (res.data.data) {
       console.log("error", res.data.error);
@@ -326,18 +324,39 @@ export const postTaskTeacher = async (lessonData: LessonData, setData: any) => {
   }
 };
 
-// Teacher lesson traking 
-export const lessonTRacings = async (setData: any) => {
+// Teacher lesson traking
+
+interface TaskGroup {
+  groupId: number;
+  lessonId: number;
+  active: boolean;
+}
+
+export const lessonTRacings = async (taskGroup: TaskGroup, setData: any) => {
   try {
-    const res = await axios.get(`${LessonTracing}`,config);
+    const res = await axios.post(`${LessonTracing}`, taskGroup, config);
     if (res.data && res.data.data) {
       setData(res.data.data);
+      toast.success('Dars muvaffaqiyatli qo\'shildi!'); 
     } else if (res.data && res.data.error) {
-      console.log("Error:", res.data.error);
+      toast.error(`Bu dars guruhga oldindan qo'shilgan`);
+    }
+  } catch (error) {
+    console.log("Error", error);
+    toast.error(`Bu dars guruhga oldindan qo'shilgan`); 
+  }
+};
+
+// Teacher lesson traking get 
+export const teacherGetLesson = async (setData: any) => {
+  const res = await axios.get(`${LessonTracingGet}`, config)
+  try {
+    if (res.data.data) {
+      setData(res.data.data)
+    } else if (res.data.data) {
+      console.log("error", res.data.error);
     }
   } catch (error) {
     console.log("Error", error);
   }
 };
-
-// Teacher lesson trakin

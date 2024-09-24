@@ -12,6 +12,7 @@ import {
   Legend,
   ArcElement, // Import for pie/doughnut chart
 } from 'chart.js';
+import { setConfig } from '@/context/api/token';
 
 // Register the necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -25,6 +26,7 @@ const ChartWeek = () => {
   
 
   useEffect(() => {
+    setConfig()
     const fetchData = async () => {
       try {
         await getStudentWeek((statData: any) => {
