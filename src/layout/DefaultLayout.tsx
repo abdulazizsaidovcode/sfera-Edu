@@ -16,25 +16,24 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const role = sessionStorage.getItem('ROLE');
   const token = sessionStorage.getItem('token');
   const getMee = useGet(get_Mee, config);
+
   useEffect(() => {
-    let check = !(pathname.startsWith('/auth') || (pathname.startsWith('/home')) || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/'))
-    setIsvisibleSidebar(check)
+    const checkSidebarVisibility = !(pathname.startsWith('/auth') || pathname.startsWith('/home') || role === 'ROLE_ADMIN' || pathname.startsWith('/register') || pathname.startsWith('/client/quiz/'));
+    setIsvisibleSidebar(checkSidebarVisibility);
   }, [pathname, role]);
 
   useEffect(() => {
     if (role && token) {
       getMee.getData();
     }
-  }, [])
+  }, [role, token]);
 
   useEffect(() => {
-    if (role && token && getMee.data) {
-      if (getMee.data.role === 'ROLE_STUDENT') {
-        sessionStorage.setItem('ROLE', getMee.data.role)
-        console.log('ishladi');
-      }
+    if (getMee.data?.role === 'ROLE_STUDENT') {
+      sessionStorage.setItem('ROLE', getMee.data.role);
+      console.log('Role updated to ROLE_STUDENT');
     }
-  }, [])
+  }, [getMee.data, role]);
 
   return (
     <div className="bg-[#fff] text-black">
@@ -42,14 +41,14 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
         <>
           <DotPattern />
           <div className="flex justify-center items-center h-screen">
-            <ShineBorder color={'#1c8340'} borderWidth={1.5} className="p-10 bg-white  shadow-lg rounded-lg max-w-xl text-center">
+            <ShineBorder color={'#1c8340'} borderWidth={1.5} className="p-10 bg-white shadow-lg rounded-lg max-w-xl text-center">
               <h1 className="text-4xl font-bold text-[#1c8340] mb-4">Tasdiqlash Talab Qilinadi</h1>
               <p className="text-lg text-gray-700 mb-6">
                 Iltimos, admin bilan bog'laning yoki biroz kuting. Sizning rolingiz hali tasdiqlanmagan.
               </p>
               <div className="flex justify-center items-center">
                 <a href="https://t.me/ITCityAcademy">
-                  <ShinyButton text='Adminga Murojaat Qiling' className="bg-[#1c8340] border-none text-white px-6 py-3 rounded-full " />
+                  <ShinyButton text="Adminga Murojaat Qiling" className="bg-[#1c8340] border-none text-white px-6 py-3 rounded-full " />
                 </a>
               </div>
             </ShineBorder>
@@ -68,7 +67,8 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
               </main>
             </div>
           </div>
-        </>)}
+        </>
+      )}
     </div>
   );
 };
