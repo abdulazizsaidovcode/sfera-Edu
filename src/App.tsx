@@ -16,6 +16,7 @@ import Lessons from './pages/teacher/lessons/lessons'
 import Confirmeted from './confirmeted'
 import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
 import TaskSection from './pages/teacher/taskSection/taskSection'
+import Graded from './pages/teacher/Gradet/gradet'
 
 function App() {
   const tokens = sessionStorage.getItem('token');
@@ -209,6 +210,16 @@ function App() {
             <>
               <PageTitle title="TaskSection" />
               <TaskSection/>
+            </>
+          }
+        />
+        <Route
+          index
+          path={`/graded`}
+          element={
+            <>
+              <PageTitle title="TaskSection" />
+              <Graded/>
             </>
           }
         />
