@@ -5,7 +5,7 @@ import { SelectComponent } from '@/components/select/select';
 import { FaEdit } from 'react-icons/fa';
 import Modal from '@/components/moduleSaidbar/modulTeacher';
 import { Input } from '@/components/ui/input';
-import { getCategoryTeachers, getModules, getTeacherGroup, getTeacherLessons, lessonTRacings } from '@/context/logic/course';
+import { getCategoryTeachers, getFiles, getModules, getTeacherGroup, getTeacherLessons, lessonTRacings } from '@/context/logic/course';
 import { useLesson } from '@/context/logic/state-managment/course';
 import { useTeacherAllGroup, useTeacherCategory } from '@/context/logic/state-managment/teacher/teacher';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
@@ -17,14 +17,18 @@ import 'react-toastify/dist/ReactToastify.css';  // Toastify style
 import { InputDemo } from '@/components/Inputs/InputDemo';
 import LessonModal from '@/components/lesson/lessonModal';
 import {Popover} from "antd";
+import { getFile } from '@/context/api/url';
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
-  { id: 2, name: 'Dars mavzusi' },
-  { id: 3, name: "Dars haqida ma'lumot" },
-  { id: 4, name: 'Davomiylik vaqti (min)' },
-  { id: 5, name: 'Darsni tahrirlash' },
-  { id: 6, name: 'Darsga ruhsat berish' }
+  { id: 2, name: "Bo'lim nomi" },
+  { id: 3, name: "Yo'nalish nomi " },
+  { id: 4, name: 'Dars mavzusi' },
+  { id: 5, name: "Dars haqida ma'lumot" },
+  { id: 6, name: 'Davomiylik vaqti (min)' },
+  { id: 7, name: 'Darslikni yuklab olish' },
+  { id: 8, name: 'Darsni tahrirlash' },
+  { id: 9, name: 'Darsga ruhsat berish' }
 ];
 
 const Lessons = () => {
@@ -143,11 +147,17 @@ const Lessons = () => {
           {lessons.length > 0 ? (
             lessons.map((lesson: any, index: number) => (
               <tr key={lesson.id || index} className="hover:bg-gray duration-100">
-                <td className="border-b border-[#eee] min-w-[200px] p-5">
+                <td className="border-b border-[#eee] min-w-[100px] p-5">
                   <p className="text-black dark:text-white">{index + 1 + (currentPage * pageSize)}</p>
                 </td>
                 <td className="border-b border-[#eee] min-w-[200px] p-5 ">
-                  <p className="text-black dark:text-white">{lesson.name ?? 'N/A'}</p>
+                  <p className="text-black dark:text-white">{lesson.moduleName ?? "Bo'lim mavjud emas"}</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[200px] p-5 ">
+                  <p className="text-black dark:text-white">{lesson.categoryName ?? "Yo'nalish topilmadi"}</p>
+                </td>
+                <td className="border-b border-[#eee] min-w-[200px] p-5 ">
+                  <p className="text-black dark:text-white">{lesson.name ?? 'Dars nomi mavjud emas '}</p>
                 </td>
                 <td className="border-b border-[#eee] min-w-[200px] p-5 ">
                   {lesson.description.length > 20 ?
@@ -159,10 +169,15 @@ const Lessons = () => {
                 <td className="border-b border-[#eee] min-w-[160px] p-5 ">
                   <p className="text-black dark:text-white">{lesson.videoTime ?? '0'} min</p>
                 </td>
+                <td className="border-b border-[#eee] min-w-[160px] p-5 ">
+                  <p className="text-black dark:text-white">
+                  <a href={lesson.fileId ? getFile + lesson.fileId : ''} download>Yuklab olish</a>
+                    </p>
+                </td>
                 <td className="border-b border-[#eee] min-w-[160px]">
                   <div className="flex gap-10">
                     <div
-                      className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
+                      className="text-blue-500 mt-3 min-w-[100px] justfy-center text-center hover:text-yellow-600 cursor-pointer"
                       onClick={() => handleEditLesson(lesson)}
                     >
                       <FaEdit />

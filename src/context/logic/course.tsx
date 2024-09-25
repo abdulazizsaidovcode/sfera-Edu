@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getFile, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
 import { toast } from 'react-toastify'; 
 
@@ -378,6 +378,19 @@ export const teacherGetLesson = async (setData: any) => {
   try {
     if (res.data.data) {
       setData(res.data.data)
+    } else if (res.data.data) {
+      console.log("error", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+// Get file 
+export const getFiles = async (id:number) => {
+  const res = await axios.get(`${getFile}${id}`, config)
+  try {
+    if (res.data.data) {
     } else if (res.data.data) {
       console.log("error", res.data.error);
     }

@@ -79,6 +79,8 @@ export const TaskAdd : string = `${base_url}task`
 //Teacher darsga ruhsat beradi 
 export const LessonTracing: string = `${base_url}lesson/tracking`
 export const LessonTracingGet: string = `${base_url}lesson/tracking`
+//Get file 
+export const getFile: string = `${base_url}file/files/`
 
 
 
