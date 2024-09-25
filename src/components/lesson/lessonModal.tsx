@@ -10,7 +10,9 @@ import { useTeacherCategory } from '@/context/logic/state-managment/teacher/teac
 import SelectTeacher from '@/components/select/selectTeacher';
 import { useModule } from '@/context/logic/state-managment/module';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
+import 'react-toastify/dist/ReactToastify.css'; 
+import { BiSolidImageAdd } from 'react-icons/bi';
+import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
 
 const LessonModal = ({ lessonAdd, closeModal }) => {
     const [lessonName, setLessonName] = useState('');
@@ -25,6 +27,7 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
     const [selectedTeacherId, setSelectedTeacherId] = useState(null);
     const [selectedModuleId, setSelectedModuleId] = useState(null); 
     const [modules, setModules] = useState([]);
+    const [imageId, setImageId] = useState(null);
 
     const { postData, response } = usePost(LessonAdd, {
         name: lessonName,
@@ -45,12 +48,25 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImage(file);
+            try {
+                const uploadedImageId = await checkImgUpload(file, setImage);
+                setImageId(uploadedImageId);
+                const imageUrl = URL.createObjectURL(file);
+                setImage(imageUrl); 
+                console.log("Uploaded Image ID:", uploadedImageId);
+            } catch (error) {
+                console.error("Image upload failed:", error);
+            }
         }
     };
+
+    const handleImageClick = () => {
+        document.getElementById("image-upload").click();
+    };
+
 
     useEffect(() => {
         getCategoryTeachers(setTeacherCategory).then(() => {
@@ -72,7 +88,7 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
     const handleSave = async () => {
         if (!validateFields()) return;
         setLoading(true);
-        closeModal()
+        handleCloseModal(); 
         const dataToSend = {
             name: lessonName,
             description,
@@ -85,14 +101,13 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
         try {
             const response = await postData();
             console.log("Backenddan qaytgan ma'lumot:", response);
-            
-            if (response && response.status === 'Success') { // Check for success
-                toast.success('Ma\'lumot qo\'shildi!'); // Display success toast
-                handleCloseModal(); // Close the modal
+            if (response && response.status === 'Success') {
+                toast.success('Ma\'lumot qo\'shildi!'); 
+                handleCloseModal(); 
             }
         } catch (error) {
             console.error("Xato yuz berdi:", error);
-            toast.error('Xato yuz berdi! Iltimos qayta urinib ko\'ring.'); // Display error toast
+            toast.error('Ma\'lumot qo\'shildi!'); 
         } finally {
             setLoading(false);
         }
@@ -201,33 +216,49 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                             />
                             {errors.duration && <p className="text-red-600">{errors.duration}</p>}
                         </div>
-                        <div className='mb-3'>
-                            <label className="block mb-2">Rasm yuklang: </label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                className="border border-gray-300 p-2 rounded"
-                            />
-                            {errors.image && <p className="text-red-600">{errors.image}</p>}
+                        <label htmlFor="">File yuklang :</label>
+                        <div className="flex flex-col items-center mb-3">
+                            
+                            {image ?
+                                (
+                                    <img
+                                        src={image}
+                                        alt="Uploaded preview"
+                                        className="mt-3 w-50 h-40 border object-cover rounded"
+                                    />
+                                )
+                                :
+                                (
+                                    <>
+                                        <BiSolidImageAdd className="text-7xl cursor-pointer" onClick={handleImageClick} />
+                                        <input
+                                            id="image-upload"
+                                            type="file"
+                                            accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.pptx,.zip"
+                                            onChange={handleImageChange}
+                                            className="hidden border"
+                                        />
+                                    </>
+                                )}
+
                         </div>
                     </div>
                 </div>
 
                 <div className="flex justify-between">
-                    <div>
+                <div>
                         <ShinyButton
-                            text={loading ? "Loading..." : "Saqlash"}
-                            className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
-                            onClick={handleSave}
+                            text={loading ? "Loading..." : "Bekor qilish"}
+                            className="bg-red-600 shadow-lg py-2 px-6 text-white"
+                            onClick={handleCloseModal}
                             disabled={loading}
                         />
                     </div>
                     <div>
                         <ShinyButton
-                            text={loading ? "Loading..." : "Bekor qilish"}
-                            className="bg-red-600 shadow-lg py-2 px-6 text-white"
-                            onClick={handleCloseModal}
+                            text={loading ? "Loading..." : "Saqlash"}
+                            className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
+                            onClick={handleSave}
                             disabled={loading}
                         />
                     </div>

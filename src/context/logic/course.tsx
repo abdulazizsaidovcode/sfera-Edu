@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
 import { toast } from 'react-toastify'; 
 
@@ -314,6 +314,31 @@ interface Task {
 export const postTaskTeacher = async (lessonData: LessonData, setData: any) => {
   try {
     const res = await axios.post(`${TaskAdd}`, lessonData,config);
+    if (res.data && res.data.data) {
+      setData(res.data.data);
+    } else if (res.data && res.data.error) {
+      console.log("Error:", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+//Teacher lesson edit 
+interface LessonData {
+  id: number; 
+  name: string;
+  description: string;
+  videoLink: string;
+  videoTime: number;
+  moduleId: number;
+  fileId: number;
+}
+
+// editLesson funksiyasini yangilangan interfeysga mos ravishda o'zgartiring
+export const editLesson = async (id: number, lessonData: LessonData, setData: any) => {
+  try {
+    const res = await axios.post(`${LessonEdit}/${id}`, lessonData, config);
     if (res.data && res.data.data) {
       setData(res.data.data);
     } else if (res.data && res.data.error) {

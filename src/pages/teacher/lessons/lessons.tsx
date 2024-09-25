@@ -16,6 +16,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Toastify style
 import { InputDemo } from '@/components/Inputs/InputDemo';
 import LessonModal from '@/components/lesson/lessonModal';
+import {Popover} from "antd";
 
 export const dashboardThead = [
   { id: 1, name: 'T/r' },
@@ -45,7 +46,7 @@ const Lessons = () => {
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
- 
+
 
   useEffect(() => {
     getTeacherLessons(setLessonData, currentPage, pageSize);
@@ -97,7 +98,6 @@ const Lessons = () => {
         lessonId: parseInt(selectedLessonId ?? "0"),
         active: true,
       };
-
       await lessonTRacings(taskGroup, setLessonData);
       closeModal();
       getTeacherLessons(setLessonData, currentPage, pageSize);
@@ -150,7 +150,11 @@ const Lessons = () => {
                   <p className="text-black dark:text-white">{lesson.name ?? 'N/A'}</p>
                 </td>
                 <td className="border-b border-[#eee] min-w-[200px] p-5 ">
-                  <p className="text-black dark:text-white">{lesson.description ?? 'N/A'}</p>
+                  {lesson.description.length > 20 ?
+                    <Popover title={lesson.description}
+                      overlayStyle={{ textAlign: 'center', maxWidth: '400px' }}>
+                      {lesson.description.slice(0, 20)}...
+                    </Popover> : lesson.description}
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px] p-5 ">
                   <p className="text-black dark:text-white">{lesson.videoTime ?? '0'} min</p>
@@ -198,6 +202,7 @@ const Lessons = () => {
                 backgroundColor: "#f0f0f0",
                 borderRadius: '6px'
               }}
+              defaultValue="Guruhni tanlang"
               dropdownStyle={{ zIndex: 9999 }}
               options={teacherAllGroup?.map((group: any) => ({
                 value: group.id,
@@ -223,19 +228,6 @@ const Lessons = () => {
         <h2 className="text-xl font-bold mb-4">Darsni tahrirlash </h2>
         <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
           <div className='mb-15'>
-            <SelectTeacher
-              style={{
-                width: '640px',
-                height: '44px',
-                backgroundColor: "#f0f0f0",
-                borderRadius: '6px'
-              }}
-              dropdownStyle={{ zIndex: 9999 }}
-            // options={selectedLesson((module:any) => ({
-            //   value: module.id, // yoki module.name, kerakli maydon
-            //   label: module.name // yoki module.description, kerakli maydon
-            // }))}
-            />
             <div className='mb-3'>
               <InputDemo
                 label='Dars mavzusini kiriting: '
@@ -262,25 +254,26 @@ const Lessons = () => {
             </div>
           </div>
         </div>
-
-        <div className="flex justify-center">
-          <ShinyButton
-            text={loading ? "Loading..." : "Saqlash"}
-            className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
-            onClick={handleSubmitTeacher}
-            disabled={loading}
-          />
-          <ShinyButton
-            text={loading ? "Loading..." : "Bekor qilish "}
-            className="bg-red-600 shadow-lg py-2 px-6 text-white"
-            onClick={closeModal}
-            disabled={loading}
-          />
+        <div className="flex justify-between">
+          <div>
+            <ShinyButton
+              text={loading ? "Loading..." : "Bekor qilish"}
+              className="bg-red-600 shadow-lg py-2 px-6 text-white"
+              onClick={handleSubmitTeacher}
+              disabled={loading}
+            />
+          </div>
+          <div>
+            <ShinyButton
+              text={loading ? "Loading..." : "Saqlash"}
+              className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
+              onClick={closeModal}
+              disabled={loading}
+            />
+          </div>
         </div>
       </Modal>
-      
       <LessonModal lessonAdd={lessonAdd} closeModal={closeModal} />
-
       {/* Toast Container */}
       <ToastContainer
         position="bottom-center"
