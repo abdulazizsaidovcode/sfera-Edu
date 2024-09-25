@@ -4,7 +4,7 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import { PiStudentFill, PiUsersThreeFill } from 'react-icons/pi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import logo from '@/assets/images/Sfer 2.png';
-import { MdNotificationsActive, MdOutlinePlayLesson } from 'react-icons/md';
+import { MdGrade, MdNotificationsActive, MdOutlinePlayLesson } from 'react-icons/md';
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
 import { FaUserGraduate } from "react-icons/fa6";
 import { FaCheck, } from "react-icons/fa";
@@ -144,7 +144,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         />
                         <MenuItem
                           title='Student'
-                          icon={<PiUsersThreeFill size={20} /> }
+                          icon={<PiUsersThreeFill size={20} />}
                           pathname={location.pathname}
                           to='/Student'
                           setSidebarOpen={setSidebarOpen}
@@ -161,6 +161,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           icon={<FaCheck size={20} />}
                           pathname={location.pathname}
                           to='/completed'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Graded'
+                          icon={<MdGrade size={20} />}
+                          pathname={location.pathname}
+                          to='/graded'
                           setSidebarOpen={setSidebarOpen}
                         />
                         <MenuItem
