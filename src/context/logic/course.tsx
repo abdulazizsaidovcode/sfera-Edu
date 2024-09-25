@@ -158,7 +158,7 @@ export const getStudenTeacher = async (
   name?: string 
 ) => {
   try {
-    let url = `${getTeachetStudent}?page=${page}&size=${size}`;
+    let url = `${getTeachetStudent}?type=EDUCATION&page=${page}&size=${size}`;
     if (id) {
       url += `&groupId=${id}`;
     }
@@ -168,7 +168,6 @@ export const getStudenTeacher = async (
     const res = await axios.get(url, config);
     
     if (res.data.data) {
-      console.log('Data received:', res.data);
       setData({
         body: res.data
       });
