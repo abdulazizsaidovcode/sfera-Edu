@@ -28,13 +28,12 @@ const Students = () => {
     setSelectedId(selectedValue);
   };
 
-  console.log(12121323213213,search);
   
 
   useEffect(() => {
     setLoading(true);
     getTeacherGroup(setTeacherAllGroup);
-    getCategoryTeachers(setTeacherCategory);
+    getCategoryTeachers(setTeacherCategory,currentPage,pageSize);
     setLoading(false);
   }, [setTeacherAllGroup, setTeacherCategory]);
 

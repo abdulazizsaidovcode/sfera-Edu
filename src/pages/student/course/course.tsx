@@ -3,12 +3,13 @@ import { useLessonONe, useLessonTask } from "@/context/logic/state-managment/mod
 import VideoPlayer from "@/components/lesson/lessonVideo";
 import { getLessonOneTask } from "@/context/logic/course";
 import axios from "axios";
-import { base_url, get_file, file_upload } from "@/context/api/url";
+import { base_url, get_file } from "@/context/api/url";
 import ShinyButton from "@/components/magicui/shiny-button";
 import Modal from "@/components/moduleSaidbar/modulTeacher";
 import { checkImgUpload } from "@/context/logic/global_functions/fileUpolatOptions";
 import { config } from "@/context/api/token";
 import toast from "react-hot-toast";
+import { FaPenClip } from "react-icons/fa6";
 
 const Course = () => {
   const { lessonOneSave } = useLessonONe();
@@ -17,25 +18,31 @@ const Course = () => {
   const [fileId, setFileId] = useState<number | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [solution, setSolution] = useState<string>(''); // Solution uchun state
+  const [solution, setSolution] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const closeMOdal = () => setIsModalOpen(false);
+  const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
 
   useEffect(() => {
     const id = lessonOneSave?.id;
     if (id) {
-      getLessonOneTask(id, setLessonTaskSave);
+      const fetchData = async () => {
+        setLoading(true);
+        await getLessonOneTask(id, setLessonTaskSave);
+        setLoading(false);
+      };
+      fetchData();
+    } else {
+      setLoading(false); // No lesson ID, set loading to false
     }
   }, [lessonOneSave, setLessonTaskSave]);
 
-  // Fayl tanlanganda chaqiriladigan funksiya
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setSelectedFile(file || null);
   };
 
-  // Faylni yuklash funksiyasi
   const uploadFile = async () => {
     if (selectedFile) {
       const uploadedFileId = await checkImgUpload(selectedFile, setFileId);
@@ -52,28 +59,26 @@ const Course = () => {
     }
   };
 
-  // Yangi taskni yuklash funksiyasi
   const upLoadLesson = async () => {
     if (!selectedFile) {
       toast.error("Avval faylni tanlang.");
       return;
     }
 
-    // Faylni yuklab, keyin topshiriqni yuklaymiz
     const uploadedFileId = await uploadFile();
 
     if (uploadedFileId) {
       const data = {
         taskId: lessonOneSave?.id,
         solution: solution || "Javob yo'q",
-        fileId: uploadedFileId, // Fayl yuklab bo'lgandan keyin fileId qo'yamiz
+        fileId: uploadedFileId,
       };
 
       try {
         const response = await axios.post(`${base_url}homework/save`, data, config);
         console.log(response.data);
         toast.success("Vazifa muvaffaqiyatli yuklandi");
-        closeMOdal(); // Modalni yopish
+        closeModal();
       } catch (error) {
         console.error("Vazifa yuklashda xatolik:", error);
         toast.error("Vazifa yuklashda xatolik yuz berdi.");
@@ -85,95 +90,109 @@ const Course = () => {
 
   return (
     <div className="hs-accordion-group">
-      <VideoPlayer videoId={lessonOneSave?.videoLink || ""} />
-      <div className="bg-[#6A9C89] shadow-xl p-3 mt-2 rounded-xl">
-        <h2 className="text-xl mb-2">Dars mavzusi :
-          <span className="text-green-900 text-xl font-bold">
-            {lessonOneSave?.name || "Darslikni tanlang "}
-          </span>
-        </h2>
-        <h2 className="font-bold mb-2 text-lg">Mavzu yuzasidan izoh :
-          <span className="text-green-900 text-xl font-bold">
-            {lessonOneSave?.description || "Lesson Description"}
-          </span>
-        </h2>
-        <h2 className="font-bold mb-2 text-lg">Davomiylik vaqti :
-          <span className="text-green-900 text-xl font-bold">
-            {lessonOneSave?.videoTime || "Lesson Duration"}
-          </span> minut
-        </h2>
-        <p className="font-bold text-black mb-2">Mavzu yuzasidan savol va topshiriqlar</p>
+      {loading ? (
+        <p className="text-gray-600 font-bold">Yuklanmoqda...</p> // Loading message
+      ) : (
+        <>
+          {lessonOneSave && lessonOneSave.videoLink ? (
+            <VideoPlayer videoId={lessonOneSave.videoLink} />
+          ) : (
+            <VideoPlayer videoId={""} />
+          )}
+          <div className="bg-[#6A9C89] shadow-xl p-3 mt-2 rounded-xl">
+            <h2 className="text-xl mb-2 font-bold">Dars mavzusi ✅ :
+              <span className="text-green-900 text-xl font-bold ml-2">
+                {lessonOneSave?.name || "Darslik mavjud emas "}
+              </span>
+            </h2>
+            <h2 className="font-bold mb-2 text-lg flex">Mavzu yuzasidan izoh <span className="mt-2 text-sm ml-2 "><FaPenClip /></span>
+              <span className="text-green-900 text-xl font-bold ml-3">
+                : {lessonOneSave?.description || "Mavzu mavjud emas"}
+              </span>
+            </h2>
+            <h2 className="font-bold mb-2 text-lg">Davomiylik vaqti :
+              <span className="text-green-900 text-xl font-bold">
+                {lessonOneSave?.videoTime || "Darsning davomiylik vaqti mavjud emas"}
+              </span> minut
+            </h2>
+            <p className="font-bold text-black mb-2">Mavzu yuzasidan savol va topshiriqlar</p>
 
-        {lessonTaskSave ? (
-          <>
-            {lessonTaskSave?.map((task: any, index: number) => (
-              <div key={index} className="mb-4 bg-gray-600 p-3  border-gray-900 rounded-xl">
-                <p>Kim qo'shgan bo'lsa o'sha  crud: {task.name || "Task Name"}</p>
-                <p>Savolga izoh: {task.description || "Task Description"}</p>
-
-                {task.fileId ? (
-                  <div>
-                    <p>Dars davomida ishlatilgan qo'llanmani yuklab olish :
-                      <a
-                        href={`${get_file}${task.fileId}`}
-                        className="mb-4 bg-gray-600 p-3 border-2  rounded-xl"
-                        download
-                      >
-                        Yuklab olish
-                      </a>
-                    </p>
+            {Array.isArray(lessonTaskSave) && lessonTaskSave.length > 0 ? (
+              <>
+                {lessonTaskSave.map((task: any, index: number) => (
+                  <div key={index} className="mb-4 bg-gray-600 p-3 border-gray-900 rounded-xl">
+                    <p>Savol : <span className="font-bold mb-3">{task.name || "Dars yuzasidan savollar mavjud emas ⚠️"}</span></p>
+                    <p className="mb-4">Savolga izoh: {task.description || "Task Description"}</p>
+                    {task.fileId ? (
+                      <div>
+                        <p className="mb-3">Dars davomida ishlatilgan qo'llanmani yuklab olish :
+                          <a
+                            href={`${get_file}${task.fileId}`}
+                            className="mb-4 bg-gray-600 p-1 border-2 rounded-xl ml-2"
+                            download
+                          >
+                            Yuklab olish
+                          </a>
+                        </p>
+                        <div className="mb-2 mt-3">
+                          {task.send ?
+                            <ShinyButton className="bg-slate-700" onClick={openModal} text="Vazifa yuklash" />
+                            :
+                            <p className="text-gray-600 font-bold">Siz oldin bu savolga javob bergansiz </p>
+                          }
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="block mb-2 font-bold">{task.name} savoliga javob bering</label>
+                        <input type="file" onChange={handleFileChange} className="mb-2" />
+                        <button
+                          className="bg-[#4A5568] text-white py-2 px-4 rounded-lg"
+                          onClick={uploadFile}
+                        >
+                          Faylni yuklash
+                        </button>
+                        {uploadStatus && <p className="mt-2 text-red-500">{uploadStatus}</p>}
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div>
-                    <label className="block mb-2 font-bold">{task.name} savoliga javob bering</label>
-                    <input type="file" onChange={handleFileChange} className="mb-2" />
-                    <button
-                      className="bg-[#4A5568] text-white py-2 px-4 rounded-lg"
-                      onClick={uploadFile}
-                    >
-                      Faylni yuklash
-                    </button>
-                    {uploadStatus && <p className="mt-2 text-red-500">{uploadStatus}</p>}
-                  </div>
-                )}
-              </div>
-            ))}
-          </>
-        ) : (
-          <p>Topshiriqlar yuklanmoqda...</p>
-        )}
+                ))}
+              </>
+            ) : (
+              <p className="text-gray-600 font-bold">Vazifalar mavjud emas</p>
+            )}
 
-        <ShinyButton className="bg-slate-700" onClick={openModal} text="Vazifa yuklash" />
-        <Modal isOpen={isModalOpen} onClose={closeMOdal}>
-          <div>
-            <div className="flex items-center justify-center w-90">
-              <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">html, css, java, py ,js ... </p>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <div>
+                <div className="flex items-center justify-center w-90">
+                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h8z" />
+                      </svg>
+                      <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Faylni tanlang</span> yoki saqlash uchun yuklang</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, PDF yoki DOCX formatlarida fayllarni yuklashingiz mumkin</p>
+                    </div>
+                    <input id="dropzone-file" type="file" className="hidden" />
+                  </label>
                 </div>
-                <input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
-              </label>
-            </div>
-
-            <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
-            <textarea
-              value={solution}
-              onChange={(e) => setSolution(e.target.value)}
-              id="message"
-              placeholder="Solution kiriting"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " ></textarea>
-
-            <div className="flex gap-5 pt-10">
-              <ShinyButton className="bg-black text-white" onClick={closeMOdal} text="Yopish" />
-              <ShinyButton className="bg-[#316651]" onClick={upLoadLesson} text="Jo'natish" />
-            </div>
+                <div className="mt-4">
+                  <textarea
+                    value={solution}
+                    onChange={(e) => setSolution(e.target.value)}
+                    placeholder="Javobingizni kiriting..."
+                    className="border border-gray-300 rounded-md p-2 w-full"
+                  />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={upLoadLesson}>Saqlash</button>
+                  <button className="ml-2 bg-red-500 text-white px-4 py-2 rounded" onClick={closeModal}>Bekor qilish</button>
+                </div>
+              </div>
+            </Modal>
           </div>
-        </Modal>
-      </div>
+        </>
+      )}
     </div>
   );
 };

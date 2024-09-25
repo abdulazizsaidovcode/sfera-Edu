@@ -39,37 +39,37 @@
 
 // export default VideoPlayer;
 
-import React from "react";
+// import React from "react";
 
-interface VideoPlayerProps {
-  videoId: string;
-}
+// interface VideoPlayerProps {
+//   videoId: string;
+// }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
-  console.log(videoId,123);
+// const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId }) => {
+//   console.log(videoId,123);
   
-  return (
-    <div className="w-full h-auto">
-      {
-      videoId ? <iframe
-        width="100%"
-        height="480"
-        src={'https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP'}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
-      : 
-      <div className="w-full h-90 rounded-xl bg-[#6a9c89] flex justify-center items-center">
-        <p className="text-white text-center">Video yuklanmagan ?</p>
-      </div>
-      }
-    </div>
-  );
-};
+//   return (
+//     <div className="w-full h-auto">
+//       {
+//       videoId ? <iframe
+//         width="100%"
+//         height="480"
+//         src={'https://www.youtube.com/embed/KQDTtvZMS9c?si=F8b6FjgAcAwSz3DP'}
+//         title="YouTube video player"
+//         frameBorder="0"
+//         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+//         allowFullScreen
+//       ></iframe>
+//       : 
+//       <div className="w-full h-90 rounded-xl bg-[#6a9c89] flex justify-center items-center">
+//         <p className="text-white text-center">Video yuklanmagan ?</p>
+//       </div>
+//       }
+//     </div>
+//   );
+// };
 
-export default VideoPlayer;
+// export default VideoPlayer;
 // import React from "react";
 // import ReactPlayer from "react-player";
 
@@ -172,3 +172,33 @@ export default VideoPlayer;
 // };
 
 // export default VideoPlayer;
+
+import React from "react";
+import YouTube from "react-youtube";
+
+interface VideoPlayerProps {
+    videoId: string;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({videoId}) => {
+    const extractVideoId = (id: string) => {
+        const youtubeUrlPattern =
+            /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = id.match(youtubeUrlPattern);
+        return match ? match[1] : id;
+    };
+
+    const finalVideoId = extractVideoId(videoId);
+
+    const opts = {
+        height: '500',
+        width: '100%',
+        playerVars: {
+            autoplay: 0,
+        },
+    };
+
+    return <YouTube videoId={finalVideoId} opts={opts}/>
+};
+
+export default VideoPlayer;

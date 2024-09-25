@@ -48,7 +48,7 @@ const Lessons = () => {
   const [videoLink, setVideoLink] = useState<string>('');
   const [duration, setDuration] = useState<number>();
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<number>();
   const [loading, setLoading] = useState(false);
 
 
@@ -59,6 +59,8 @@ const Lessons = () => {
     getModules(selectedCategory, setModuleData);
   }, [currentPage, pageSize, setLessonData, selectedCategory]);
 
+ console.log(selectedCategory,121212121212);
+console.log(teacherCategory,77777777);
 
 
   const lessons = lessonData?.body || [];
@@ -113,6 +115,8 @@ const Lessons = () => {
   };
 
 
+
+
   const closeModal = () => {
     setIsModalOpen(false);
     setLessonAdd(false);
@@ -136,7 +140,7 @@ const Lessons = () => {
               label: category.name,
             })) || []}
             placeholder="Kategoriyani tanlang"
-            onChange={(value: string) => {
+            onChange={(value: any) => {
               setSelectedCategory(value);
             }}
           />
@@ -171,8 +175,8 @@ const Lessons = () => {
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px] p-5 ">
                   <p className="text-black dark:text-white">
-                  <a href={lesson.fileId ? getFile + lesson.fileId : ''} download>Yuklab olish</a>
-                    </p>
+                  <a href={lesson.fileId ? getFile + lesson.fileId : ''} target='_blank' download>Yuklab olish</a>
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px]">
                   <div className="flex gap-10">
@@ -186,6 +190,7 @@ const Lessons = () => {
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px]">
                   <div className="flex gap-10">
+                    
                     <div
                       className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
                       onClick={() => handleAllowLesson(lesson)}
