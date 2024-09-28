@@ -47,7 +47,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
                 Iltimos, admin bilan bog'laning yoki biroz kuting. Sizning rolingiz hali tasdiqlanmagan.
               </p>
               <div className="flex justify-center items-center">
-                <a href="https://t.me/ITCityAcademy">
+                <a href="https://t.me/sfera_administr">
                   <ShinyButton text="Adminga Murojaat Qiling" className="bg-[#1c8340] border-none text-white px-6 py-3 rounded-full " />
                 </a>
               </div>
