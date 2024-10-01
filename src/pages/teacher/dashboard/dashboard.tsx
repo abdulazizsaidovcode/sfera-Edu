@@ -16,6 +16,11 @@ export const dashboardThead = [
   { id: 3, name: "O'quvchilar soni" },
   { id: 4, name: 'Umumiy ball' },
 ];
+export const gradedThead = [
+  { id: 1, name: 'T/r' },
+  { id: 2, name: "O'quvchi ismi" },
+  { id: 2, name: "Guruh nomi" },
+];
 export const TopStudent = [
   { id: 1, name: 'T/r' },
   { id: 2, name: "Ism va familiya" },

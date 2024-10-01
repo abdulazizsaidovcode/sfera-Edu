@@ -45,6 +45,7 @@ export const studentWeek = `${base_url}statistic/student-statistic`
 export const getHomeWork_all_url: string = `${base_url}homework/list/all`
 export const getHomework_list_url: string = `${base_url}homework/list/`
 export const score_Ball_url:string=`${base_url}homework/update/score/`
+export const homework_filter:string=`${base_url}homework/homework-filter`
 
 // Teacherga tegishli bo'lgan studentlar qaytadi
 export const getTeachetStudent: string = `${base_url}user/searchUser`
