@@ -34,7 +34,7 @@ const Course = () => {
       };
       fetchData();
     } else {
-      setLoading(false); // No lesson ID, set loading to false
+      setLoading(false); 
     }
   }, [lessonOneSave, setLessonTaskSave]);
 
@@ -42,6 +42,9 @@ const Course = () => {
     const file = event.target.files?.[0];
     setSelectedFile(file || null);
   };
+
+  console.log(lessonTaskSave);
+  
 
   const uploadFile = async () => {
     if (selectedFile) {
@@ -116,45 +119,37 @@ const Course = () => {
               </span> minut
             </h2>
             <p className="font-bold text-black mb-2">Mavzu yuzasidan savol va topshiriqlar</p>
-
             {Array.isArray(lessonTaskSave) && lessonTaskSave.length > 0 ? (
               <>
                 {lessonTaskSave.map((task: any, index: number) => (
                   <div key={index} className="mb-4 bg-gray-600 p-3 border-gray-900 rounded-xl">
-                    <p>Savol : <span className="font-bold mb-3">{task.name || "Dars yuzasidan savollar mavjud emas ⚠️"}</span></p>
-                    <p className="mb-4">Savolga izoh: {task.description || "Task Description"}</p>
+                    <p>Topshiriq : <span className="font-bold mb-3">{task.name || "Dars yuzasidan savollar mavjud emas ⚠️"}</span></p>
+                    <p className="mb-2"> 
+                      Izoh: {task.description || "Task Description"}</p>
                     {task.fileId ? (
                       <div>
                         <p className="mb-3">Dars davomida ishlatilgan qo'llanmani yuklab olish :
                           <a
                             href={`${get_file}${task.fileId}`}
-                            className="mb-4 bg-gray-600 p-1 border-2 rounded-xl ml-2"
+                            className="mb-4 bg-blue-600 p-2 text-white hover:text-black  rounded-xl ml-2"
                             download
                           >
                             Yuklab olish
                           </a>
                         </p>
-                        <div className="mb-2 mt-3">
-                          {task.send ?
-                            <ShinyButton className="bg-slate-700" onClick={openModal} text="Vazifa yuklash" />
-                            :
-                            <p className="text-gray-600 font-bold">Siz oldin bu savolga javob bergansiz </p>
-                          }
-                        </div>
                       </div>
                     ) : (
-                      <div>
-                        <label className="block mb-2 font-bold">{task.name} savoliga javob bering</label>
-                        <input type="file" onChange={handleFileChange} className="mb-2" />
-                        <button
-                          className="bg-[#4A5568] text-white py-2 px-4 rounded-lg"
-                          onClick={uploadFile}
-                        >
-                          Faylni yuklash
-                        </button>
-                        {uploadStatus && <p className="mt-2 text-red-500">{uploadStatus}</p>}
-                      </div>
+                     <div>
+                       
+                     </div>
                     )}
+                    <div className="mb-2 mt-3">
+                          {task.send ?
+                          <p className="text-red-600 font-bold">Topshiriq oldin bajarilgan </p>
+                            :
+                            <ShinyButton className="bg-slate-700" onClick={openModal} text="Vazifa yuklash" />
+                          }
+                        </div>
                   </div>
                 ))}
               </>
@@ -173,7 +168,7 @@ const Course = () => {
                       <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Faylni tanlang</span> yoki saqlash uchun yuklang</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, PDF yoki DOCX formatlarida fayllarni yuklashingiz mumkin</p>
                     </div>
-                    <input id="dropzone-file" type="file" className="hidden" />
+                    <input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
                   </label>
                 </div>
                 <div className="mt-4">
@@ -181,7 +176,7 @@ const Course = () => {
                     value={solution}
                     onChange={(e) => setSolution(e.target.value)}
                     placeholder="Javobingizni kiriting..."
-                    className="border border-gray-300 rounded-md p-2 w-full"
+                    className="border border-gray-300 bg-white rounded-md p-2 w-full"
                   />
                 </div>
                 <div className="flex justify-end mt-4">

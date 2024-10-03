@@ -58,14 +58,29 @@ const Lessons = () => {
     getTeacherGroup(setTeacherAllGroup);
     getModules(selectedCategory, setModuleData);
   }, [currentPage, pageSize, setLessonData, selectedCategory]);
-
- console.log(selectedCategory,121212121212);
-console.log(teacherCategory,77777777);
-
-
+    
+  console.log(currentPage);
+  
   const lessons = lessonData?.body || [];
-  const totalPages = lessonData?.body?.data?.totalPage || 1;
+  const totalPages = lessonData?.totalPage || 1;
 
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => index);
+    }
+    const pageNumbers = [];
+    if (currentPage < 3) {
+      pageNumbers.push(0, 1, 2, 3, '...', totalPages - 1);
+    } else if (currentPage >= totalPages - 3) {
+      pageNumbers.push(0, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1);
+    } else {
+      pageNumbers.push(0, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages - 1);
+    }
+    return pageNumbers;
+  };
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
   const openModal = (type: string, lesson: any) => {
     setSelectedLesson(lesson);
     setIsModalOpen(true);
@@ -96,6 +111,7 @@ console.log(teacherCategory,77777777);
   const handleAdd = () => {
     setLessonAdd(true)
   }
+ 
 
   const handleSubmitTeacher = async () => {
     try {
@@ -113,10 +129,6 @@ console.log(teacherCategory,77777777);
       setLoading(false);
     }
   };
-
-
-
-
   const closeModal = () => {
     setIsModalOpen(false);
     setLessonAdd(false);
@@ -210,7 +222,20 @@ console.log(teacherCategory,77777777);
           )}
         </Tables>
       </div>
-
+      <div className="mt-4 flex justify-center items-center space-x-3 p-3">
+      {getPageNumbers().map((page, index) => (
+        <button
+          key={index}
+          onClick={() => page !== '...' && handlePageChange(page)}
+          className={`shadow-lg py-1 px-3 text-lg font-bold ${
+            currentPage === page ? 'bg-blue-600 text-white' : 'bg-black text-white'
+          }`}
+          disabled={page === '...'}
+        >
+          {page === '...' ? '...' : `${+page + 1}`}
+        </button>
+      ))}
+    </div>
       <Modal isOpen={lessonModal} onClose={closeModal}>
         <h2 className="text-xl font-bold mb-4">Guruhga dars qo'shish</h2>
         <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
