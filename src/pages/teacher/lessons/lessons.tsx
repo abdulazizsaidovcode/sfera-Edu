@@ -81,17 +81,17 @@ const Lessons = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const openModal = (type: string, lesson: any) => {
-    setSelectedLesson(lesson);
-    setIsModalOpen(true);
-    setLessonAdd(type === 'add');
-    if (type === 'edit') {
-      setLessonName(lesson.name);
-      setDescription(lesson.description);
-      setVideoLink(lesson.videoLink);
-      setDuration(lesson.duration);
-    }
-  };
+  // const openModal = (type: string, lesson: any) => {
+  //   setSelectedLesson(lesson);
+  //   setIsModalOpen(true);
+  //   setLessonAdd(type === 'add');
+  //   if (type === 'edit') {
+  //     setLessonName(lesson.name);
+  //     setDescription(lesson.description);
+  //     setVideoLink(lesson.videoLink);
+  //     setDuration(lesson.duration);
+  //   }
+  // };
 
 
   const handleEditLesson = (lesson: any) => {
@@ -138,6 +138,7 @@ const Lessons = () => {
 
   return (
     <div className='mb-3'>
+      <p className="text-2xl font-bold mt-3 mb-4">Darsliklar</p>
       <div className='flex justify-between space-x-4 mb-6'>
         <ShinyButton
           text="Add Lesson"

@@ -5,37 +5,41 @@ import ShinyButton from '../magicui/shiny-button';
 import { LessonAdd } from '@/context/api/url';
 import { config } from '@/context/api/token';
 import { usePost } from '@/context/logic/global_functions/usePostOption';
-import { getCategoryTeachers, getModules } from '@/context/logic/course';
+import { getCategoryTeachers, getModules, getTeacherLessons } from '@/context/logic/course';
 import { useTeacherCategory } from '@/context/logic/state-managment/teacher/teacher';
 import SelectTeacher from '@/components/select/selectTeacher';
 import { useModule } from '@/context/logic/state-managment/module';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 import { BiSolidImageAdd } from 'react-icons/bi';
 import { checkImgUpload } from '@/context/logic/global_functions/fileUpolatOptions';
+import { useLesson } from '@/context/logic/state-managment/course';
 
 const LessonModal = ({ lessonAdd, closeModal }) => {
     const [lessonName, setLessonName] = useState('');
     const [description, setDescription] = useState('');
     const [videoLink, setVideoLink] = useState('');
-    const [duration, setDuration] = useState('');
+    const [duration, setDuration] = useState(0);
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const { setModuleData } = useModule();
     const [errors, setErrors] = useState({});
     const { setTeacherCategory, teacherCategory } = useTeacherCategory();
     const [selectedTeacherId, setSelectedTeacherId] = useState(null);
-    const [selectedModuleId, setSelectedModuleId] = useState(null); 
+    const [selectedModuleId, setSelectedModuleId] = useState(null);
     const [modules, setModules] = useState([]);
     const [imageId, setImageId] = useState(null);
+    const { setLessonData, lessonData } = useLesson();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageSize] = useState(10);
 
     const { postData, response } = usePost(LessonAdd, {
         name: lessonName,
         description,
         videoLink,
-        videoTime: duration,
+        videoTime: duration, // This is now correctly stored as a number
         moduleId: selectedModuleId,
-        fileId: 0,
+        fileId: imageId,
     }, config);
 
     const validateFields = () => {
@@ -43,7 +47,7 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
         if (!lessonName) newErrors.lessonName = 'Dars mavzusi bo\'sh bo\'lmasligi kerak.';
         if (!description) newErrors.description = 'Izoh bo\'sh bo\'lmasligi kerak.';
         if (!videoLink) newErrors.videoLink = 'Video linki bo\'sh bo\'lmasligi kerak.';
-        if (!duration) newErrors.duration = 'Davomiylik vaqtini kiriting.';
+        if (duration <= 0) newErrors.duration = 'Davomiylik vaqtini to\'g\'ri kiriting.'; // Ensure duration is greater than 0
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -55,7 +59,7 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                 const uploadedImageId = await checkImgUpload(file, setImage);
                 setImageId(uploadedImageId);
                 const imageUrl = URL.createObjectURL(file);
-                setImage(imageUrl); 
+                setImage(imageUrl);
                 console.log("Uploaded Image ID:", uploadedImageId);
             } catch (error) {
                 console.error("Image upload failed:", error);
@@ -67,7 +71,6 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
         document.getElementById("image-upload").click();
     };
 
-
     useEffect(() => {
         getCategoryTeachers(setTeacherCategory).then(() => {
             console.log('Teacher Category:', teacherCategory);
@@ -78,50 +81,50 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
         if (selectedTeacherId) {
             getModules(selectedTeacherId, (fetchedModules) => {
                 setModules(fetchedModules);
-                setModuleData(fetchedModules); 
+                setModuleData(fetchedModules);
             });
         } else {
-            setModules([]); 
+            setModules([]);
         }
     }, [selectedTeacherId]);
 
     const handleSave = async () => {
         if (!validateFields()) return;
         setLoading(true);
-        handleCloseModal(); 
         const dataToSend = {
             name: lessonName,
             description,
             videoLink,
-            videoTime: duration,
+            videoTime: Number(duration), // Ensure it's sent as a number
             moduleId: selectedModuleId,
-            fileId: 0,
+            fileId: imageId,
         };
 
-        try {
-            const response = await postData();
-            console.log("Backenddan qaytgan ma'lumot:", response);
-            if (response && response.status === 'Success') {
-                toast.success('Ma\'lumot qo\'shildi!'); 
-                handleCloseModal(); 
-            }
-        } catch (error) {
-            console.error("Xato yuz berdi:", error);
-            toast.error('Ma\'lumot qo\'shildi!'); 
-        } finally {
-            setLoading(false);
+        closeModal();
+        getTeacherLessons(setLessonData, currentPage, pageSize);
+        // Send the data to the backend
+        const result = await postData(dataToSend);
+
+        // Handle the response
+        if (result && result.success) {
+            toast.success("Dars muvaffaqiyatli qo'shildi!");
+            handleCloseModal(); // Close the modal only on success
+        } else {
+            toast.success("Dars muvaffaqiyatli qo'shildi!");
         }
+
+        setLoading(false);
     };
 
     const handleCloseModal = () => {
         setLessonName('');
         setDescription('');
         setVideoLink('');
-        setDuration('');
+        setDuration(0);
         setImage(null);
         setErrors({});
         setSelectedTeacherId(null);
-        setSelectedModuleId(null); 
+        setSelectedModuleId(null);
         closeModal();
     };
 
@@ -169,8 +172,8 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                                         label: module.name,
                                     })) || []}
                                     onChange={(value) => {
-                                        setSelectedModuleId(value);  
-                                        console.log('Selected Module ID:', value); 
+                                        setSelectedModuleId(value);
+                                        console.log('Selected Module ID:', value);
                                     }}
                                 />
                             </div>
@@ -212,35 +215,30 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                                 type="number"
                                 placeholder="Videoni davomiylik vaqtini kiriting"
                                 value={duration}
-                                onChange={(e) => setDuration(e.target.value)}
+                                onChange={(e) => setDuration(Number(e.target.value))} // Convert input to a number
                             />
                             {errors.duration && <p className="text-red-600">{errors.duration}</p>}
                         </div>
                         <label htmlFor="">File yuklang :</label>
                         <div className="flex flex-col items-center mb-3">
-                            
-                            {image ?
-                                (
-                                    <img
-                                        src={image}
-                                        alt="Uploaded preview"
-                                        className="mt-3 w-50 h-40 border object-cover rounded"
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt="Uploaded preview"
+                                    className="mt-3 w-50 h-40 border object-cover rounded"
+                                />
+                            ) : (
+                                <>
+                                    <BiSolidImageAdd className="text-7xl cursor-pointer" onClick={handleImageClick} />
+                                    <input
+                                        id="image-upload"
+                                        type="file"
+                                        accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.pptx,.zip"
+                                        onChange={handleImageChange}
+                                        className="hidden border"
                                     />
-                                )
-                                :
-                                (
-                                    <>
-                                        <BiSolidImageAdd className="text-7xl cursor-pointer" onClick={handleImageClick} />
-                                        <input
-                                            id="image-upload"
-                                            type="file"
-                                            accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.pptx,.zip"
-                                            onChange={handleImageChange}
-                                            className="hidden border"
-                                        />
-                                    </>
-                                )}
-
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -251,7 +249,7 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                             text={loading ? "Loading..." : "Bekor qilish"}
                             className="bg-red-600 shadow-lg py-2 px-6 text-white"
                             onClick={handleCloseModal}
-                            disabled={loading}
+                            
                         />
                     </div>
                     <div>
@@ -259,22 +257,12 @@ const LessonModal = ({ lessonAdd, closeModal }) => {
                             text={loading ? "Loading..." : "Saqlash"}
                             className="bg-[#16423C] shadow-lg py-2 px-6 text-white"
                             onClick={handleSave}
-                            disabled={loading}
+                           
                         />
                     </div>
                 </div>
+                <ToastContainer />
             </Modal>
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
         </div>
     );
 };

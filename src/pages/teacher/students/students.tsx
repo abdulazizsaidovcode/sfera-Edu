@@ -3,6 +3,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import { SelectComponent } from "@/components/select/select";
 import { getCategoryTeachers, getStudenTeacher, getTeacherGroup } from "@/context/logic/course";
 import { useTeacherAll, useTeacherAllGroup, useTeacherCategory, useTeacherStudent } from "@/context/logic/state-managment/teacher/teacher";
+import { Breadcrumb } from "antd";
 import { useEffect, useState } from "react";
 import { FadeLoader } from "react-spinners";
 
@@ -24,7 +25,7 @@ const Students = () => {
   const [selectedId, setSelectedId] = useState<number | undefined>(undefined);
   const [search, setSearch] = useState('');
 
-  const handleSelectChange = (selectedValue: number | undefined) => {
+  const handleSelectChange = (selectedValue: any) => {
     setSelectedId(selectedValue);
   };
 
@@ -33,7 +34,7 @@ const Students = () => {
   useEffect(() => {
     setLoading(true);
     getTeacherGroup(setTeacherAllGroup);
-    getCategoryTeachers(setTeacherCategory,currentPage,pageSize);
+    getCategoryTeachers(setTeacherCategory);
     setLoading(false);
   }, [setTeacherAllGroup, setTeacherCategory]);
 
@@ -68,9 +69,11 @@ const Students = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+       <p className="text-2xl font-bold mt-3 mb-4">Talabalar</p>
       <div className="flex flex-wrap gap-6 mb-8 justify-between">
+       
         <div className="md:w-auto flex-1">
-          <SelectComponent
+          {/* <SelectComponent
             label=""
             options={teacherAllGroup?.map((category: any) => ({
               value: category.id,
@@ -78,10 +81,10 @@ const Students = () => {
             })) || []}
             placeholder="Guruhni tanlang"
             onChange={handleSelectChange}
-          />
+          /> */}
         </div>
         <div className="md:w-auto flex-1">
-          <TextInput placeholder=" 🔍 Qidiruv..." />
+          {/* <TextInput placeholder=" 🔍 Qidiruv..." /> */}
         </div>
       </div>
 
