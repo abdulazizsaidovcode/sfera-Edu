@@ -1,5 +1,5 @@
-// export const base_url: string = "http://142.93.106.195:8080/"
-export const base_url: string = "https://online.sferaedu.uz/"
+export const base_url: string = "http://142.93.106.195:8080/"
+// export const base_url: string = "https://online.sferaedu.uz/"
 //register url
 export const register_URl: string = `${base_url}auth/register`
 //login url
@@ -83,6 +83,10 @@ export const LessonTracing: string = `${base_url}lesson/tracking`
 export const LessonTracingGet: string = `${base_url}lesson/tracking`
 //Get file 
 export const getFile: string = `${base_url}file/files/`
+
+// get group one 
+export const getGroup:string = `${base_url}group`
+export const getDavomat:string = `${base_url}api/v1/attendance/by-group`
 
 
 

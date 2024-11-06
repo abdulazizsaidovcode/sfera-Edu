@@ -33,7 +33,7 @@ function Login() {
             } else if (response.role === 'ROLE_STUDENT') {
                 navigate("/dashboard");
             } else {
-                navigate("/dashboard");
+                navigate("");
             }
         }
     }, [response?.role, response?.token]);

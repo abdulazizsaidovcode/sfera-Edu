@@ -17,6 +17,8 @@ import Confirmeted from './confirmeted'
 import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
 import TaskSection from './pages/teacher/taskSection/taskSection'
 import Graded from './pages/teacher/Gradet/gradet'
+import GroupAttendance from './pages/teacher/davomat/Davomat'
+
 
 function App() {
   const tokens = sessionStorage.getItem('token');
@@ -223,6 +225,26 @@ function App() {
             </>
           }
         />
+        <Route
+          index
+          path={`/davomat`}
+          element={
+            <>
+              <PageTitle title="TaskSection" />
+              <GroupAttendance/>
+            </>
+          }
+        />
+        {/* <Route
+          index
+          path={`/student/davomat`}
+          element={
+            <>
+              <PageTitle title="TaskSection" />
+              <GroupAttendanceStudent/>
+            </>
+          }
+        /> */}
 
       </Routes>
     </DefaultLayout>

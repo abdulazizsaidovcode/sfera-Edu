@@ -109,3 +109,32 @@ export const useTeacherAllLessonTracing= create<teacherallGetLesson>((set) => ({
     teacherAllGetLesson:null,
     setTeacherAllGetLesson: (data) => set({teacherAllGetLesson: data}),
 }));
+
+interface getOneGroupAll {
+    getOneGroup:any
+    setgetOneGroup: (data: any) => void;
+}
+
+export const useGroupAll = create<getOneGroupAll>((set) => ({
+    getOneGroup:null,
+    setgetOneGroup: (data) => set({getOneGroup: data}),
+}));
+
+interface getAttendaseAll {
+    getAttendase:any
+    setAttendase: (data: any) => void;
+}
+
+export const useAttendase = create<getAttendaseAll>((set) => ({
+    getAttendase:null,
+    setAttendase: (data) => set({getAttendase: data}),
+}));
+
+interface groupId{
+    selectedGroupId:number
+    setSelectedGroupId:(data:any) => void;
+} 
+export const useGroupId = create<groupId> ((set) => ({
+    selectedGroupId:0,
+    setSelectedGroupId:(data) => set({selectedGroupId:data})
+}))

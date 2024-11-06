@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getFile, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
+import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getDavomat, getFile, getGroup, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
 import { toast } from 'react-toastify'; 
 
@@ -390,6 +390,33 @@ export const getFiles = async (id:number) => {
   const res = await axios.get(`${getFile}${id}`, config)
   try {
     if (res.data.data) {
+    } else if (res.data.data) {
+      console.log("error", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+// Get group one 
+export const groupOne = async (selectedGroupId:any,setData:any,) => {
+  const res = await axios.get(`${getGroup}/${selectedGroupId}`, config)
+  try {
+    if (res.data.data) {
+      setData(res.data.data)
+    } else if (res.data.data) {
+      console.log("error", res.data.error);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+export const groupAttendace = async (selectedGroupId:number,year:any,month:number, setData:any,) => {
+  const res = await axios.get(`${getDavomat}?groupId=${selectedGroupId}&year=${year}&month=${month}`, config)
+  try {
+    if (res.data.data) {
+      setData(res.data.data)
     } else if (res.data.data) {
       console.log("error", res.data.error);
     }
