@@ -8,6 +8,7 @@ import { MdGrade, MdNotificationsActive, MdOutlinePlayLesson } from 'react-icons
 import ModuleSidebar from '@/components/moduleSaidbar/modulSaidbar';
 import { FaUserGraduate } from "react-icons/fa6";
 import { FaCheck, } from "react-icons/fa";
+import { MdOutlineEventNote } from "react-icons/md";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -189,6 +190,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           icon={<MdNotificationsActive size={20} />}
                           pathname={location.pathname}
                           to='/task'
+                          setSidebarOpen={setSidebarOpen}
+                        />
+                        <MenuItem
+                          title='Davomat'
+                          icon={<MdOutlineEventNote size={20} />}
+                          pathname={location.pathname}
+                          to='/davomat'
                           setSidebarOpen={setSidebarOpen}
                         />
                       </>

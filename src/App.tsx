@@ -230,7 +230,7 @@ function App() {
           path={`/davomat`}
           element={
             <>
-              <PageTitle title="TaskSection" />
+              <PageTitle title="Davomat" />
               <GroupAttendance/>
             </>
           }
