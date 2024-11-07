@@ -6,7 +6,7 @@ interface StudentRowProps {
     checkData: any[];
 }
 
-const StudentRow: React.FC<StudentRowProps> = ({ name, dates, checkData }) => {
+const StudentRow: React.FC<StudentRowProps> = ({ name, dates}) => {
     const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
     const [hoveredDate, setHoveredDate] = useState<string | null>(null);
 

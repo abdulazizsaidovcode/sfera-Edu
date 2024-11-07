@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Select } from "antd";
 import { getTeacherGroup, groupOne } from "@/context/logic/course";
 import { useGroupAll, useGroupId, useTeacherAllGroup } from "@/context/logic/state-managment/teacher/teacher";
