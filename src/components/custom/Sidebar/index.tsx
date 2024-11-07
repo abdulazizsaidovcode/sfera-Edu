@@ -230,6 +230,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           to='/profile'
                           setSidebarOpen={setSidebarOpen}
                         />
+                        <MenuItem
+                          title='Davomat'
+                          icon={<MdOutlineEventNote size={20} />}
+                          pathname={location.pathname}
+                          to='/student/davomat'
+                          setSidebarOpen={setSidebarOpen}
+                        />  
                       </>
                     )}
 

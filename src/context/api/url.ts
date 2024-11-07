@@ -87,6 +87,7 @@ export const getFile: string = `${base_url}file/files/`
 // get group one 
 export const getGroup:string = `${base_url}group`
 export const getDavomat:string = `${base_url}api/v1/attendance/by-group`
+export const studentAttandens:string = `${base_url}api/v1/attendance/myAttendance`
 
 
 

@@ -18,6 +18,7 @@ import Completed_tasks from './pages/teacher/Completed task/completed_tasks'
 import TaskSection from './pages/teacher/taskSection/taskSection'
 import Graded from './pages/teacher/Gradet/gradet'
 import GroupAttendance from './pages/teacher/davomat/Davomat'
+import StudentDavomat from './pages/student/studentRow/Davomat'
 
 
 function App() {
@@ -235,16 +236,16 @@ function App() {
             </>
           }
         />
-        {/* <Route
+        <Route
           index
           path={`/student/davomat`}
           element={
             <>
               <PageTitle title="TaskSection" />
-              <GroupAttendanceStudent/>
+              <StudentDavomat/>
             </>
           }
-        /> */}
+        />
 
       </Routes>
     </DefaultLayout>

@@ -1,20 +1,19 @@
+
 import React, {useState} from 'react';
 
 interface StudentRowProps {
-    name: { fullName: string, studentId: number };
+    name: string;
     dates: string[];
-    checkData: any[]
 }
 
-const StudentRow: React.FC<StudentRowProps> = ({name, dates, checkData}) => {
+const StudentHead: React.FC<StudentRowProps> = ({name, dates}) => {
     const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
     const handleClick = (date: string, status: string) => setAttendance({...attendance, [date]: status});
 
-    // console.log(checkData)
     return (
         <tr className="border-b border-black/40">
-            <td className="p-3 pl-1 pr-5">{name.fullName}</td>
-            {dates?.length > 0 && dates.map((date, index) => (
+            <td className="p-3 pl-1 pr-5">{name}</td>
+            {dates?.map((date, index) => (
                 <td key={index} className="text-center p-2 min-w-24">
                     <div
                         className={`cursor-pointer ${attendance[date] ? 'px-3 py-1.5 rounded-xl' : 'p-4 hover:px-3 hover:py-1.5 rounded-full'} text-sm font-medium border border-black/30 transition-colors duration-300 ${
@@ -36,4 +35,4 @@ const StudentRow: React.FC<StudentRowProps> = ({name, dates, checkData}) => {
     );
 };
 
-export default StudentRow;
+export default StudentHead;

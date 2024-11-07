@@ -138,3 +138,12 @@ export const useGroupId = create<groupId> ((set) => ({
     selectedGroupId:0,
     setSelectedGroupId:(data) => set({selectedGroupId:data})
 }))
+
+interface StudentDavomat{
+    davomat:any
+    setDavomat:(data:any) => void;
+} 
+export const useStudentDavomat = create<StudentDavomat> ((set) => ({
+    davomat:null,
+    setDavomat:(data) => set({davomat:data})
+}))
