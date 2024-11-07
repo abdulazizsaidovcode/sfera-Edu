@@ -9,8 +9,6 @@ interface StudentRowProps {
 const StudentRow: React.FC<StudentRowProps> = ({name, dates, checkData}) => {
     const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
     const handleClick = (date: string, status: string) => setAttendance({...attendance, [date]: status});
-
-    // console.log(checkData)
     return (
         <tr className="border-b border-black/40">
             <td className="p-3 pl-1 pr-5">{name.fullName}</td>

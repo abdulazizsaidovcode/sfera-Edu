@@ -197,8 +197,8 @@ export const getCategoryTeachers = async (setData: any) => {
 };
 
 // Teacher hamma lessonni ko'radi 
-export const getTeacherLessons = async (setData: (data: any) => void, page: number, size: number) => {
-  const res = await axios.get(`${getTeacherLesson}?categoryEnum=${`EDUCATION`}&page=${page}&size=${size}`, config)
+export const getTeacherLessons = async (setData: (data: any) => void, page: number, size: number, CategoryId?: number) => {
+  const res = await axios.get(`${getTeacherLesson}?${CategoryId && `categoryId=${CategoryId}`}&categoryEnum=${`EDUCATION`}&page=${page}&size=${size}`, config)
   try {
     if (res.data.data) {
       setData(res.data.data)

@@ -16,7 +16,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Toastify style
 import { InputDemo } from '@/components/Inputs/InputDemo';
 import LessonModal from '@/components/lesson/lessonModal';
-import {Popover} from "antd";
+import { Popover, Select } from "antd";
 import { getFile } from '@/context/api/url';
 
 export const dashboardThead = [
@@ -53,14 +53,14 @@ const Lessons = () => {
 
 
   useEffect(() => {
-    getTeacherLessons(setLessonData, currentPage, pageSize);
+    getTeacherLessons(setLessonData, currentPage, pageSize,selectedCategory);
     getCategoryTeachers(setTeacherCategory);
     getTeacherGroup(setTeacherAllGroup);
     getModules(selectedCategory, setModuleData);
   }, [currentPage, pageSize, setLessonData, selectedCategory]);
-    
+
   console.log(currentPage);
-  
+
   const lessons = lessonData?.body || [];
   const totalPages = lessonData?.totalPage || 1;
 
@@ -81,17 +81,7 @@ const Lessons = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  // const openModal = (type: string, lesson: any) => {
-  //   setSelectedLesson(lesson);
-  //   setIsModalOpen(true);
-  //   setLessonAdd(type === 'add');
-  //   if (type === 'edit') {
-  //     setLessonName(lesson.name);
-  //     setDescription(lesson.description);
-  //     setVideoLink(lesson.videoLink);
-  //     setDuration(lesson.duration);
-  //   }
-  // };
+  
 
 
   const handleEditLesson = (lesson: any) => {
@@ -111,7 +101,7 @@ const Lessons = () => {
   const handleAdd = () => {
     setLessonAdd(true)
   }
- 
+
 
   const handleSubmitTeacher = async () => {
     try {
@@ -145,19 +135,21 @@ const Lessons = () => {
           className='bg-[#16423C] shadow-lg py-2 px-3 text-white'
           onClick={() => handleAdd()}
         />
-        <div className='shadow'>
-          <SelectComponent
-            label=''
-            options={teacherCategory?.map((category: any) => ({
-              value: category.id,
-              label: category.name,
-            })) || []}
-            placeholder="Kategoriyani tanlang"
+    
+          <Select
+            placeholder="Select a group"
+            className=" mb-4"
+            allowClear
             onChange={(value: any) => {
               setSelectedCategory(value);
             }}
-          />
-        </div>
+          >
+            {teacherCategory?.map((category: any) => (
+              <Select.Option key={category.id} value={category.id}>
+                {category.name}
+              </Select.Option>
+            )) || []}
+          </Select>
       </div>
       <div>
         <Tables thead={dashboardThead}>
@@ -188,7 +180,7 @@ const Lessons = () => {
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px] p-5 ">
                   <p className="text-black dark:text-white">
-                  <a href={lesson.fileId ? getFile + lesson.fileId : ''} target='_blank' download>Yuklab olish</a>
+                    <a href={lesson.fileId ? getFile + lesson.fileId : ''} target='_blank' download>Yuklab olish</a>
                   </p>
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px]">
@@ -203,7 +195,7 @@ const Lessons = () => {
                 </td>
                 <td className="border-b border-[#eee] min-w-[160px]">
                   <div className="flex gap-10">
-                    
+
                     <div
                       className="text-blue-500 mt-3 text-center hover:text-yellow-600 cursor-pointer"
                       onClick={() => handleAllowLesson(lesson)}
@@ -224,19 +216,18 @@ const Lessons = () => {
         </Tables>
       </div>
       <div className="mt-4 flex justify-center items-center space-x-3 p-3">
-      {getPageNumbers().map((page, index) => (
-        <button
-          key={index}
-          onClick={() => page !== '...' && handlePageChange(page)}
-          className={`shadow-lg py-1 px-3 text-lg font-bold ${
-            currentPage === page ? 'bg-blue-600 text-white' : 'bg-black text-white'
-          }`}
-          disabled={page === '...'}
-        >
-          {page === '...' ? '...' : `${+page + 1}`}
-        </button>
-      ))}
-    </div>
+        {getPageNumbers().map((page, index) => (
+          <button
+            key={index}
+            onClick={() => page !== '...' && handlePageChange(page)}
+            className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-black text-white'
+              }`}
+            disabled={page === '...'}
+          >
+            {page === '...' ? '...' : `${+page + 1}`}
+          </button>
+        ))}
+      </div>
       <Modal isOpen={lessonModal} onClose={closeModal}>
         <h2 className="text-xl font-bold mb-4">Guruhga dars qo'shish</h2>
         <div className={`min-w-54 sm:w-64 md:w-96 lg:w-[40rem]`}>
