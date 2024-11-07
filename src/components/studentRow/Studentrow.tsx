@@ -1,14 +1,30 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 interface StudentRowProps {
     name: { fullName: string, studentId: number };
     dates: string[];
-    checkData: any[]
+    checkData: any[];
 }
 
-const StudentRow: React.FC<StudentRowProps> = ({name, dates, checkData}) => {
+const StudentRow: React.FC<StudentRowProps> = ({ name, dates, checkData }) => {
     const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
-    const handleClick = (date: string, status: string) => setAttendance({...attendance, [date]: status});
+    const [hoveredDate, setHoveredDate] = useState<string | null>(null);
+
+    const handleClick = (date: string) => {
+        setAttendance(prev => ({
+            ...prev,
+            [date]: prev[date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi'
+        }));
+    };
+
+    const handleMouseEnter = (date: string) => {
+        setHoveredDate(date);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredDate(null);
+    };
+
     return (
         <tr className="border-b border-black/40">
             <td className="p-3 pl-1 pr-5">{name.fullName}</td>
@@ -22,11 +38,12 @@ const StudentRow: React.FC<StudentRowProps> = ({name, dates, checkData}) => {
                                     ? 'bg-blue-500 text-white'
                                     : 'bg-gray-200 text-gray-800'
                         }`}
-                        onClick={() => handleClick(date, attendance[date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi')}
-                        onMouseEnter={(e) => e.currentTarget.innerText = attendance[date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi'}
-                        onMouseLeave={(e) => e.currentTarget.innerText = attendance[date] || ''}
+                        onClick={() => handleClick(date)}
+                        onMouseEnter={() => handleMouseEnter(date)}
+                        onMouseLeave={handleMouseLeave}
+                        aria-label={`Attendance for ${date}`}
                     >
-                        {attendance[date] || ''}
+                        {attendance[date] || (hoveredDate === date ? 'Bor edi' : '')}
                     </div>
                 </td>
             ))}

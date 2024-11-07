@@ -1,7 +1,6 @@
 import { FC, useEffect } from "react";
 import { useStudentDavomat } from "@/context/logic/state-managment/teacher/teacher";
 import { AttandanceStudent } from "@/context/logic/course";
-import moment from "moment";
 import StudentRows from "./studentRows";
 
 interface AttendanceTableProps {
@@ -51,7 +50,7 @@ const DavomatStudent: FC<AttendanceTableProps> = ({ active, setActive }) => {
                         <tr className="bg-gray-100 text-gray-700">
                             <th className="font-semibold border-b border-gray-300 p-3 text-center">T/r</th>
                             <th className="font-semibold border-b border-gray-300 p-3 text-center">Ism familiya</th>
-                            <th className="font-semibold border-b border-gray-300 p-3 text-center">Qatnashish Holati</th>
+                            <th className="font-semibold border-b border-gray-300 p-3 text-center">Darsga qatnashish holati</th>
                             <th className="font-semibold border-b border-gray-300 p-3 text-center">Sana</th>
                         </tr>
                     </thead>
