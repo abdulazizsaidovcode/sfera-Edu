@@ -412,18 +412,28 @@ export const groupOne = async (selectedGroupId:any,setData:any,) => {
   }
 };
 
-export const groupAttendace = async (selectedGroupId:number,year:any,month:number, setData:any,) => {
-  const res = await axios.get(`${getDavomat}?groupId=${selectedGroupId}&year=${year}&month=${month}`, config)
+export const groupAttendace = async (
+  selectedGroupId: number,
+  year: any,
+  month: number,
+  setData: (data: any) => void
+) => {
   try {
-    if (res.data.data) {
-      setData(res.data.data)
-    } else if (res.data.data) {
-      console.log("error", res.data.error);
+    const res = await axios.get(
+      `${getDavomat}?groupId=${selectedGroupId}&year=${year}&month=${month}`,
+      config
+    );
+    if (res.data?.data) {
+      setData(res.data.data); 
+    } else if (res.data?.error?.message === "Attendance topilmadi.") {
+      setData([]); 
     }
   } catch (error) {
     console.log("Error", error);
+    setData([]); 
   }
 };
+
 
 export const AttandanceStudent = async (month:number,setData: any) => {
   const res = await axios.get(`${studentAttandens}?month=${month}`, config)

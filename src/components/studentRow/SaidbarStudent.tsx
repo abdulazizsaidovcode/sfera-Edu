@@ -25,8 +25,6 @@ const SidebarStudent = () => {
             fetchData();
         }
     }, [selectedGroupId, setgetOneGroup]);
-
-    // Calculate the number of active, inactive, and total students
     const totalStudentCount = getOneGroup?.students?.length || 0;
     const activeStudentCount = getOneGroup?.students?.filter((student:{active:boolean}) => student.active).length || 0;
     const deActiveStudentCount = totalStudentCount - activeStudentCount;

@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import StudentRow from "./Studentrow";
-import { useAttendase, useGroupAll, useGroupId } from "@/context/logic/state-managment/teacher/teacher";
+import { useAttendase, useGroupId } from "@/context/logic/state-managment/teacher/teacher";
 import { groupAttendace } from "@/context/logic/course";
 import moment from "moment";
 import ShinyButton from "../magicui/shiny-button";
@@ -13,13 +13,11 @@ interface AttendanceTableProps {
 const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
     const { selectedGroupId } = useGroupId();
     const year = new Date().getFullYear();
-    const { getOneGroup } = useGroupAll();
     const { getAttendase, setAttendase } = useAttendase();
-    const today = moment().format('YYYY-MM-DD');
 
     useEffect(() => {
         groupAttendace(selectedGroupId, year, active, setAttendase);
-    }, [selectedGroupId, year, active]);
+    }, [selectedGroupId, year, active, setAttendase]);
 
     const months = [
         { month: 'Yan', id: 1 },
@@ -33,20 +31,32 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
         { month: 'Sen', id: 9 },
         { month: 'Oct', id: 10 },
         { month: 'Noy', id: 11 },
-        { month: 'Dek', id: 12 }
+        { month: 'Dek', id: 12 },
     ];
+
     const isToday = (date: string) => {
+        const today = moment().format('YYYY-MM-DD');
         return moment(date).isSame(today, 'day');
     };
 
+    // Log attendance data for each student
+    const handleSaveClick = () => {
+        getAttendase?.forEach((student: any) => {
+            student.attendDtoList.forEach((attendance: { date: string, status: string }) => {
+                console.log(`Student ID: ${student.id}, Date: ${attendance.date}, Attendance: ${attendance.status}`);
+            });
+        });
+    };
+
     return (
-        <div className="w-3/4 bg-white p-6 shadow-md rounded-lg">
+        <div className="relative w-3/4 bg-white p-6 shadow-md rounded-lg">
             <div className="flex flex-wrap items-center text-sm text-gray-600 mb-3 gap-2">
                 {months.map((month) => (
                     <span
                         key={month.id}
                         onClick={() => setActive(month.id)}
-                        className={`${month.id === active ? 'text-orange-600 font-bold border-orange-600' : 'border-black/40'} border rounded-xl px-4 py-1.5 hover:cursor-pointer shadow-md`}
+                        className={`${month.id === active ? 'text-orange-600 font-bold border-orange-600' : 'border-black/40'
+                            } border rounded-xl px-4 py-1.5 hover:cursor-pointer shadow-md`}
                     >
                         {month.month}
                     </span>
@@ -58,47 +68,42 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
                     <thead>
                         <tr>
                             <th className="font-medium border-b border-black/50 p-2">Ism</th>
-                            {getAttendase?.days?.length > 0 && getAttendase?.days?.map((date: string, index: number) => (
+                            {getAttendase?.[0]?.attendDtoList?.map((item: { date: string }, index: number) => (
                                 <th
                                     key={index}
-                                    className={`text-center font-medium border-b border-black/50 min-w-24 ${!isToday(date) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : ''}`}
-                                    style={{ pointerEvents: !isToday(date) ? 'none' : 'auto' }}  // Disable for non-today dates
+                                    className={`text-center font-medium border-b border-black/50 min-w-24 ${!isToday(item.date) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : ''
+                                        }`}
+                                    style={{ pointerEvents: !isToday(item.date) ? 'none' : 'auto' }}
                                 >
-                                    {moment(date).format('DD MMM')}
+                                    {moment(item.date).format('DD MMM')}
                                 </th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {active && getOneGroup?.students?.length > 0 ? (
-                            getOneGroup?.students
-                                .filter((student:any) => student.active)
-                                .map((name: { fullName: string; studentId: number; active: boolean }, index: number) => (
-                                    <StudentRow
-                                        key={index}
-                                        name={name}
-                                        dates={getAttendase?.days}
-                                        checkData={getAttendase?.attendanceDtos}
-                                    />
-                                ))
+                        {getAttendase?.length > 0 ? (
+                            getAttendase.map((student: any, index: number) => (
+                                <StudentRow
+                                    key={index}
+                                    name={student}
+                                    dates={student.attendDtoList}
+                                    checkData={student}
+                                />
+                            ))
                         ) : (
                             <tr>
-                                <td colSpan={getAttendase?.days?.length + 1} className="text-center text-gray-400">No students available</td>
+                                <td colSpan={12} className="text-center text-gray-400">
+                                    Guruh ochilmagan yoki talabalar mavjud emas
+                                </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
 
-            {getAttendase?.students?.length > 0 && (
-                <div
-                    className={`${getAttendase.students.length >= 6 ? 'flex justify-end mt-7' : 'absolute bottom-5 right-5'}`}
-                >
-                    <ShinyButton
-                        text={'Saqlash'}
-                        className={'bg-darkGreen'}
-                        onClick={() => { }}
-                    />
+            {getAttendase?.length > 0 && (
+                <div className="absolute bottom-5 right-5">
+                    <ShinyButton text={'Saqlash'} className={'bg-blue-600'} onClick={handleSaveClick} />
                 </div>
             )}
         </div>
