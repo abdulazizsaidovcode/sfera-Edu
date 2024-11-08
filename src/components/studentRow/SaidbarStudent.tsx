@@ -56,7 +56,7 @@ const SidebarStudent = () => {
                         <h3 className="text-lg font-semibold mt-4 mb-2"><strong>Students</strong></h3>
                         Jami o'quvchilar soni: <span className="text-blue-600 font-bold">{totalStudentCount}</span> <br />
                         Guruhda o'qiyotgan: <span className="text-green-600 font-bold">{activeStudentCount}</span> <br />
-                        Guruhdan chiqib ketgan: <span className="text-red-600 font-bold">{deActiveStudentCount}</span>
+                        Guruhdan chiqib ketgan:<span className="text-red-600 font-bold">{deActiveStudentCount}</span>
 
                         <ul className="mt-2 space-y-2 mt-4">
                             {getOneGroup?.students?.map((student:any, index:number) => (
