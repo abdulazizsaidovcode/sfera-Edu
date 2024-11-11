@@ -88,6 +88,9 @@ export const getFile: string = `${base_url}file/files/`
 export const getGroup:string = `${base_url}group`
 export const getDavomat:string = `${base_url}api/v1/attendance/by-group`
 export const studentAttandens:string = `${base_url}api/v1/attendance/myAttendance`
+export const attendanceCreate: string = `${base_url}api/v1/attendance/create`
+
+export const notFound: string = 'Ma\'lumot topilmadi'
 
 
 
