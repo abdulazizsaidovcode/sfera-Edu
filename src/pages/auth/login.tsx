@@ -22,7 +22,6 @@ function Login() {
 
     useEffect(() => {
         if (response?.token && response?.role) {
-            // const expiryTime = new Date().getTime() + 24 * 60 * 60 * 1000;
             sessionStorage.setItem('token', response.token);
             sessionStorage.setItem('ROLE', response.role);
             toast.success('Muvaffaqiyatli kirdingiz!');
@@ -58,7 +57,7 @@ function Login() {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Enter') {
-                handleSubmit();  // Enter bosilganda formani yuborish
+                handleSubmit(); 
             }
         };
         window.addEventListener('keydown', handleKeyDown);

@@ -17,13 +17,11 @@ function Register() {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Input references
+    
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const checkPasswordRef = useRef<HTMLInputElement>(null);
-
-    // API call using usePost
     const { error, loading, postData, } = usePost(
         register_URl, // URL
         {
@@ -42,12 +40,11 @@ function Register() {
             return;
         }
 
-        // Agar parollar mos kelsa, xatoni tozalash va POST so'rovini jo'natish
         setError(null);
         if (phoneNumber.length > 11 && firstNameRef.current?.value && lastNameRef.current?.value && passwordRef.current?.value) {
             setIsSubmitting(true);
             try {
-                // postData funksiyasini chaqiramiz va serverga so'rovni yuboramiz
+                
                 await postData();
                 navigate('/auth/login', { replace: true });
                 toast.success('Ro\'yxatdan o\'tdingiz!');
@@ -67,7 +64,7 @@ function Register() {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Enter') {
-                handleSubmit();  // Enter bosilganda formani yuborish
+                handleSubmit(); 
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -146,7 +143,7 @@ function Register() {
                     </div>
                 </div>
             </section>
-            <LoadingModal isVisible={isSubmitting} /> {/* Render the LoadingModal component */}
+            <LoadingModal isVisible={isSubmitting} /> 
         </>
     );
 }

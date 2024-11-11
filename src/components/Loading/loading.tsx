@@ -13,7 +13,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ isVisible }) => {
       className="fixed inset-0 flex items-center justify-center" 
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-        zIndex: 1000 // Ensure the modal is above other elements
+        zIndex: 1000 
       }}
     >
       <motion.div
