@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getDavomat, getFile, getGroup, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentAttandens, studentRating, studentWeek, TaskAdd } from '../api/url';
+import { adminNatifacation, getAllGroupTeacher, getAllTeacher, getCategory, getCategoryTeacher, getDavomat, getFile, getGroup, getLessonOnes, getLessonStudent, getModule, getStudentScore, getStudentStatistic, getTask, getTeacherLesson, getTeacherStatistik, getTeachetStudent, getTopGroups, getTopStudent, LessonAdd, LessonEdit, LessonTracing, LessonTracingGet, studentAttandens, studentRating, studentWeek, TaskAdd } from '../api/url';
 import { config } from '../api/token';
 import { toast } from 'react-toastify'; 
 
@@ -447,3 +447,4 @@ export const AttandanceStudent = async (month:number,setData: any) => {
     console.log("Error", error);
   }
 };
+

@@ -91,6 +91,7 @@ export const studentAttandens:string = `${base_url}api/v1/attendance/myAttendanc
 export const attendanceCreate: string = `${base_url}api/v1/attendance/create`
 
 export const notFound: string = 'Ma\'lumot topilmadi'
+export const adminNatifacation:string = `${base_url}notification/registrant`
 
 
 
