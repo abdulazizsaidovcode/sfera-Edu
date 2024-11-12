@@ -144,13 +144,18 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-end mt-5">
+            {getAttendase?.length > 0 ? (
+                <div className="flex justify-end mt-5">
                 <ShinyButton
                     text={addLoading ? 'Yuborilmoqda...' : 'Saqlash'}
                     className={`bg-blue-600 ${addLoading && 'cursor-not-allowed opacity-60'}`}
                     onClick={() => addAttendance()}
                 />
             </div>
+            ):(
+                <>
+                </>
+            )} 
         </div>
     );
 };
