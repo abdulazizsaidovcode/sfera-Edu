@@ -137,7 +137,7 @@ const Students = () => {
           <button
             key={index}
             onClick={() => page !== '...' && handlePageChange(page as number)}
-            className={`shadow-lg py-1 px-3 text-lg font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'}`}
+            className={`shadow-lg py-1 px-3 text-lg  font-bold ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-black text-white'}`}
             disabled={page === '...'}
           >
             {page === '...' ? '...' : `${+page + 1}`}
