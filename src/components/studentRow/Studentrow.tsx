@@ -1,85 +1,78 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
-interface AttendanceData {
-    id: number | null;
-    attendance: boolean | null;
-    date: string;
+export interface IAttendance {
+    attendDtoList: {
+        attendance: null | boolean;
+        date: string;
+        id: null | number;
+    }[];
+    studentId: number;
+    studentLastName: string;
+    studentName: string;
 }
 
 interface StudentRowProps {
-    name: {
-        studentLastName: string;
-        studentName: string;
-    };
-    dates: AttendanceData[];
-    checkData: (date: string, status: string, firstName: string, lastName: string) => void;
+    data: IAttendance;
+    updateAttendance: (data: { studentId: number; attendance: boolean; date: string }[]) => void;
 }
 
-const StudentRow: React.FC<StudentRowProps> = ({ name, dates, checkData }) => {
-    const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
-    const today = moment().format('YYYY-MM-DD'); // Bugungi sana
+const StudentRow: React.FC<StudentRowProps> = ({ data, updateAttendance }) => {
+    const [attendance, setAttendance] = useState<{ [key: string]: string | null }>(() => {
+        const initialAttendance: { [key: string]: string | null } = {};
+        data.attendDtoList.forEach((item) => {
+            initialAttendance[item.date] =
+                item.attendance === true ? 'Bor edi' :
+                    item.attendance === false ? 'Yo\'q' : null;
+        });
+        return initialAttendance;
+    });
+    // const today = "2024-11-13";
+    const today = moment().format('YYYY-MM-DD');
 
-    // Yangi `getAttendanceStatus` funksiyasi
-    const getAttendanceStatus = (item: AttendanceData) => {
-        if (attendance[item.date] === 'Bor edi') {
-            return { text: 'Bor edi', class: 'bg-teal-500 text-white' };
-        } else if (attendance[item.date] === 'Yo\'q') {
-            return { text: 'Yo\'q', class: 'bg-blue-500 text-white' };
-        } else if (item.attendance === true) {
-            return { text: 'Bor edi', class: 'bg-teal-500 text-white' };
-        } else if (item.attendance === false) {
-            return { text: 'Yo\'q', class: 'bg-blue-500 text-white' };
-        }
-        return { text: '', class: 'px-3' };
-    };
-    const handleClick = (date: string, status: string) => {
-        setAttendance({ ...attendance, [date]: status });
-        checkData(date, status, name.studentName, name.studentLastName);
+    const handleClick = (date: string) => {
+        if (date !== today) return;
+
+        const newStatus = attendance[date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi';
+        setAttendance((prev) => ({ ...prev, [date]: newStatus }));
+
+        updateAttendance([
+            {
+                studentId: data.studentId,
+                attendance: newStatus === 'Bor edi',
+                date: today,
+            },
+        ]);
     };
 
     return (
         <tr className="border-b border-black/40">
             <td className="p-3 pl-1 pr-5">
-                {name.studentName} {name.studentLastName}
+                {data.studentName} {data.studentLastName}
             </td>
-            {dates.map((item, index) => {
-                const { text, class: statusClass } = getAttendanceStatus(item);
-                const isPastDate = item.date < today; 
-                const isFutureDate = item.date > today; 
-
-                return (
+            {data?.attendDtoList.length > 0 &&
+                data.attendDtoList.map((item, index) => (
                     <td key={index} className="text-center p-2 min-w-24">
                         <div
                             className={`${
-                                isPastDate || isFutureDate ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+                                today === item.date ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
                             } ${
-                                attendance[item.date] || item.attendance !== null
-                                    ? 'px-3 py-1.5 rounded-xl'
-                                    : 'p-4 hover:px-3 hover:py-1.5 rounded-full'
-                            } text-sm font-medium border border-black/30 transition-colors duration-300 ${statusClass}`}
-                            onClick={() => {
-                                if (item.date === today) {
-                                    const newStatus = attendance[item.date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi';
-                                    handleClick(item.date, newStatus);
-                                }
-                            }}
-                            onMouseEnter={(e) => {
-                                if (item.date === today) {
-                                    e.currentTarget.innerText = attendance[item.date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi';
-                                } else if (isPastDate || isFutureDate) {
-                                    e.currentTarget.innerText = 'Bor edi'; // Hover bo'lganda Bor edi ko'rsatilsin
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.innerText = attendance[item.date] || text;
-                            }}
+                                attendance[item.date] ? 'px-3 py-1.5 rounded-xl' : 'p-4 hover:px-3 hover:py-1.5 rounded-full'
+                            } text-sm font-medium border border-black/30 transition-colors duration-300 ${
+                                attendance[item.date] === 'Bor edi'
+                                    ? 'bg-teal-500 text-white'
+                                    : attendance[item.date] === 'Yo\'q'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-gray-200 text-gray-800'
+                            }`}
+                            onClick={() => handleClick(item.date)}
+                            onMouseEnter={(e) => (e.currentTarget.innerText = attendance[item.date] === 'Bor edi' ? 'Yo\'q' : 'Bor edi')}
+                            onMouseLeave={(e) => (e.currentTarget.innerText = attendance[item.date] || '')}
                         >
-                            {attendance[item.date] || text}
+                            {attendance[item.date] || ''}
                         </div>
                     </td>
-                );
-            })}
+                ))}
         </tr>
     );
 };

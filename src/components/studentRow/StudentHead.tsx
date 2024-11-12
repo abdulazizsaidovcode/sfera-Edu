@@ -1,26 +1,59 @@
 import { FC, useEffect, useState } from "react";
-import StudentRow from "./Studentrow";
 import { useAttendase, useGroupId } from "@/context/logic/state-managment/teacher/teacher";
 import { groupAttendace } from "@/context/logic/course";
 import moment from "moment";
 import ShinyButton from "../magicui/shiny-button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import StudentRow from "./Studentrow";
+import axios from "axios";
+import { attendanceCreate } from "@/context/api/url";
+import { config } from "@/context/api/token";
 
 interface AttendanceTableProps {
     active: number;
     setActive: (monthId: number) => void;
 }
 
+export interface IStudentData {
+    studentId: number;
+    attendance: boolean;
+    date: string;
+}
+
+
+export interface IAttendance {
+    attendDtoList: {
+        attendance: null | boolean;
+        date: string;
+        id: null | number;
+    }[];
+    studentId: number;
+    studentLastName: string;
+    studentName: string;
+}
+
 const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
     const { selectedGroupId } = useGroupId();
     const year = new Date().getFullYear();
     const { getAttendase, setAttendase } = useAttendase();
+    const [attendanceData, setAttendanceData] = useState<IStudentData[]>([]);
     const [addLoading, setAddLoading] = useState(false);
-    const [isAttendance, setIsAttendance] = useState(false);
+    const [addResponse, setAddResponse] = useState(null);
+
     useEffect(() => {
         groupAttendace(selectedGroupId, year, active, setAttendase);
     }, [selectedGroupId, year, active, setAttendase]);
+
+    useEffect(() => {
+        setAttendanceData([]);
+    }, [active]);
+
+    useEffect(() => {
+        if (addResponse) {
+            setAttendanceData([]);
+        }
+    }, [addResponse]);
 
     const months = [
         { month: 'Yan', id: 1 },
@@ -36,45 +69,30 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
         { month: 'Noy', id: 11 },
         { month: 'Dek', id: 12 },
     ];
-    const isToday = (date: string) => {
-        const today = moment().format('YYYY-MM-DD');
-        return moment(date).isSame(today, 'day');
-    };
-    const checkAllAttendance = () => {
-        return getAttendase.every((student: any) =>
-            student.attendDtoList.every((attend: any) => attend.attended)
-        );
+    // const isToday = (date: string) => {
+    //     const today = moment().format('YYYY-MM-DD');
+    //     return moment(date).isSame(today, 'day');
+    // };
+    const handleUpdateAttendance = (data: IStudentData[]) => {
+        setAttendanceData((prev) => {
+            const filtered = prev.filter(
+                (item) => item.studentId !== data[0].studentId || item.date !== data[0].date
+            );
+            return [...filtered, ...data];
+        });
     };
     const addAttendance = async () => {
         try {
+            if (attendanceData.length === 0) {
+                toast.error('Hech bo\'lmaganda 1 ta o\'quvchini tanlang!');
+                return;
+            }
             setAddLoading(true);
-            console.log('Yoqlama saqlash boshlandi');
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            const selectedStudents = getAttendase
-                .filter((student: any) =>
-                    student.attendDtoList.some((attend: any) => attend.attended)
-                )
-                .map((student: any) => {
-                    const { studentId, studentName, attendDtoList } = student;
-                    const selectedAttendance = attendDtoList
-                        .filter((attend: any) => attend.attended)
-                        .map((attend: any) => ({
-                            date: attend.date,
-                            attended: attend.attended,
-                        }));
-                    return {
-                        studentId,
-                        studentName,
-                        attendances: selectedAttendance,
-                    };
-                });
-            console.log("Tanlangan studentlar:", selectedStudents);
-
-            toast.success("Yoqlama muvaffaqiyatli saqlandi");
-            setIsAttendance(true);
+            const response = await axios.post(attendanceCreate, attendanceData, config);
+            setAddResponse(response.data);
+            toast.success("Davomat ma'lumotlari muvaffaqiyatli saqlandi");
         } catch (error) {
-            console.error("Xatolik:", error);
-            toast.error("Yoqlama saqlashda xatolik yuz berdi");
+            toast.error("Davomat ma'lumotlarini saqlashda xatolik yuz berdi");
         } finally {
             setAddLoading(false);
         }
@@ -99,44 +117,21 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr>
-                            <th className="font-medium border-b border-black/50 p-2">Ism</th>
-                            {getAttendase?.[0]?.attendDtoList?.map((item: { date: string }, index: number) => (
-                                <th
-                                    key={index}
-                                    className={`text-center font-medium border-b border-black/50 min-w-24 ${!isToday(item.date) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : ''
-                                        }`}
-                                    style={{ pointerEvents: !isToday(item.date) ? 'none' : 'auto' }}
-                                >
-                                    {moment(item.date).format('DD MMM')}
+                            {getAttendase?.length > 0 && <th className="font-medium border-b border-black/50 p-2">Ism</th>}
+                            {getAttendase?.length > 0 && getAttendase[0].attendDtoList.map((date:any, index:number) => (
+                                <th key={index} className="text-center font-medium border-b border-black/50 min-w-24">
+                                    {moment(date.date).format('DD MMM')}
                                 </th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
                         {getAttendase?.length > 0 ? (
-                            getAttendase.map((student: any, index: number) => (
+                            getAttendase.map((item: IAttendance, index: number) => (
                                 <StudentRow
                                     key={index}
-                                    name={student}
-                                    dates={student.attendDtoList}
-                                    checkData={student}
-                                    onAttendanceChange={(studentId: any, date: any, isChecked: any) => {
-                                        const updatedAttendance = getAttendase.map((s: any) => {
-                                            if (s.studentId === studentId) {
-                                                return {
-                                                    ...s,
-                                                    attendDtoList: s.attendDtoList.map((a: any) => {
-                                                        if (a.date === date) {
-                                                            return { ...a, attended: isChecked };
-                                                        }
-                                                        return a;
-                                                    }),
-                                                };
-                                            }
-                                            return s;
-                                        });
-                                        setAttendase(updatedAttendance);
-                                    }}
+                                    data={item}
+                                    updateAttendance={handleUpdateAttendance}
                                 />
                             ))
                         ) : (
@@ -153,21 +148,7 @@ const AttendanceTable: FC<AttendanceTableProps> = ({ active, setActive }) => {
                 <ShinyButton
                     text={addLoading ? 'Yuborilmoqda...' : 'Saqlash'}
                     className={`bg-blue-600 ${addLoading && 'cursor-not-allowed opacity-60'}`}
-                    onClick={() => {
-                        if (isAttendance) {
-                            toast.error('Bugun bu guruhni yo\'qlama qilib bo\'ldingiz. Tahrirlashingiz mumkin!');
-                        } else {
-                            if (getAttendase.length > 0 && !addLoading) {
-                                if (checkAllAttendance()) {
-                                    addAttendance();
-                                } else {
-                                    toast.error("Hamma o'quvchini yo'qlama qilishingiz shart !");
-                                }
-                            } else {
-                                toast.error('Ma\'lumot mavjud emas!');
-                            }
-                        }
-                    }}
+                    onClick={() => addAttendance()}
                 />
             </div>
         </div>
